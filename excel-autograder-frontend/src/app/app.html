@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">
+  <div *ngIf="this.authService.getUser()">
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon *ngIf="this.authService.getUser()">account_circle</mat-icon></button>
+  </div>
+  <mat-menu #menu="matMenu">
+    <button disabled mat-menu-item>{{this.authService.getUser()?.username}}</button>
+    <button mat-menu-item (click)="this.authService.logout()">Log Out</button>
+  </mat-menu>
+</mat-toolbar>
+<router-outlet></router-outlet>

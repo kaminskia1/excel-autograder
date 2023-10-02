@@ -1,0 +1,6 @@
+<button mat-flat-button color="secondary" [value]="isLogin ? 'Login' : 'Register'" (click)="isLogin = !isLogin">
+  {{ isLogin ? 'Register' : 'Login' }}
+</button>
+<mat-divider></mat-divider>
+<app-login *ngIf="isLogin"></app-login>
+<app-register *ngIf="!isLogin"></app-register>

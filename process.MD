@@ -21,7 +21,6 @@ structure
 setup trello board for tracking. Created initial cards for our perceived tasks.
 https://trello.com/b/oacnv6Wr/excel-autograder
 
-
 brainstorming
 - more advanced 'questions'
   - require function instead of hardcoded param
@@ -31,3 +30,19 @@ brainstorming
     - wrap ml model to 'evaluate' correctness
 - show / evaluate file metadata
   - catch cheating
+
+moved django to a sub-folder and set up an angular container
+
+https://www.django-rest-framework.org/
+https://mattermost.com/blog/user-authentication-with-the-django-rest-framework-and-angular/
+
+built out user authentication and assignment models in django
+  - set up api endpoints for them to use
+
+
+set up angular app, default views
+- login, table, and wizard view
+
+build out angular layer for interacting with api
+
+fixed cors issues so that frontend could communicate with backend
