@@ -1,4 +1,4 @@
-import { User } from "../auth-service/auth.service";
+import { User } from "../auth-service/auth";
 
 export interface Assignment {
   uuid: string;
@@ -8,7 +8,7 @@ export interface Assignment {
   updated_at: string;
   file: File;
   encrypted: boolean;
-  data: AssignmentData
+  data: AssignmentData,
 }
 
 export interface AssignmentData {

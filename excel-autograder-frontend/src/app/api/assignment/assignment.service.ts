@@ -14,6 +14,20 @@ export class AssignmentService extends AbstractApiService<Assignment> {
   }
 
   public override list(): Observable<Array<Assignment>> {
-    return this.http.get('http://127.0.0.1:8000/api/v1/questions/') as Observable<Array<Assignment>>;
+    return this.get('assignments/') as Observable<Array<Assignment>>;
   }
+
+  //@ts-ignore
+  public override create(instance: Assignment): Observable<Assignment> {
+  }
+
+  public override retrieve(key: string): Observable<Assignment> {
+    return this.get(`assignments/${key}/`) as Observable<Assignment>
+  }
+
+  //@ts-ignore
+  public override update(instance: Assignment): Observable<Assignment> {}
+
+  //@ts-ignore
+  public override destroy(instance: Assignment): Observable<boolean> {}
 }

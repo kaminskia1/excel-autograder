@@ -11,15 +11,16 @@ import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { WizardComponent } from './views/wizard/wizard.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
-import { MatTableModule} from "@angular/material/table";
-import { MatInputModule} from "@angular/material/input";
-import { MatButtonModule} from "@angular/material/button";
-import { MatToolbarModule} from "@angular/material/toolbar";
-import { MatIconModule} from "@angular/material/icon";
+import { MatTableModule } from "@angular/material/table";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatIconModule } from "@angular/material/icon";
 import { AuthComponent } from './auth/auth.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { MatDividerModule } from "@angular/material/divider";
 import { MatMenuModule } from "@angular/material/menu";
+import {MatGridListModule} from "@angular/material/grid-list";
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { MatMenuModule } from "@angular/material/menu";
     NgIf,
     MatDividerModule,
     MatMenuModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [App]

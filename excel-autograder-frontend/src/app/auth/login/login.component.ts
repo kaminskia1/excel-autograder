@@ -20,23 +20,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  logInUser(user: UserCredentials): void {
-   this.authService.login(user.username, user.password).subscribe({
-     next: (data) => {
-       console.log(data);
-     },
-     error: (error) => {
-       console.log(error);
-     }
-   }
-   );
-  }
-
   onSubmit(formData: any): void {
     if (this.logInForm.invalid) {
       console.log(this.logInForm.errors);
     } else {
-      this.logInUser(formData);
+      this.authService.login(formData.username, formData.password);
     }
   }
 }

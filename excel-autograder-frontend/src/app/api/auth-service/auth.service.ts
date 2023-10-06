@@ -32,7 +32,6 @@ export class AuthService extends AbstractApiService<User> {
 
   public login(username: string, password: string): Observable<User> {
      let req = this.post('auth/login/', {username, password}) as Observable<User>
-    console.log('triggered')
     req.subscribe({
       next: (user: User) => {
         this._registerUser(user)

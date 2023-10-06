@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { API_URL } from "../../main";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -22,7 +22,6 @@ export abstract class AbstractApiService<T> {
   }
   public registerHeader(key: string, value: string) {
     AbstractApiService.headers.set(key, value);
-    console.log('', AbstractApiService.headers, value)
   }
 
   public deregisterHeader(key: string) {
