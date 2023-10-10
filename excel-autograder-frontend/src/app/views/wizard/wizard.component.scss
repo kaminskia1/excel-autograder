@@ -1,0 +1,48 @@
+.sidebar {
+  min-width: 400px
+}
+.excel-table {
+  display: flex;
+}
+
+/* Style each column */
+.column {
+  flex: 0 0 auto;
+}
+
+/* Style each cell within a column */
+.cell {
+  height: 36px;
+  width: 120px;
+  padding: 5px;
+  margin-top: -1px;
+  margin-left: -1px;
+  text-align: right;
+  line-height: 26px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #E1E1E1
+}
+.cell-border {
+  min-width: 10px;
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid #E1E1E1
+}
+.cell-active:hover {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  z-index:100;
+  cursor: pointer
+}
+.sheet-active {
+  background: rgba(0,0,0,.075);
+}
+.column-add {
+  margin: 2px;
+  width: 30px;
+  height: 100%;
+}
+.miw-0 {
+  min-width: 0;
+}

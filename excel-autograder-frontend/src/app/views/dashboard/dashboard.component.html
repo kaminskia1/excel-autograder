@@ -1,4 +1,4 @@
-<div class="basic-container" *ngIf="assignments.length">
+<div class="container mt-4">
 
   <h1>Documents</h1>
   <table mat-table #table [dataSource]="assignments" class="mat-elevation-z8">
@@ -7,27 +7,31 @@
       <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
-    <ng-container matColumnDef="file">
-      <th mat-header-cell *matHeaderCellDef> File </th>
-      <td mat-cell *matCellDef="let element"> {{element.file}} </td>
-    </ng-container>
     <ng-container matColumnDef="updated_at">
       <th mat-header-cell *matHeaderCellDef> Last Modified </th>
-      <td mat-cell *matCellDef="let element"> {{element.updated_at}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.updated_at | date: 'dd/MM/yyyy'}} </td>
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
-        <button mat-button color="primary">
+        <button mat-button color="primary" class="float-end">
           New
         </button>
       </th>
       <td mat-cell *matCellDef="let element">
+        <div class="float-end">
         <button mat-icon-button color="primary" [routerLink]="'wizard/' + element.uuid">
           <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" [routerLink]="'grader/' + element.uuid">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button mat-icon-button color="primary">
+          <mat-icon>download</mat-icon>
         </button>
         <button mat-icon-button color="warn" (click)="assignmentService.destroy(element)">
           <mat-icon>delete</mat-icon>
         </button>
+        </div>
       </td>
     </ng-container>
 

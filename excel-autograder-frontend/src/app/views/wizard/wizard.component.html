@@ -1,4 +1,86 @@
-<mat-grid-list cols="2">
-  <mat-grid-tile>1</mat-grid-tile>
-  <mat-grid-tile>2</mat-grid-tile>
-</mat-grid-list>
+<mat-drawer-container class="h-100" fullscreen *ngIf="activeAssignment">
+  <mat-drawer mode="side" opened="true" class="sidebar">
+    <mat-toolbar>
+      <button mat-icon-button routerLink="/">
+        <mat-icon>home</mat-icon>
+      </button>
+      <h1>Autograder</h1>
+      <div class="spacer"></div>
+      <button class="ms-2 me-2" mat-button (click)="questionService.create()">Add</button>
+      <button class="ms-2 me-2" mat-button (click)="assignmentService.update(this.activeAssignment)">Save</button>
+
+    </mat-toolbar>
+    <div class="questions">
+      <div class="p-1 border-1 border-black" *ngFor="let question of questionService.getQuestions(); let idx = index">
+        <mat-toolbar class="bg-transparent">
+          <h2>Question {{idx+1}}</h2>
+          <div class="spacer bg"></div>
+          <button mat-icon-button (click)="questionService.removeQuestion(question)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-toolbar>
+        <div class="p-2" *ngFor="let element of question.elements">
+          <mat-form-field class="d-block">
+            <mat-label>Validator Type</mat-label>
+            <mat-select class="mb-2" [ngModel]="element.type" (ngModelChange)="element.type = $event">
+              <mat-option *ngFor="let kv of QuestionElementType | keyvalue" [value]="kv.value">{{kv.key}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="d-block">
+            <mat-label>Points</mat-label>
+            <input matInput [(ngModel)]="element.points">
+          </mat-form-field>
+
+          <span *ngIf="element.type === QuestionElementType.Value">
+            <mat-form-field class="d-block">
+              <mat-label>Target Value</mat-label>
+              <input matInput [(ngModel)]="element.targetValue">
+            </mat-form-field>
+
+            <mat-form-field class="d-block">
+              <mat-label>Target Cell</mat-label>
+              <input class="w-100 hide-disabled" matInput readonly [value]="(element.targetCell?.fullAddress?.sheetName ? element.targetCell?.fullAddress?.sheetName + ': ' : '') + (element.targetCell?.address ?? '')">
+            </mat-form-field>
+
+            <div class="d-block">
+              <button class="w-100" [disabled]="activeQElement" mat-button (click)="this.activeQElement = element">Select</button>
+            </div>
+          </span>
+
+
+
+
+        </div>
+        <button mat-button (click)="questionService.addElement(question)">Add Element</button>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar>
+      <h1>{{ activeAssignment.name }}</h1>
+      <div class="sheet-selector ps-4">
+        <button mat-button *ngFor="let item of workbookService.getSheets()" (click)="this.workbookService.setActiveSheet(item)" [ngClass]="workbookService.getActiveSheet() === item ? 'sheet-active' : ''" class="ms-1 me-1 d-inline-block">{{item.name}}</button>
+      </div>
+    </mat-toolbar>
+    <div class="excel-table" *ngIf="workbookService.getSheetHeight()">
+      <div class="column">
+        <div class="cell cell-border"></div>
+        <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getSheetHeight())">{{val}}</div>
+        <div class="cell cell-border p-0">
+          <button class="w-100 h-100 miw-0" mat-button (click)="workbookService.addRow()">+</button>
+        </div>
+      </div>
+      <div class="column" *ngFor="let col of workbookService.getTable()">
+        <div class="cell align-text-center">{{col.letter}}</div>
+        <div class="cell" *ngFor="let cell of col.values" [ngClass]="{'cell-active': activeQElement}" (click)="selectCell(cell)"> {{workbookService.getCellSafeValue(cell).text}}</div>
+      </div>
+      <div class="column">
+        <div class="cell cell-border p-0">
+          <button class="w-100 h-100 miw-0" mat-button (click)="workbookService.addColumn()">+</button>
+        </div>
+      </div>
+      </div>
+
+  </mat-drawer-content>
+</mat-drawer-container>

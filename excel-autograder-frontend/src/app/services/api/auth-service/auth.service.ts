@@ -12,7 +12,7 @@ export class AuthService extends AbstractApiService<User> {
 
    constructor(public override http: HttpClient) {
     super(http);
-    let user = localStorage.getItem('user');
+    const user = localStorage.getItem('user');
     if (user) {
       this._registerUser(JSON.parse(user))
     }
@@ -31,7 +31,7 @@ export class AuthService extends AbstractApiService<User> {
   }
 
   public login(username: string, password: string): Observable<User> {
-     let req = this.post('auth/login/', {username, password}) as Observable<User>
+     const req = this.post('auth/login/', {username, password}) as Observable<User>
     req.subscribe({
       next: (user: User) => {
         this._registerUser(user)
@@ -40,21 +40,16 @@ export class AuthService extends AbstractApiService<User> {
     return req;
   }
 
-  public logout(): Observable<any> {
-    let user = this.currentUser.getValue();
-    // check that u is a user object
-    if (user === null) return of(false)
-    let req = this.post('auth/logout/') as Observable<any>
-    req.subscribe({
+  public logout(): void {
+    this.post('auth/logout/').subscribe({
       next: () => {
         this._deregisterUser()
       }
     })
-    return req
   }
 
   public register(username: string, password: string): Observable<User> {
-    let req = this.post('auth/register/', {username, password}) as Observable<User>
+    const req = this.post('auth/register/', {username, password}) as Observable<User>
     req.subscribe({
       next: (user: User) => {
         this._registerUser(user)

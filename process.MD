@@ -46,3 +46,20 @@ set up angular app, default views
 build out angular layer for interacting with api
 
 fixed cors issues so that frontend could communicate with backend
+
+built out authentication
+
+built out assignment dashboard
+- fetched assignments from backend
+
+
+began work on assignment wizard
+- got exceljs working
+  - added in node types
+- read in assignment + attached file from backend
+
+rendered sheets on wizard 
+- added ability to add rows/columns
+
+added support for multi-legged questions via question service
+- added cell-picking functionality

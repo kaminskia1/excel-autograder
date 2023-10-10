@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent {
-  isLogin: boolean = true;
+  // @TODO: Move this section to views
+  isLogin = true;
 }

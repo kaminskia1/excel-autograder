@@ -1,6 +1,6 @@
-import { Component, OnInit} from '@angular/core';
-import { AssignmentService } from "../../api/assignment/assignment.service";
-import { Assignment } from "../../api/assignment/assignment";
+import { Component, OnInit } from '@angular/core';
+import { AssignmentService } from "../../services/api/assignment/assignment.service";
+import { Assignment } from "../../services/api/assignment/assignment";
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +10,7 @@ import { Assignment } from "../../api/assignment/assignment";
 export class DashboardComponent implements OnInit {
 
   assignments: Array<Assignment> = [];
-  displayedColumns = ['name', 'file', 'updated_at', 'action'];
+  displayedColumns = ['name', 'updated_at', 'action'];
   constructor(public assignmentService: AssignmentService) {}
 
   ngOnInit(): void {

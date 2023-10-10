@@ -16,7 +16,7 @@ class Assignment(models.Model):
 	owner = models.ForeignKey('users.User', related_name='user', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
-	file = models.FileField(upload_to='assignments/', validators=[validate_file_extension])
+	file = models.FileField(upload_to='', validators=[validate_file_extension])
 	encrypted = models.BooleanField(default=False)
 	data = models.JSONField(default=dict)
 

@@ -1,4 +1,5 @@
 import { User } from "../auth-service/auth";
+import { Question } from "../../question/question";
 
 export interface Assignment {
   uuid: string;
@@ -6,11 +7,7 @@ export interface Assignment {
   owner: User;
   created_at: string;
   updated_at: string;
-  file: File;
+  file: string;
   encrypted: boolean;
-  data: AssignmentData,
-}
-
-export interface AssignmentData {
-
+  questions: Array<Question>
 }

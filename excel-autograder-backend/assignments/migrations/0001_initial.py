@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('file', models.FileField(upload_to='assignments/', validators=[assignments.models.validate_file_extension])),
+                ('file', models.FileField(upload_to='', validators=[assignments.models.validate_file_extension])),
                 ('encrypted', models.BooleanField(default=False)),
                 ('data', models.JSONField(default=dict)),
             ],

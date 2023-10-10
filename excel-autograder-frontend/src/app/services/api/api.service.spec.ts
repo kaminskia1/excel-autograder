@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { AbstractApiService } from './api.service';
 
 describe('ApiService', () => {
-  let service: AbstractApiService<any>;
+  let service: AbstractApiService<unknown>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
