@@ -8,8 +8,10 @@ import {
   Workbook,
   Cell
 } from "exceljs";
+import {RenderedCell, RenderedTable} from "./workbook";
+import {CellAddress} from "../question/question";
 
-export type RenderedTable = Array<{letter: string, isActive: boolean, isActiveColor: string, values:Array<Cell>}>
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +19,7 @@ export class WorkbookService {
 
   activeWorkbook: Workbook|null = null;
   activeSheet: Worksheet|null = null;
+  renderedTable: RenderedTable = []
 
   loadWorkbook(file: Blob) {
     const fileReader = new FileReader();
@@ -31,6 +34,7 @@ export class WorkbookService {
         })
     };
     fileReader.readAsArrayBuffer(file);
+    this.refreshTable()
   }
 
   getSheets(): Array<Worksheet> {
@@ -42,37 +46,57 @@ export class WorkbookService {
     if (this.activeWorkbook == null) return;
     if (this.getSheets().indexOf(sheet) == -1) throw new Error("Sheet not found in workbook");
     this.activeSheet = sheet;
+    this.refreshTable()
   }
 
   getActiveSheet(): Worksheet|null {
     return this.activeSheet;
   }
 
-  getTable(): RenderedTable {
+  refreshTable(): void {
     const table: RenderedTable = []
-    if (this.activeSheet == null) return table
-
+    if (this.activeSheet == null) {
+      this.renderedTable = [];
+      return
+    }
     for (let i: number = 1; i <= this.activeSheet.columns.length; i++) {
       const column = this.activeSheet.getColumn(i)
-      if (column == null || column.eachCell == null || column.letter == null || column.values == null) return []
-      table.push({letter: column.letter, isActive: false, isActiveColor: '', values: []})
-
+      if (column == null || column.eachCell == null || column.letter == null || column.values == null) {
+        this.renderedTable = [];
+        return
+      }
+      table.push({letter: column.letter, values: Array<RenderedCell>()})
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
-        table[i-1].values.push(cell)
+
+        table[i-1].values.push(new RenderedCell(cell, this.getCellSafeValue(cell).text))
       });
     }
 
-    return table;
+    this.renderedTable = table;
+  }
+
+  getTableCell(row: number|string|Cell, col: number = -1): RenderedCell | undefined {
+    if (this.activeSheet == null) return undefined
+    if (typeof row == "string") return this.renderedTable.find((c) => c.letter == row)?.values[col-1] || undefined
+    if (typeof row == "number") return this.renderedTable[col-1].values[row-1] || undefined
+    return this.renderedTable[row.fullAddress.col-1].values[row.fullAddress.row-1] || undefined
+  }
+
+  getCell(address: CellAddress): Cell | undefined {
+    if (!this.activeWorkbook) return undefined
+    return this.activeWorkbook.getWorksheet(address.sheetName).findCell(address.row, address.col)
   }
 
   addColumn() {
     if (!this.activeSheet) return
     this.activeSheet.columns = this.activeSheet.columns.concat([{}])
+    this.refreshTable()
   }
 
   addRow() {
     if (!this.activeSheet) return
     this.activeSheet.addRow([])
+    this.refreshTable()
   }
 
 
@@ -93,7 +117,7 @@ export class WorkbookService {
     if (Object.prototype.hasOwnProperty.call(val, 'richText')) return {type: "richText", text: (val as CellRichTextValue).richText.join("")}
     if (Object.prototype.hasOwnProperty.call(val, 'text')) return {type: "text", text: (val as CellHyperlinkValue).text}
     if (Object.prototype.hasOwnProperty.call(val, 'formula')) {
-      let fv: CellFormulaValue = val as CellFormulaValue
+      const fv: CellFormulaValue = val as CellFormulaValue
       if (fv.result !== undefined) {
         // @ts-ignore
         if (fv.result.error) return fv.result.error;

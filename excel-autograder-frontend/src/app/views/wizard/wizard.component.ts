@@ -5,7 +5,7 @@ import { AssignmentService } from "../../services/api/assignment/assignment.serv
 import { Assignment } from "../../services/api/assignment/assignment";
 import { WorkbookService } from "../../services/workbook/workbook.service";
 import { QuestionService } from "../../services/question/question.service";
-import {QElement, QElementType, Question} from "../../services/question/question";
+import { QType, Question } from "../../services/question/question";
 
 
 @Component({
@@ -15,7 +15,7 @@ import {QElement, QElementType, Question} from "../../services/question/question
 })
 export class WizardComponent implements OnInit {
   activeAssignment: Assignment | null = null;
-  activeQElement: QElement | null = null
+  activeQuestion: Question | null = null
 
   range = (start: number, end: number) => Array.from({ length: (end - start) }, (v, k) => k + start);
 
@@ -36,28 +36,37 @@ export class WizardComponent implements OnInit {
   }
 
   registerAssignment(id: string) {
-    this.assignmentService.retrieve(id).subscribe({
-      next: (assignment) => {
-        this.activeAssignment = assignment;
-        this.activateWorkbook(assignment)
-      }
+    this.assignmentService.retrieve(id).subscribe((assignment) => {
+      this.activeAssignment = assignment;
+      if (!assignment.questions.length) this.questionService.addQuestion()
+      this.activateWorkbook(assignment)
     });
   }
 
   activateWorkbook(assignment: Assignment) {
-    this.assignmentService.getFile(assignment).subscribe({
-      next: (file) => {
-        this.workbookService.loadWorkbook(file);
-      }
+    this.assignmentService.getFile(assignment).subscribe((file) => {
+      this.workbookService.loadWorkbook(file);
     })
   }
 
   selectCell(cell: Cell) {
-
-    if (this.activeQElement == null) return;
-    this.activeQElement.targetCell = cell
-    this.activeQElement = null;
+    if (this.activeQuestion == null) return;
+    if (this.activeQuestion.targetCell != null) this.clearTableCell(this.activeQuestion._targetCell)
+    this.activeQuestion._targetCell = cell
+    this.activeQuestion = null;
   }
 
-  protected readonly QuestionElementType = QElementType;
+
+  highlightTableCell(cell: Cell|undefined) {
+    if (cell == null) return
+    const renderedCell = this.workbookService.getTableCell(cell)
+    if (renderedCell) renderedCell.isHighlighted = true
+  }
+
+  clearTableCell(cell: Cell|undefined) {
+    if (cell == null) return
+    const renderedCell = this.workbookService.getTableCell(cell)
+    if (renderedCell) renderedCell.isHighlighted = false
+  }
+  protected readonly QuestionElementType = QType;
 }

@@ -1,0 +1,7 @@
+<div #cell class="cell" [ngClass]="{'cell-active-hover': hover, 'cell-active': renderedCell.isHighlighted}" [ngStyle]="{
+  'background-color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.background : '',
+  'border-color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.border : '',
+  'color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.color : '',
+  'position': renderedCell.isHighlighted ? 'relative' : 'inherit',
+  'border-radius': renderedCell.isHighlighted ? '2px' : ''
+}" [matTooltip]="isOverflow() ? renderedCell.safeValue : ''" matTooltipPosition="above">{{renderedCell.safeValue}}</div>

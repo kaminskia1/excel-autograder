@@ -6,12 +6,13 @@
       </button>
       <h1>Autograder</h1>
       <div class="spacer"></div>
-      <button class="ms-2 me-2" mat-button (click)="questionService.create()">Add</button>
-      <button class="ms-2 me-2" mat-button (click)="assignmentService.update(this.activeAssignment)">Save</button>
+      <button class="ms-2 me-2" mat-button (click)="questionService.addQuestion()">Add</button>
+      <button class="ms-2 me-2" mat-button (click)="this.activeAssignment.questions = questionService.getQuestions(); assignmentService.update(this.activeAssignment)">Save</button>
 
     </mat-toolbar>
     <div class="questions">
-      <div class="p-1 border-1 border-black" *ngFor="let question of questionService.getQuestions(); let idx = index">
+      <div class="p-2" *ngIf="!questionService.getQuestions().length">No questions found. Begin by adding one <mat-icon>arrow_upward</mat-icon></div>
+      <div class="p-1" *ngFor="let question of questionService.getQuestions(); let idx = index">
         <mat-toolbar class="bg-transparent">
           <h2>Question {{idx+1}}</h2>
           <div class="spacer bg"></div>
@@ -19,40 +20,37 @@
             <mat-icon>delete</mat-icon>
           </button>
         </mat-toolbar>
-        <div class="p-2" *ngFor="let element of question.elements">
+        <mat-form-field class="d-block">
+          <mat-label>Validator Type</mat-label>
+          <mat-select class="mb-2" [ngModel]="question.type" (ngModelChange)="question.type = $event">
+            <mat-option *ngFor="let kv of QuestionElementType | keyvalue" [value]="kv.value">{{kv.key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="d-block">
+          <mat-label>Points</mat-label>
+          <input matInput [(ngModel)]="question.points">
+        </mat-form-field>
+
+        <span *ngIf="question.type === QuestionElementType.Value">
           <mat-form-field class="d-block">
-            <mat-label>Validator Type</mat-label>
-            <mat-select class="mb-2" [ngModel]="element.type" (ngModelChange)="element.type = $event">
-              <mat-option *ngFor="let kv of QuestionElementType | keyvalue" [value]="kv.value">{{kv.key}}</mat-option>
-            </mat-select>
+            <mat-label>Target Value</mat-label>
+            <input matInput [(ngModel)]="question.targetValue">
           </mat-form-field>
 
-          <mat-form-field class="d-block">
-            <mat-label>Points</mat-label>
-            <input matInput [(ngModel)]="element.points">
-          </mat-form-field>
-
-          <span *ngIf="element.type === QuestionElementType.Value">
-            <mat-form-field class="d-block">
-              <mat-label>Target Value</mat-label>
-              <input matInput [(ngModel)]="element.targetValue">
-            </mat-form-field>
-
+          <span (mouseenter)="highlightTableCell(questionService.getTargetCell(question))" (mouseleave)="clearTableCell(questionService.getTargetCell(question))">
             <mat-form-field class="d-block">
               <mat-label>Target Cell</mat-label>
-              <input class="w-100 hide-disabled" matInput readonly [value]="(element.targetCell?.fullAddress?.sheetName ? element.targetCell?.fullAddress?.sheetName + ': ' : '') + (element.targetCell?.address ?? '')">
+              <input class="w-100 hide-disabled" matInput readonly [value]="(questionService.getTargetCell(question)?.fullAddress?.sheetName ? questionService.getTargetCell(question)?.fullAddress?.sheetName + ': ' : '') + (questionService.getTargetCell(question)?.address ?? '')">
             </mat-form-field>
 
             <div class="d-block">
-              <button class="w-100" [disabled]="activeQElement" mat-button (click)="this.activeQElement = element">Select</button>
+              <button class="w-50" mat-button [disabled]="activeQuestion" (click)="this.activeQuestion = question">Select</button>
+              <button class="w-50" mat-button color="accent" [disabled]="activeQuestion || !questionService.getTargetCell(question)" (click)="clearTableCell(questionService.getTargetCell(question)); question._targetCell = undefined">Clear</button>
             </div>
           </span>
+        </span>
 
-
-
-
-        </div>
-        <button mat-button (click)="questionService.addElement(question)">Add Element</button>
       </div>
     </div>
   </mat-drawer>
@@ -71,9 +69,9 @@
           <button class="w-100 h-100 miw-0" mat-button (click)="workbookService.addRow()">+</button>
         </div>
       </div>
-      <div class="column" *ngFor="let col of workbookService.getTable()">
+      <div class="column" *ngFor="let col of workbookService.renderedTable">
         <div class="cell align-text-center">{{col.letter}}</div>
-        <div class="cell" *ngFor="let cell of col.values" [ngClass]="{'cell-active': activeQElement}" (click)="selectCell(cell)"> {{workbookService.getCellSafeValue(cell).text}}</div>
+        <app-table-cell (click)="this.selectCell(rCell.parent)" *ngFor="let rCell of col.values" [hover]="activeQuestion !== null" [renderedCell]="rCell"></app-table-cell>
       </div>
       <div class="column">
         <div class="cell cell-border p-0">

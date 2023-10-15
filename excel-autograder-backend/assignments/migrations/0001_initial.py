@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('file', models.FileField(upload_to='', validators=[assignments.models.validate_file_extension])),
                 ('encrypted', models.BooleanField(default=False)),
-                ('data', models.JSONField(default=dict)),
+                ('data', models.JSONField(default=[])),
             ],
         ),
     ]

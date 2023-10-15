@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
+import { MatDialog } from "@angular/material/dialog";
+import { MatTableDataSource } from '@angular/material/table';
 import { AssignmentService } from "../../services/api/assignment/assignment.service";
 import { Assignment } from "../../services/api/assignment/assignment";
+import { NewAssignmentDialogComponent } from "./new-assignment-dialog/new-assignment-dialog.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -11,13 +14,53 @@ export class DashboardComponent implements OnInit {
 
   assignments: Array<Assignment> = [];
   displayedColumns = ['name', 'updated_at', 'action'];
-  constructor(public assignmentService: AssignmentService) {}
+  dataSource = new MatTableDataSource<Assignment>(this.assignments);
+
+  constructor(public dialog: MatDialog, public assignmentService: AssignmentService) {
+  }
 
   ngOnInit(): void {
-    this.assignmentService.list().subscribe({
-      next: (assignments) => {
-        this.assignments = assignments;
+    this.assignmentService.list().subscribe((assignments) => {
+      this.assignments = assignments
+      this.dataSource.data = this.assignments
+    })
+  }
+
+  openNewDialog(): void {
+    const newAssignment = new EventEmitter<Assignment | null>()
+    newAssignment.subscribe((assignment: Assignment|null) => {
+      if (assignment) {
+        this.assignmentService.create(assignment).subscribe((assignment) => {
+          this.assignments.push(assignment)
+          this.dataSource.data = this.assignments
+        })
       }
+    });
+    const newPopupRef = this.dialog.open(NewAssignmentDialogComponent, {
+      width: '300px',
+      data: newAssignment
+    })
+  }
+
+  deleteItem(assignment: Assignment) {
+    this.assignmentService.destroy(assignment).subscribe((success) => {
+      this.assignments = this.assignments.filter((a) => a.uuid !== assignment.uuid)
+      this.dataSource.data = this.assignments
+    })
+  }
+
+  download(assignment: Assignment) {
+    this.assignmentService.getFile(assignment).subscribe((file) => {
+
+      const blobUrl = URL.createObjectURL(file);
+      const aElement = document.createElement('a');
+      aElement.href = blobUrl;
+      aElement.download = assignment.name + '.xlsx';
+      aElement.style.display = 'none';
+      document.body.appendChild(aElement);
+      aElement.click();
+      URL.revokeObjectURL(blobUrl);
+      aElement.remove();
     })
   }
 }

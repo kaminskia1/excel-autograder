@@ -36,6 +36,14 @@ export abstract class AbstractApiService<T> {
     return this.http.post(`${AbstractApiService.apiUrl}${path}`, body, this._buildOptions(options));
   }
 
+  protected put(path: string, body: NonNullable<Object> = {}, options: NonNullable<Object> = {}): Observable<NonNullable<Object>> {
+    return this.http.put(`${AbstractApiService.apiUrl}${path}`, body, this._buildOptions(options));
+  }
+
+  protected delete(path: string, options: NonNullable<Object> = {}): Observable<NonNullable<Object>> {
+    return this.http.delete(`${AbstractApiService.apiUrl}${path}`, this._buildOptions(options));
+  }
+
   public list(): Observable<Array<T>> {
     throw new Error("Not implemented");
   }

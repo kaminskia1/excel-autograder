@@ -18,7 +18,7 @@ class Assignment(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	file = models.FileField(upload_to='', validators=[validate_file_extension])
 	encrypted = models.BooleanField(default=False)
-	data = models.JSONField(default=dict)
+	questions = models.JSONField(default=list, blank=True)
 
 	def __str__(self):
 		return self.name

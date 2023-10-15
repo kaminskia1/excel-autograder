@@ -1,7 +1,7 @@
 <div class="container mt-4">
 
   <h1>Documents</h1>
-  <table mat-table #table [dataSource]="assignments" class="mat-elevation-z8">
+  <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -13,24 +13,38 @@
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
-        <button mat-button color="primary" class="float-end">
+        <button mat-button color="primary" class="float-end" (click)="openNewDialog()">
           New
         </button>
+        <button mat-button color="primary" class="float-end">
+          Import
+        </button>
       </th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let assignment">
         <div class="float-end">
-        <button mat-icon-button color="primary" [routerLink]="'wizard/' + element.uuid">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" [routerLink]="'grader/' + element.uuid">
-          <mat-icon>play_arrow</mat-icon>
-        </button>
-        <button mat-icon-button color="primary">
-          <mat-icon>download</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="assignmentService.destroy(element)">
-          <mat-icon>delete</mat-icon>
-        </button>
+          <button mat-icon-button disabled *ngIf="assignment.questions.length" [routerLink]="'wizard/' + assignment.uuid">
+            <mat-icon>check_circle_outline</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="'grader/' + assignment.uuid">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="'wizard/' + assignment.uuid">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>list</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item class="d-block w-100" (click)="download(assignment)">
+              Download Spreadsheet
+            </button>
+            <button mat-menu-item class="d-block w-100">
+              Export Assignment
+            </button>
+            <button mat-menu-item class="d-block w-100 alert" (click)="deleteItem(assignment)">
+              Delete Assignment
+            </button>
+          </mat-menu>
         </div>
       </td>
     </ng-container>

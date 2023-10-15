@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z8">
-  <h1>Autograder</h1>
+  <h1 [routerLink]="'/'" role="button">Autograder</h1>
   <div class="spacer"></div>
   <div *ngIf="this.authService.getUser()">
     <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon *ngIf="this.authService.getUser()">account_circle</mat-icon></button>

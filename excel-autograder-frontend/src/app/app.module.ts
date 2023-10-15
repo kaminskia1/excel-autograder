@@ -14,6 +14,11 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { NgxMatFileInputModule } from "@angular-material-components/file-input";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,7 +31,8 @@ import { RegisterComponent} from "./views/auth/register/register.component";
 import { MatListModule } from "@angular/material/list";
 import { QuestionComponent } from './components/question/question.component';
 import { GraderComponent } from './views/grader/grader.component';
-import {MatSelectModule} from "@angular/material/select";
+import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-dialog/new-assignment-dialog.component';
+import { TableCellComponent } from './views/wizard/table-cell/table-cell.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +44,9 @@ import {MatSelectModule} from "@angular/material/select";
     AuthComponent,
     RegisterComponent,
     QuestionComponent,
-    GraderComponent
+    GraderComponent,
+    NewAssignmentDialogComponent,
+    TableCellComponent
   ],
   imports: [
     BrowserModule,
@@ -58,6 +66,10 @@ import {MatSelectModule} from "@angular/material/select";
     MatSidenavModule,
     MatListModule,
     MatSelectModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    NgxMatFileInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

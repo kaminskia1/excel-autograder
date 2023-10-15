@@ -1,19 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Question, QElement, QElementType } from "./question";
+import { Question, QType } from "./question";
+import {Cell} from "exceljs";
+import { WorkbookService } from "../workbook/workbook.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionService {
   questions: Array<Question> = []
-  constructor() { }
+  constructor(private workbookService: WorkbookService) { }
 
-  create() {
-    this.questions.push({ elements: [] })
+
+  loadQuestions(questions: Array<Question>) {
+    this.questions = questions
+  }
+
+  deleteQuestions() {
+    this.questions = []
   }
 
   getQuestions() {
     return this.questions
+  }
+
+  addQuestion() {
+    const question: Question = {
+      type: QType.Value,
+      points: 1
+    }
+    this.questions.push(question)
   }
 
   removeQuestion(question: Question) {
@@ -22,11 +37,10 @@ export class QuestionService {
       this.questions.splice(index, 1);
     }
   }
-  addElement(question: Question) {
-    let element: QElement = {
-      type: QElementType.Value,
-      points: 1
-    }
-    question.elements.push(element);
+
+  getTargetCell(question: Question): Cell | undefined {
+    if (question._targetCell) return question._targetCell
+    if (question.targetCell == null) return undefined
+    return this.workbookService.getCell(question.targetCell)
   }
 }
