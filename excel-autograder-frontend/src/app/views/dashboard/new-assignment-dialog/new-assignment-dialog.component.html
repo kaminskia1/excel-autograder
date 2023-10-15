@@ -6,16 +6,16 @@
   </mat-form-field>
   <p>File</p>
   <mat-form-field>
-    <ngx-mat-file-input [(ngModel)]="newAssignment.file" accept="['xlsx']"></ngx-mat-file-input>
+    <ngx-mat-file-input [ngModel]="newAssignment.getCachedFile()" (ngModelChange)="newAssignment.setFile($event)" [accept]="'xlsx'"></ngx-mat-file-input>
 
   </mat-form-field>
     <mat-checkbox class="d-inline-block" [(ngModel)]="newAssignment.encrypted">Encrypted?</mat-checkbox>
   <p *ngIf="newAssignment.encrypted">File Password</p>
   <mat-form-field *ngIf="newAssignment.encrypted">
-    <input matInput [(ngModel)]="newAssignment._key">
+    <input matInput [ngModel]="newAssignment.getKey()" (ngModelChange)="newAssignment.setKey($event)">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="dialogRef.close()">Cancel</button>
-  <button mat-button (click)="data.emit(this.newAssignment); dialogRef.close()" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="create()" cdkFocusInitial>Ok</button>
 </div>

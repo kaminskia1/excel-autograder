@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 import { MatListModule } from '@angular/material/list';
@@ -68,7 +69,9 @@ import { TableCellComponent } from './views/wizard/table-cell/table-cell.compone
     MatDialogModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatSnackBarModule,
     NgxMatFileInputModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent],

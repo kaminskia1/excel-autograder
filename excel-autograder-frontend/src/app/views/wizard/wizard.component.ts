@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Cell } from 'exceljs';
-import { AssignmentService } from '../../services/api/assignment/assignment.service';
-import { Assignment } from '../../services/api/assignment/assignment';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AssignmentService } from '../../models/assignment/assignment.service';
+import { Assignment } from '../../models/assignment/assignment';
+import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { WorkbookService } from '../../services/workbook/workbook.service';
-import { QuestionService } from '../../services/question/question.service';
-import { QType, Question } from '../../services/question/question';
+import { QuestionService } from '../../models/question/question.service';
+import { Question } from '../../models/question/question';
+import { QuestionType } from '../../models/question/misc';
 
 @Component({
   selector: 'app-wizard',
@@ -18,13 +21,16 @@ export class WizardComponent implements OnInit {
   activeQuestion: Question | null = null;
 
   range = (start: number, end: number) => Array.from({
-    length: (end - start)
+    length: (end - start),
   }, (v, k) => k + start);
 
-  constructor(private route: ActivatedRoute,
-              public workbookService: WorkbookService,
-              public assignmentService: AssignmentService,
-              public questionService: QuestionService,
+  constructor(
+    private route: ActivatedRoute,
+    public workbookService: WorkbookService,
+    public assignmentService: AssignmentService,
+    public questionService: QuestionService,
+    public assignmentFactory: AssignmentFactory,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -40,7 +46,8 @@ export class WizardComponent implements OnInit {
   }
 
   registerAssignment(id: string) {
-    this.assignmentService.retrieve(id).subscribe((assignment) => {
+    this.assignmentService.retrieve(id).subscribe((iAssignment) => {
+      const assignment = this.assignmentFactory.createAssignment(iAssignment);
       this.activeAssignment = assignment;
       this.questionService.loadQuestions(assignment);
       this.activateWorkbook(assignment);
@@ -48,16 +55,17 @@ export class WizardComponent implements OnInit {
   }
 
   activateWorkbook(assignment: Assignment) {
-    this.assignmentService.getFile(assignment).subscribe((file) => {
+    assignment.getFile().subscribe((file) => {
       this.workbookService.loadWorkbook(file);
     });
   }
 
   selectCell(cell: Cell) {
     if (this.activeQuestion == null) return;
-    if (this.activeQuestion.targetCell != null)
-      this.clearTableCell(this.activeQuestion._targetCell);
-    this.activeQuestion._targetCell = cell;
+    if (this.activeQuestion.getTargetCell() != null) {
+      this.clearTableCell(this.activeQuestion.getTargetCell());
+    }
+    this.activeQuestion.setTargetCell(cell);
     this.activeQuestion = null;
   }
 
@@ -73,5 +81,18 @@ export class WizardComponent implements OnInit {
     if (renderedCell) renderedCell.isHighlighted = false;
   }
 
-  protected readonly QuestionElementType = QType;
+  saveQuestions() {
+    if (this.activeAssignment == null) return;
+    this.activeAssignment.questions = this.questionService.getQuestions();
+    this.activeAssignment.save().subscribe({
+      next: () => {
+        this.snackBar.open('Saved!', 'Close', { duration: 1500 });
+      },
+      error: () => {
+        this.snackBar.open('Failed to save!', 'Close', { duration: 1500 });
+      },
+    });
+  }
+
+  protected readonly QuestionElementType = QuestionType;
 }

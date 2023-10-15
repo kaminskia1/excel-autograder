@@ -9,7 +9,7 @@ import {
   Cell,
 } from 'exceljs';
 import { RenderedCell, RenderedTable } from './workbook';
-import { CellAddress } from '../question/question';
+import { ICellAddress } from '../../models/question/misc';
 
 @Injectable({
   providedIn: 'root',
@@ -69,19 +69,21 @@ export class WorkbookService {
       }
       table.push({ letter: column.letter, values: Array<RenderedCell>() });
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
-        table[i - 1].values.push(new RenderedCell(cell, WorkbookService.getCellSafeValue(cell).text));
+        table[i - 1].values.push(
+          new RenderedCell(cell, WorkbookService.getCellSafeValue(cell).text),
+        );
       });
     }
 
     this.renderedTable = table;
   }
 
-  getTableCellByAddress(address: CellAddress): RenderedCell | undefined {
+  getTableCellByAddress(address: ICellAddress): RenderedCell | undefined {
     if (this.activeSheet?.name !== address.sheetName) return undefined;
     return this.renderedTable[address.col - 1].values[address.row - 1] || undefined;
   }
 
-  getCell(address: CellAddress): Cell | undefined {
+  getCell(address: ICellAddress): Cell | undefined {
     if (!this.activeWorkbook) return undefined;
     return this.activeWorkbook.getWorksheet(address.sheetName).findCell(address.row, address.col);
   }

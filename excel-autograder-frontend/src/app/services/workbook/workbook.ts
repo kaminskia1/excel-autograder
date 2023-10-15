@@ -23,4 +23,9 @@ export class RenderedCell {
   }
 }
 
-export type RenderedTable = Array<{letter: string, values:Array<RenderedCell>}>
+export type RenderedColumn = {
+  letter: string,
+  values: Array<RenderedCell>
+}
+
+export type RenderedTable = Array<RenderedColumn>

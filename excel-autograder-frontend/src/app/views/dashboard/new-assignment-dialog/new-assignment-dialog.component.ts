@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Assignment } from '../../../services/api/assignment/assignment';
+import {
+  Assignment,
+  IAssignment,
+  IAssignmentPartial,
+} from '../../../models/assignment/assignment';
+import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
 
 @Component({
   selector: 'app-new-assignment-dialog',
@@ -8,14 +13,23 @@ import { Assignment } from '../../../services/api/assignment/assignment';
   styleUrls: ['./new-assignment-dialog.component.scss'],
 })
 export class NewAssignmentDialogComponent {
-  newAssignment: Assignment = {
-    name: '',
-    file: '',
-    encrypted: false,
-  } as Assignment;
+  newAssignment: Assignment;
 
   constructor(
-  public dialogRef: MatDialogRef<NewAssignmentDialogComponent>,
-  @Inject(MAT_DIALOG_DATA) public data: EventEmitter<Assignment|null>,
-  ) {}
+    public dialogRef: MatDialogRef<NewAssignmentDialogComponent>,
+    public assignmentFactory: AssignmentFactory,
+    @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
+  ) {
+    this.newAssignment = this.assignmentFactory.createAssignment({
+      name: '',
+      file: '',
+      encrypted: false,
+      questions: [],
+    } as unknown as IAssignmentPartial);
+  }
+
+  create() {
+    this.data.emit(this.assignmentFactory.createAssignment(this.newAssignment));
+    this.dialogRef.close();
+  }
 }

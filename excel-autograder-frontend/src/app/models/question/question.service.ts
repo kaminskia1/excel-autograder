@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Cell } from 'exceljs';
-import { Question, QType } from './question';
-import { WorkbookService } from '../workbook/workbook.service';
-import { Assignment } from '../api/assignment/assignment';
+import { Question } from './question';
+import { QuestionFactory } from './question.factory';
+import { WorkbookService } from '../../services/workbook/workbook.service';
+import { Assignment } from '../assignment/assignment';
+import { QuestionType } from './misc';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,10 @@ import { Assignment } from '../api/assignment/assignment';
 export class QuestionService {
   questions: Array<Question> = [];
 
-  constructor(private workbookService: WorkbookService) { }
+  constructor(
+    private workbookService: WorkbookService,
+    private questionFactory: QuestionFactory,
+  ) { }
 
   loadQuestions(assignment: Assignment) {
     this.questions = assignment.questions;
@@ -25,10 +29,10 @@ export class QuestionService {
   }
 
   addQuestion() {
-    const question: Question = {
-      type: QType.Value,
+    const question: Question = this.questionFactory.createQuestion({
+      type: QuestionType.Value,
       points: 1,
-    };
+    });
     this.questions.push(question);
   }
 
@@ -37,11 +41,5 @@ export class QuestionService {
     if (index > -1) {
       this.questions.splice(index, 1);
     }
-  }
-
-  getTargetCell(question: Question): Cell | undefined {
-    if (question._targetCell) return question._targetCell;
-    if (question.targetCell == null) return undefined;
-    return this.workbookService.getCell(question.targetCell);
   }
 }
