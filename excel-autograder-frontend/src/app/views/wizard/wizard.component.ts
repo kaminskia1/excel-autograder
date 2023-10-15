@@ -17,7 +17,7 @@ export class WizardComponent implements OnInit {
 
   activeQuestion: Question | null = null;
 
-  public static range = (start: number, end: number) => Array.from({
+  range = (start: number, end: number) => Array.from({
     length: (end - start)
   }, (v, k) => k + start);
 
