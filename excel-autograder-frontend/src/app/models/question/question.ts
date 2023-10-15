@@ -10,12 +10,12 @@ export interface IQuestionPartial {
   targetValue?: string
 }
 
-export interface IQuestion extends IQuestionPartial {
+export interface IQuestion extends IQuestionPartial, IModel<IQuestionPartial> {
   getTargetCell(): Cell | undefined
   setTargetCell(cell: Cell | ICellAddress | undefined): void
 }
 
-export class Question implements IQuestion, IModel<IQuestionPartial> {
+export class Question implements IQuestion {
   targetCell?: ICellAddress;
 
   type: QuestionType;

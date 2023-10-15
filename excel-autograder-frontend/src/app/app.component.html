@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="mat-elevation-z8">
   <h1 [routerLink]="'/'" role="button">Autograder</h1>
   <div class="spacer"></div>
-  <div *ngIf="this.authService.getUser()">
-    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon *ngIf="this.authService.getUser()">account_circle</mat-icon></button>
+  <div *ngIf="this.userService.getUser()">
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon *ngIf="this.userService.getUser()">account_circle</mat-icon></button>
   </div>
   <mat-menu #menu="matMenu">
-    <button disabled mat-menu-item>{{this.authService.getUser()?.username}}</button>
+    <button disabled mat-menu-item>{{this.userService.getUser()?.username}}</button>
     <a mat-menu-item routerLink="/">Dashboard</a>
-    <button mat-menu-item (click)="this.authService.logout()">Log Out</button>
+    <button mat-menu-item (click)="this.userService.logout()">Log Out</button>
   </mat-menu>
 </mat-toolbar>
 <router-outlet></router-outlet>

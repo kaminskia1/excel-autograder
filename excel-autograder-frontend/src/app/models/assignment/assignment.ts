@@ -2,7 +2,7 @@ import { Observable, of, shareReplay } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { IQuestion, Question } from '../question/question';
 import { QuestionFactory } from '../question/question.factory';
-import { IUser } from '../user/auth';
+import { IUser } from '../user/user';
 import { AssignmentService } from './assignment.service';
 import { IApiModel } from '../model';
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../../models/user/auth.service';
+import { UserService } from '../../../models/user/user.service';
 
 interface UserCredentials {
   username: string|null
@@ -18,7 +18,7 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
+    private userService: UserService,
     private snackBar: MatSnackBar,
   ) {
     this.logInForm = this.formBuilder.group({
@@ -31,7 +31,7 @@ export class LoginComponent {
     if (this.logInForm.invalid) {
       this.snackBar.open(JSON.stringify(this.logInForm.errors), 'Close', { duration: 1500 });
     } else if ('username' in formData && formData.username != null && 'password' in formData && formData.password != null) {
-      this.authService.login(formData.username, formData.password);
+      this.userService.login(formData.username, formData.password);
     }
   }
 }

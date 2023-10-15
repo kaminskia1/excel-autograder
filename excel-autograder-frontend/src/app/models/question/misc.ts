@@ -1,7 +1,7 @@
 export enum QuestionType {
-  Value= 'value',
-  Function = 'function',
-  Work = 'work',
+  Value= 'QuestionType.Value',
+  Function = 'QuestionType.Function',
+  Work = 'QuestionType.Work',
 }
 
 export interface ICellAddress {
