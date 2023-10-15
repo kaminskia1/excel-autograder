@@ -38,7 +38,7 @@ export class WizardComponent implements OnInit {
   registerAssignment(id: string) {
     this.assignmentService.retrieve(id).subscribe((assignment) => {
       this.activeAssignment = assignment;
-      if (!assignment.questions.length) this.questionService.addQuestion()
+      this.questionService.loadQuestions(assignment)
       this.activateWorkbook(assignment)
     });
   }
@@ -59,13 +59,13 @@ export class WizardComponent implements OnInit {
 
   highlightTableCell(cell: Cell|undefined) {
     if (cell == null) return
-    const renderedCell = this.workbookService.getTableCell(cell)
+    const renderedCell = this.workbookService.getTableCellByAddress(cell.fullAddress)
     if (renderedCell) renderedCell.isHighlighted = true
   }
 
   clearTableCell(cell: Cell|undefined) {
     if (cell == null) return
-    const renderedCell = this.workbookService.getTableCell(cell)
+    const renderedCell = this.workbookService.getTableCellByAddress(cell.fullAddress)
     if (renderedCell) renderedCell.isHighlighted = false
   }
   protected readonly QuestionElementType = QType;

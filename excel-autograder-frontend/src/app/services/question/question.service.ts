@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Question, QType } from "./question";
 import {Cell} from "exceljs";
 import { WorkbookService } from "../workbook/workbook.service";
+import {Assignment} from "../api/assignment/assignment";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,8 @@ export class QuestionService {
   constructor(private workbookService: WorkbookService) { }
 
 
-  loadQuestions(questions: Array<Question>) {
-    this.questions = questions
+  loadQuestions(assignment: Assignment) {
+    this.questions = assignment.questions
   }
 
   deleteQuestions() {

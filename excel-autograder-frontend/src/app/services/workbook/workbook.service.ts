@@ -30,6 +30,7 @@ export class WorkbookService {
       workbook.xlsx.load(arrayBuffer)
         .then(() => {
           this.activeWorkbook = workbook;
+          console.log(this.getSheets()[0].id)
           this.setActiveSheet(this.getSheets()[0])
         })
     };
@@ -75,13 +76,10 @@ export class WorkbookService {
     this.renderedTable = table;
   }
 
-  getTableCell(row: number|string|Cell, col: number = -1): RenderedCell | undefined {
-    if (this.activeSheet == null) return undefined
-    if (typeof row == "string") return this.renderedTable.find((c) => c.letter == row)?.values[col-1] || undefined
-    if (typeof row == "number") return this.renderedTable[col-1].values[row-1] || undefined
-    return this.renderedTable[row.fullAddress.col-1].values[row.fullAddress.row-1] || undefined
+  getTableCellByAddress(address: CellAddress): RenderedCell | undefined {
+    if (this.activeSheet?.name != address.sheetName) return undefined
+    return this.renderedTable[address.col-1].values[address.row-1] || undefined
   }
-
   getCell(address: CellAddress): Cell | undefined {
     if (!this.activeWorkbook) return undefined
     return this.activeWorkbook.getWorksheet(address.sheetName).findCell(address.row, address.col)
