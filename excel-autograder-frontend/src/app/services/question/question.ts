@@ -1,12 +1,4 @@
-import { Cell } from "exceljs";
-
-export interface Question {
-  type: QType
-  points: number
-  targetCell?: CellAddress
-  _targetCell?: Cell
-  targetValue?: string
-}
+import { Cell } from 'exceljs';
 
 export enum QType {
   Value= 'value',
@@ -19,4 +11,12 @@ export interface CellAddress {
   address: string;
   row: number;
   col: number;
+}
+
+export interface Question {
+  type: QType
+  points: number
+  targetCell?: CellAddress
+  _targetCell?: Cell
+  targetValue?: string
 }

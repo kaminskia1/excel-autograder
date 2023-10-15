@@ -8,7 +8,7 @@ describe('NewAssignmentDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewAssignmentDialogComponent]
+      declarations: [NewAssignmentDialogComponent],
     });
     fixture = TestBed.createComponent(NewAssignmentDialogComponent);
     component = fixture.componentInstance;

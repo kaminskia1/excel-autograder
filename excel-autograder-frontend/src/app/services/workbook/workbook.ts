@@ -1,6 +1,4 @@
-import {Cell} from "exceljs";
-
-export type RenderedTable = Array<{letter: string, values:Array<RenderedCell>}>
+import { Cell } from 'exceljs';
 
 export type RenderedCellColor = {
   background: string,
@@ -9,14 +7,20 @@ export type RenderedCellColor = {
 }
 
 export class RenderedCell {
-  parent: Cell
-  safeValue: string
-  isHighlighted: boolean
-  isHighlightedColor: RenderedCellColor
-  constructor(parent: Cell, safeValue = "", isHighlighted = false, isHighlightedColor = {background: "rgba(0, 0, 0, .075)", border: "rgba(0, 0, 0, .125)", color: ""}) {
+  parent: Cell;
+
+  safeValue: string;
+
+  isHighlighted: boolean;
+
+  isHighlightedColor: RenderedCellColor;
+
+  constructor(parent: Cell, safeValue = '', isHighlighted = false, isHighlightedColor = { background: 'rgba(0, 0, 0, .075)', border: 'rgba(0, 0, 0, .125)', color: '' }) {
     this.parent = parent;
     this.safeValue = safeValue;
     this.isHighlighted = isHighlighted;
     this.isHighlightedColor = isHighlightedColor;
   }
 }
+
+export type RenderedTable = Array<{letter: string, values:Array<RenderedCell>}>

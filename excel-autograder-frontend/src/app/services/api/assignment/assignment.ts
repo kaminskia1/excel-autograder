@@ -1,5 +1,5 @@
-import { User } from "../auth-service/auth";
-import { Question } from "../../question/question";
+import { User } from '../auth-service/auth';
+import { Question } from '../../question/question';
 
 export interface Assignment {
   readonly uuid: string;

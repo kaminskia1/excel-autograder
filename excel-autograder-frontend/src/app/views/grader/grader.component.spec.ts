@@ -8,7 +8,7 @@ describe('GraderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [GraderComponent]
+      declarations: [GraderComponent],
     });
     fixture = TestBed.createComponent(GraderComponent);
     component = fixture.componentInstance;
