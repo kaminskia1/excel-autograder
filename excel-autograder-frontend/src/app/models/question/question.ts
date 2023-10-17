@@ -1,6 +1,6 @@
 import { Cell } from 'exceljs';
 import { ICellAddress, QuestionType } from './misc';
-import { WorkbookService } from '../../services/workbook/workbook.service';
+import { WorkbookService } from '../workbook/workbook.service';
 import { IModel } from '../model';
 
 export interface IQuestionPartial {

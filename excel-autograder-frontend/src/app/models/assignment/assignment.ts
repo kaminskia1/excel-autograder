@@ -5,6 +5,8 @@ import { QuestionFactory } from '../question/question.factory';
 import { IUser } from '../user/user';
 import { AssignmentService } from './assignment.service';
 import { IApiModel } from '../model';
+import {AssignmentFactory} from "./assignment.factory";
+
 
 export interface IAssignmentPartial {
   readonly uuid: string;
@@ -54,6 +56,7 @@ export class Assignment implements IAssignment {
   constructor(
     assignment: IAssignmentPartial,
     private questionFactory: QuestionFactory,
+    private assignmentFactory: AssignmentFactory,
     private assignmentService: AssignmentService,
   ) {
     this.uuid = assignment.uuid;
@@ -63,9 +66,9 @@ export class Assignment implements IAssignment {
     this.name = assignment.name;
     this.file = assignment.file;
     this.encrypted = assignment.encrypted;
-    this.questions = assignment.questions.map(
+    this.questions = assignment.questions?.map(
       (question) => this.questionFactory.createQuestion(question),
-    );
+    ) ?? []
   }
 
   public getSerializable(): IAssignmentPartial {
@@ -84,7 +87,7 @@ export class Assignment implements IAssignment {
   /**
    * Save an assignment. Auto-resolves
    */
-  public save(): Observable<Assignment> {
+  public save(): Observable<IAssignment> {
     const form: FormData = new FormData();
     Object.entries(this).forEach(
       ([key, value]) => { if (!this.specialTypes.includes(key)) form.append(key, value); },
@@ -98,13 +101,13 @@ export class Assignment implements IAssignment {
       // existing
       if (this.cache.file) form.append('file', this.cache.file, this.file.split('/').pop());
       const obs = (this.assignmentService.put(`assignments/${this.uuid}/`, form) as Observable<Assignment>).pipe(shareReplay(1));
-      obs.subscribe(() => { });
+      obs.subscribe((assignment: IAssignment) => { return });
       return obs;
     }
     // new, @TODO: change file: Blob to file: File
     if (this.cache.file) form.append('file', this.cache.file, this.cache.file.name);
-    const obs: Observable<Assignment> = (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(shareReplay(1));
-    obs.subscribe(() => { });
+    const obs: Observable<IAssignment> = (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(shareReplay(1));
+    obs.subscribe((assignment: IAssignment) => { return });
     return obs;
   }
 

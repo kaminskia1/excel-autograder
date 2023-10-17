@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Question } from './question';
 import { QuestionFactory } from './question.factory';
-import { WorkbookService } from '../../services/workbook/workbook.service';
+import { WorkbookService } from '../workbook/workbook.service';
 import { Assignment } from '../assignment/assignment';
 import { QuestionType } from './misc';
 

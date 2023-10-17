@@ -2,10 +2,10 @@ import { Component, EventEmitter, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   Assignment,
-  IAssignment,
-  IAssignmentPartial,
+  IAssignment, IAssignmentPartial,
 } from '../../../models/assignment/assignment';
 import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
+import { FormBuilder, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-new-assignment-dialog',
@@ -13,23 +13,49 @@ import { AssignmentFactory } from '../../../models/assignment/assignment.factory
   styleUrls: ['./new-assignment-dialog.component.scss'],
 })
 export class NewAssignmentDialogComponent {
+  newAssignmentForm;
   newAssignment: Assignment;
 
   constructor(
+    private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<NewAssignmentDialogComponent>,
     public assignmentFactory: AssignmentFactory,
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
-    this.newAssignment = this.assignmentFactory.createAssignment({
-      name: '',
-      file: '',
-      encrypted: false,
-      questions: [],
-    } as unknown as IAssignmentPartial);
+    this.newAssignment = this.assignmentFactory.createAssignment({} as IAssignmentPartial)
+    this.newAssignmentForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      file: [null, Validators.required],
+      encrypted: [false],
+      key: [''],
+      questions: [[]]
+    });
+
+    this.newAssignmentForm.get('encrypted')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.newAssignmentForm.get('key')?.setValidators([Validators.required]);
+      } else {
+        this.newAssignmentForm.get('key')?.clearValidators();
+      }
+      this.newAssignmentForm.get('key')?.updateValueAndValidity();
+    });
   }
 
   create() {
-    this.data.emit(this.assignmentFactory.createAssignment(this.newAssignment));
-    this.dialogRef.close();
+    if (this.newAssignmentForm.invalid) return
+
+    const name = this.newAssignmentForm.value.name;
+    if (name) this.newAssignment.name = name
+
+    const file = this.newAssignmentForm.value.file;
+    if (file) this.newAssignment.setFile(file)
+
+    const encrypted = this.newAssignmentForm.value.encrypted;
+    if (encrypted != null) this.newAssignment.encrypted = encrypted
+
+    const key = this.newAssignmentForm.value.key;
+    if (key) this.newAssignment.setKey(key)
+    this.data.emit(this.newAssignment);
+    this.dialogRef.close()
   }
 }

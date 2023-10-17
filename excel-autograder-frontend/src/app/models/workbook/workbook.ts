@@ -1,57 +1,60 @@
-import { Injectable } from '@angular/core';
 import {
-  CellFormulaValue,
+  Cell,
+  CellErrorValue, CellFormulaValue,
   CellHyperlinkValue,
   CellRichTextValue,
-  CellErrorValue,
-  Worksheet,
   Workbook,
-  Cell,
+  Worksheet
 } from 'exceljs';
-import { RenderedCell, RenderedTable } from './workbook';
-import { ICellAddress } from '../../models/question/misc';
+import {ICellAddress} from "../question/misc";
 
-@Injectable({
-  providedIn: 'root',
-})
-export class WorkbookService {
-  activeWorkbook: Workbook|null = null;
+export type RenderedCellColor = {
+  background: string,
+  border: string,
+  color: string
+}
 
+export class RenderedCell {
+  parent: Cell;
+
+  safeValue: string;
+
+  isHighlighted: boolean;
+
+  isHighlightedColor: RenderedCellColor;
+
+  constructor(parent: Cell, safeValue = '', isHighlighted = false, isHighlightedColor = { background: 'rgba(0, 0, 0, .075)', border: 'rgba(0, 0, 0, .125)', color: '' }) {
+    this.parent = parent;
+    this.safeValue = safeValue;
+    this.isHighlighted = isHighlighted;
+    this.isHighlightedColor = isHighlightedColor;
+  }
+}
+
+export type RenderedColumn = {
+  letter: string,
+  values: Array<RenderedCell>
+}
+
+export type RenderedTable = Array<RenderedColumn>
+
+
+export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|null = null;
-
   renderedTable: RenderedTable = [];
 
-  loadWorkbook(file: Blob) {
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      if (e.target === null || e.target.result === null
-        || !(e.target.result instanceof ArrayBuffer)) return;
-      const arrayBuffer = e.target.result;
-      const workbook = new Workbook();
-      workbook.xlsx.load(arrayBuffer)
-        .then(() => {
-          this.activeWorkbook = workbook;
-          this.setActiveSheet(this.getSheets()[0]);
-        });
-    };
-    fileReader.readAsArrayBuffer(file);
-    this.refreshTable();
-  }
-
   getSheets(): Array<Worksheet> {
-    if (this.activeWorkbook === null) return [];
-    return this.activeWorkbook.worksheets;
-  }
-
-  setActiveSheet(sheet: Worksheet) {
-    if (this.activeWorkbook === null) return;
-    if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
-    this.activeSheet = sheet;
-    this.refreshTable();
+    return this.worksheets;
   }
 
   getActiveSheet(): Worksheet|null {
     return this.activeSheet;
+  }
+
+  setActiveSheet(sheet: Worksheet) {
+    if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
+    this.activeSheet = sheet;
+    this.refreshTable();
   }
 
   refreshTable(): void {
@@ -70,7 +73,7 @@ export class WorkbookService {
       table.push({ letter: column.letter, values: Array<RenderedCell>() });
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
         table[i - 1].values.push(
-          new RenderedCell(cell, WorkbookService.getCellSafeValue(cell).text),
+          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text),
         );
       });
     }
@@ -84,8 +87,7 @@ export class WorkbookService {
   }
 
   getCell(address: ICellAddress): Cell | undefined {
-    if (!this.activeWorkbook) return undefined;
-    return this.activeWorkbook.getWorksheet(address.sheetName).findCell(address.row, address.col);
+    return this.getWorksheet(address.sheetName).findCell(address.row, address.col);
   }
 
   addColumn() {

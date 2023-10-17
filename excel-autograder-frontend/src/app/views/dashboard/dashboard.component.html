@@ -36,13 +36,16 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item class="d-block w-100" (click)="download(assignment)">
-              Download Spreadsheet
+              Download
             </button>
             <button mat-menu-item class="d-block w-100">
-              Export Assignment
+              Rename
+            </button>
+            <button mat-menu-item class="d-block w-100">
+              Export
             </button>
             <button mat-menu-item class="d-block w-100 alert" (click)="deleteItem(assignment)">
-              Delete Assignment
+              Delete
             </button>
           </mat-menu>
         </div>

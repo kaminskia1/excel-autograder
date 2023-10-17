@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
-import { WorkbookService } from '../../services/workbook/workbook.service';
+import { WorkbookService } from '../../models/workbook/workbook.service';
 import { QuestionService } from '../../models/question/question.service';
 import { Question } from '../../models/question/question';
 import { QuestionType } from '../../models/question/misc';

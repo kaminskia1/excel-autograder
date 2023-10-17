@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WorkbookService } from '../../services/workbook/workbook.service';
+import { WorkbookService } from '../workbook/workbook.service';
 import { Question, IQuestionPartial } from './question';
 
 @Injectable({

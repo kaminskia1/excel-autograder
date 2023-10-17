@@ -1,1 +1,4 @@
-<p>grader works!</p>
+<div *ngIf="assignment">
+  {{assignment.name}}
+  {{workbookService.getActiveSheet()?.name}}
+</div>

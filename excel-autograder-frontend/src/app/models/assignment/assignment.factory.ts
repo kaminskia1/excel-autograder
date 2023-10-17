@@ -14,6 +14,6 @@ export class AssignmentFactory {
 
   createAssignment(assignment: IAssignmentPartial): Assignment {
     if (assignment instanceof Assignment) return assignment;
-    return new Assignment(assignment, this.questionFactory, this.assignmentService);
+    return new Assignment(assignment, this.questionFactory, this, this.assignmentService);
   }
 }

@@ -41,9 +41,10 @@ export class DashboardComponent implements OnInit {
     newAssignmentEmitter.subscribe((assignment: Assignment | null) => {
       if (assignment) {
         assignment.save().subscribe({
-          next: (liveAssignment: Assignment) => {
+          next: (liveAssignment: IAssignment) => {
+            const assignment = this.assignmentFactory.createAssignment(liveAssignment)
             this.snackBar.open('Assignment created!', 'Close', { duration: 1500 });
-            this.assignments.push(liveAssignment);
+            this.assignments.push(assignment);
             this.dataSource.data = this.assignments;
           },
           error: () => {

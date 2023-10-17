@@ -1,7 +1,7 @@
 import {
   Component, Input, ViewChild, ElementRef,
 } from '@angular/core';
-import { RenderedCell } from '../../../services/workbook/workbook';
+import { RenderedCell } from '../../../models/workbook/workbook';
 
 @Component({
   selector: 'app-table-cell',
