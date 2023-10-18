@@ -4,9 +4,9 @@ import {
   CellHyperlinkValue,
   CellRichTextValue,
   Workbook,
-  Worksheet
+  Worksheet,
 } from 'exceljs';
-import {ICellAddress} from "../question/misc";
+import { ICellAddress } from '../question/misc';
 
 export type RenderedCellColor = {
   background: string,
@@ -38,47 +38,23 @@ export type RenderedColumn = {
 
 export type RenderedTable = Array<RenderedColumn>
 
-
 export class FancyWorkbook extends Workbook {
-  activeSheet: Worksheet|null = null;
+  activeSheet: Worksheet|undefined = undefined;
+
   renderedTable: RenderedTable = [];
 
   getSheets(): Array<Worksheet> {
     return this.worksheets;
   }
 
-  getActiveSheet(): Worksheet|null {
+  getActiveSheet(): Worksheet|undefined {
     return this.activeSheet;
   }
 
-  setActiveSheet(sheet: Worksheet) {
+  setActiveSheet(sheet: Worksheet): void {
     if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
     this.activeSheet = sheet;
     this.refreshTable();
-  }
-
-  refreshTable(): void {
-    const table: RenderedTable = [];
-    if (this.activeSheet === null) {
-      this.renderedTable = [];
-      return;
-    }
-    for (let i = 1; i <= this.activeSheet.columns.length; i += 1) {
-      const column = this.activeSheet.getColumn(i);
-      if (column === null || column.eachCell === null
-        || column.letter === null || column.values === null) {
-        this.renderedTable = [];
-        return;
-      }
-      table.push({ letter: column.letter, values: Array<RenderedCell>() });
-      column.eachCell({ includeEmpty: true }, (cell: Cell) => {
-        table[i - 1].values.push(
-          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text),
-        );
-      });
-    }
-
-    this.renderedTable = table;
   }
 
   getTableCellByAddress(address: ICellAddress): RenderedCell | undefined {
@@ -103,7 +79,7 @@ export class FancyWorkbook extends Workbook {
   }
 
   getSheetHeight(): number {
-    if (this.activeSheet === null) return 0;
+    if (!this.activeSheet) return 0;
     return this.activeSheet.rowCount;
   }
 
@@ -129,5 +105,28 @@ export class FancyWorkbook extends Workbook {
       return { type: 'formula', text: `=${fv.formula}` };
     }
     return { type: 'unknown', text: 'ERROR' };
+  }
+
+  private refreshTable(): void {
+    const table: RenderedTable = [];
+    if (!this.activeSheet) {
+      this.renderedTable = [];
+      return;
+    }
+    for (let i = 1; i <= this.activeSheet.columns.length; i += 1) {
+      const column = this.activeSheet.getColumn(i);
+      if (column === null || column.eachCell === null
+        || column.letter === null || column.values === null) {
+        this.renderedTable = [];
+        return;
+      }
+      table.push({ letter: column.letter, values: Array<RenderedCell>() });
+      column.eachCell({ includeEmpty: true }, (cell: Cell) => {
+        table[i - 1].values.push(
+          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text),
+        );
+      });
+    }
+    this.renderedTable = table;
   }
 }

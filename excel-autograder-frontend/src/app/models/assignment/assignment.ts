@@ -5,8 +5,7 @@ import { QuestionFactory } from '../question/question.factory';
 import { IUser } from '../user/user';
 import { AssignmentService } from './assignment.service';
 import { IApiModel } from '../model';
-import {AssignmentFactory} from "./assignment.factory";
-
+import { AssignmentFactory } from './assignment.factory';
 
 export interface IAssignmentPartial {
   readonly uuid: string;
@@ -68,7 +67,7 @@ export class Assignment implements IAssignment {
     this.encrypted = assignment.encrypted;
     this.questions = assignment.questions?.map(
       (question) => this.questionFactory.createQuestion(question),
-    ) ?? []
+    ) ?? [];
   }
 
   public getSerializable(): IAssignmentPartial {
@@ -101,13 +100,13 @@ export class Assignment implements IAssignment {
       // existing
       if (this.cache.file) form.append('file', this.cache.file, this.file.split('/').pop());
       const obs = (this.assignmentService.put(`assignments/${this.uuid}/`, form) as Observable<Assignment>).pipe(shareReplay(1));
-      obs.subscribe((assignment: IAssignment) => { return });
+      obs.subscribe((assignment: IAssignment) => { });
       return obs;
     }
     // new, @TODO: change file: Blob to file: File
     if (this.cache.file) form.append('file', this.cache.file, this.cache.file.name);
     const obs: Observable<IAssignment> = (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(shareReplay(1));
-    obs.subscribe((assignment: IAssignment) => { return });
+    obs.subscribe((assignment: IAssignment) => { });
     return obs;
   }
 

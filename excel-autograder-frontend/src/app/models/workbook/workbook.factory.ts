@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Workbook} from "exceljs";
-import {FancyWorkbook} from "./workbook";
+import { FancyWorkbook } from './workbook';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +9,9 @@ export class WorkbookFactory {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
-        if (e.target === null || e.target.result === null || !(e.target.result instanceof ArrayBuffer)) {
-          reject("Invalid file format");
+        if (e.target === null || e.target.result === null
+          || !(e.target.result instanceof ArrayBuffer)) {
+          reject(Error('Invalid file format'));
           return;
         }
         const arrayBuffer = e.target.result;
@@ -20,7 +20,7 @@ export class WorkbookFactory {
           .then(() => {
             resolve(workbook);
           })
-          .catch(error => {
+          .catch((error) => {
             reject(error);
           });
       };

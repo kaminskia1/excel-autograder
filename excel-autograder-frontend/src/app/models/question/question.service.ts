@@ -32,6 +32,7 @@ export class QuestionService {
     const question: Question = this.questionFactory.createQuestion({
       type: QuestionType.Value,
       points: 1,
+      attributes: [],
     });
     this.questions.push(question);
   }

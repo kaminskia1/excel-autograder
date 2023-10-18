@@ -69,7 +69,7 @@
           <button class="w-100 h-100 miw-0" mat-button (click)="workbookService.addRow()">+</button>
         </div>
       </div>
-      <div class="column" *ngFor="let col of workbookService.renderedTable">
+      <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable">
         <div class="cell align-text-center">{{col.letter}}</div>
         <app-table-cell (click)="this.selectCell(rCell.parent)" *ngFor="let rCell of col.values" [hover]="activeQuestion !== null" [renderedCell]="rCell"></app-table-cell>
       </div>

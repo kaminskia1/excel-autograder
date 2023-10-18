@@ -2,12 +2,14 @@ import { Cell } from 'exceljs';
 import { ICellAddress, QuestionType } from './misc';
 import { WorkbookService } from '../workbook/workbook.service';
 import { IModel } from '../model';
+import { IFacet } from './fascet/facet';
 
 export interface IQuestionPartial {
   targetCell?: ICellAddress
   type: QuestionType
   points: number
   targetValue?: string
+  attributes: Array<IFacet>
 }
 
 export interface IQuestion extends IQuestionPartial, IModel<IQuestionPartial> {
@@ -24,6 +26,8 @@ export class Question implements IQuestion {
 
   targetValue?: string;
 
+  attributes: Array<IFacet> = [];
+
   private cache: { targetCell?: Cell } = {};
 
   constructor(
@@ -34,6 +38,7 @@ export class Question implements IQuestion {
     this.type = question.type;
     this.points = question.points;
     this.targetValue = question.targetValue;
+    this.attributes = question.attributes;
   }
 
   getSerializable(): IQuestionPartial {
@@ -42,6 +47,7 @@ export class Question implements IQuestion {
       type: this.type,
       points: this.points,
       targetValue: this.targetValue,
+      attributes: this.attributes,
     };
   }
 
