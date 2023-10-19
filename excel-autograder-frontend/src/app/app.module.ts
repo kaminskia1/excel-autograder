@@ -33,6 +33,10 @@ import { QuestionComponent } from './components/question/question.component';
 import { GraderComponent } from './views/grader/grader.component';
 import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-dialog/new-assignment-dialog.component';
 import { TableCellComponent } from './views/wizard/table-cell/table-cell.component';
+import { ValueFacetComponent } from './models/question/facet/types/value.facet/value.facet.component';
+import { FunctionChainFacetComponent } from './models/question/facet/types/function-chain.facet/function-chain.facet.component';
+import { FunctionContainsFacetComponent } from './models/question/facet/types/function-contains.facet/function-contains.facet.component';
+import { FunctionListFacetComponent } from './models/question/facet/types/function-list.facet/function-list.facet.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,10 @@ import { TableCellComponent } from './views/wizard/table-cell/table-cell.compone
     GraderComponent,
     NewAssignmentDialogComponent,
     TableCellComponent,
+    ValueFacetComponent,
+    FunctionChainFacetComponent,
+    FunctionContainsFacetComponent,
+    FunctionListFacetComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,9 @@
 import { Workbook } from 'exceljs';
 import {
   Facet, FacetType, IFacet, IFacetPartial,
-} from '../facet';
-import { IModel } from '../../../model';
+} from '../../facet';
+import { IModel } from '../../../../model';
+import { WorkbookService } from '../../../../workbook/workbook.service';
 
 export type IFunctionListFacetPartial = IFacetPartial
 
@@ -14,8 +15,8 @@ export class FunctionListFacet extends Facet implements
   IFunctionListFacet, IModel<IFunctionListFacetPartial> {
   readonly type: FacetType.FunctionListFacet = FacetType.FunctionListFacet;
 
-  constructor(facet: IFunctionListFacetPartial) {
-    super(facet);
+  constructor(facet: IFunctionListFacetPartial, workbookService: WorkbookService) {
+    super(facet, workbookService);
   }
 
   getSerializable(): IFunctionListFacetPartial {

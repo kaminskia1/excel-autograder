@@ -1,45 +1,20 @@
 import {
   Cell,
-  CellErrorValue, CellFormulaValue,
+  CellErrorValue,
+  CellFormulaValue,
   CellHyperlinkValue,
   CellRichTextValue,
   Workbook,
   Worksheet,
 } from 'exceljs';
+import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
-
-export type RenderedCellColor = {
-  background: string,
-  border: string,
-  color: string
-}
-
-export class RenderedCell {
-  parent: Cell;
-
-  safeValue: string;
-
-  isHighlighted: boolean;
-
-  isHighlightedColor: RenderedCellColor;
-
-  constructor(parent: Cell, safeValue = '', isHighlighted = false, isHighlightedColor = { background: 'rgba(0, 0, 0, .075)', border: 'rgba(0, 0, 0, .125)', color: '' }) {
-    this.parent = parent;
-    this.safeValue = safeValue;
-    this.isHighlighted = isHighlighted;
-    this.isHighlightedColor = isHighlightedColor;
-  }
-}
-
-export type RenderedColumn = {
-  letter: string,
-  values: Array<RenderedCell>
-}
-
-export type RenderedTable = Array<RenderedColumn>
+import { RenderedCell, RenderedTable } from './rendered-cell';
 
 export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|undefined = undefined;
+
+  renderedCellEmitter: EventEmitter<RenderedCell | undefined> = new EventEmitter<RenderedCell | undefined>();
 
   renderedTable: RenderedTable = [];
 
@@ -78,9 +53,21 @@ export class FancyWorkbook extends Workbook {
     this.refreshTable();
   }
 
+  emitRenderedCell(rCell: RenderedCell) {
+    this.renderedCellEmitter.emit(rCell);
+  }
+
+  getRenderedCellEmitter(): EventEmitter<RenderedCell | undefined> {
+    return this.renderedCellEmitter;
+  }
+
   getSheetHeight(): number {
     if (!this.activeSheet) return 0;
     return this.activeSheet.rowCount;
+  }
+
+  isRenderedCellEmitterSubscribed(): boolean {
+    return this.renderedCellEmitter.observed;
   }
 
   static getCellSafeValue(cell: Cell): {type: string, text: string} {

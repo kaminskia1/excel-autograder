@@ -3,7 +3,6 @@ import { Question } from './question';
 import { QuestionFactory } from './question.factory';
 import { WorkbookService } from '../workbook/workbook.service';
 import { Assignment } from '../assignment/assignment';
-import { QuestionType } from './misc';
 
 @Injectable({
   providedIn: 'root',
@@ -24,15 +23,13 @@ export class QuestionService {
     this.questions = [];
   }
 
-  getQuestions() {
+  getQuestions(): Array<Question> {
     return this.questions;
   }
 
   addQuestion() {
     const question: Question = this.questionFactory.createQuestion({
-      type: QuestionType.Value,
-      points: 1,
-      attributes: [],
+      facets: [],
     });
     this.questions.push(question);
   }

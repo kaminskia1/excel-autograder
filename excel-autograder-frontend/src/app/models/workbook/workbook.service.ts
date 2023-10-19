@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Worksheet, Cell } from 'exceljs';
-import { FancyWorkbook, RenderedCell } from './workbook';
+import { FancyWorkbook } from './workbook';
 import { ICellAddress } from '../question/misc';
 import { WorkbookFactory } from './workbook.factory';
+import { RenderedCell } from './rendered-cell';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,18 @@ export class WorkbookService {
 
   getCell(address: ICellAddress): Cell | undefined {
     return this.activeWorkbook?.getCell(address);
+  }
+
+  emitRenderedCell(cell: RenderedCell) {
+    this.activeWorkbook?.emitRenderedCell(cell);
+  }
+
+  isRenderedCellEmitterSubscribed(): boolean {
+    return this.activeWorkbook?.isRenderedCellEmitterSubscribed() || false;
+  }
+
+  getRenderedCellEmitter() {
+    return this.activeWorkbook?.getRenderedCellEmitter();
   }
 
   addColumn() {

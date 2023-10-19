@@ -1,7 +1,8 @@
 import {
   Component, Input, ViewChild, ElementRef,
 } from '@angular/core';
-import { RenderedCell } from '../../../models/workbook/workbook';
+import { WorkbookService } from '../../../models/workbook/workbook.service';
+import { RenderedCell } from '../../../models/workbook/rendered-cell';
 
 @Component({
   selector: 'app-table-cell',
@@ -14,6 +15,8 @@ export class TableCellComponent {
   @Input() renderedCell!: RenderedCell;
 
   @Input() hover!: boolean;
+
+  constructor(public workbookService: WorkbookService) { }
 
   isOverflow() {
     return this.textElement.nativeElement.offsetWidth < this.textElement.nativeElement.scrollWidth;

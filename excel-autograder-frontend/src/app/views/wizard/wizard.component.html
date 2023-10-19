@@ -6,51 +6,52 @@
       </button>
       <h1>Autograder</h1>
       <div class="spacer"></div>
-      <button class="ms-2 me-2" mat-button (click)="questionService.addQuestion()">Add</button>
+      <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
       <button class="ms-2 me-2" mat-button (click)="saveQuestions()">Save</button>
-
     </mat-toolbar>
-    <div class="questions">
+    <div class="question">
       <div class="p-2" *ngIf="!questionService.getQuestions().length">No questions found. Begin by adding one <mat-icon>arrow_upward</mat-icon></div>
-      <div class="p-1" *ngFor="let question of questionService.getQuestions(); let idx = index">
-        <mat-toolbar class="bg-transparent">
-          <h2>Question {{idx+1}}</h2>
+
+      <div class="p-1">
+        <mat-toolbar class="bg-transparent" *ngIf="activeQuestion">
+          <h2>Question {{questionService.getQuestions().indexOf(activeQuestion)+1}}</h2>
           <div class="spacer bg"></div>
-          <button mat-icon-button (click)="questionService.removeQuestion(question)">
-            <mat-icon>delete</mat-icon>
-          </button>
+
+
+        <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
+        <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1"(click)="nextQuestion()">></button>
+        <button mat-icon-button [matMenuTriggerFor]="questionMenu">
+          <mat-icon>list</mat-icon>
+        </button>
+
+          <mat-menu #questionMenu="matMenu">
+            <button mat-menu-item [matMenuTriggerFor]="attributes">Add Attributes</button>
+            <button mat-menu-item [matMenuTriggerFor]="actions">Actions</button>
+          </mat-menu>
+          <mat-menu #attributes="matMenu">
+            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionChainFacet)">
+              FunctionChainFacet
+            </button>
+            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionContainsFacet)">
+              FunctionContainsFacet
+            </button>
+            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionListFacet)">
+              FunctionListFacet
+            </button>
+            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.ValueFacet)">
+              ValueFacet
+            </button>
+          </mat-menu>
+
+          <mat-menu #actions="matMenu">
+            <button mat-menu-item (click)="deleteActiveQuestion()">
+              Delete
+            </button>
+          </mat-menu>
+
         </mat-toolbar>
-        <mat-form-field class="d-block">
-          <mat-label>Validator Type</mat-label>
-          <mat-select class="mb-2" [ngModel]="question.type" (ngModelChange)="question.type = $event">
-            <mat-option *ngFor="let kv of QuestionElementType | keyvalue" [value]="kv.value">{{kv.key}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="d-block">
-          <mat-label>Points</mat-label>
-          <input matInput [(ngModel)]="question.points">
-        </mat-form-field>
-
-        <span *ngIf="question.type === QuestionElementType.Value">
-          <mat-form-field class="d-block">
-            <mat-label>Target Value</mat-label>
-            <input matInput [(ngModel)]="question.targetValue">
-          </mat-form-field>
-
-          <span (mouseenter)="highlightTableCell(question.getTargetCell())" (mouseleave)="clearTableCell(question.getTargetCell())">
-            <mat-form-field class="d-block">
-              <mat-label>Target Cell</mat-label>
-              <input class="w-100 hide-disabled" matInput readonly [value]="(question.getTargetCell()?.fullAddress?.sheetName ? question.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (question.getTargetCell()?.address ?? '')">
-            </mat-form-field>
-
-            <div class="d-block">
-              <button class="w-50" mat-button [disabled]="activeQuestion" (click)="this.activeQuestion = question">Select</button>
-              <button class="w-50" mat-button color="accent" [disabled]="activeQuestion || !question.getTargetCell()" (click)="clearTableCell(question.getTargetCell()); question.setTargetCell(undefined)">Clear</button>
-            </div>
-          </span>
-        </span>
-
+        <div class="facet" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by adding an attribute!</div>
+        <ng-container #facetContainer></ng-container>
       </div>
     </div>
   </mat-drawer>
@@ -71,7 +72,7 @@
       </div>
       <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable">
         <div class="cell align-text-center">{{col.letter}}</div>
-        <app-table-cell (click)="this.selectCell(rCell.parent)" *ngFor="let rCell of col.values" [hover]="activeQuestion !== null" [renderedCell]="rCell"></app-table-cell>
+        <app-table-cell *ngFor="let rCell of col.values" [renderedCell]="rCell"></app-table-cell>
       </div>
       <div class="column">
         <div class="cell cell-border p-0">

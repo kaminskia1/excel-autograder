@@ -4,4 +4,4 @@
   'color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.color : '',
   'position': renderedCell.isHighlighted ? 'relative' : 'inherit',
   'border-radius': renderedCell.isHighlighted ? '2px' : ''
-}" [matTooltip]="isOverflow() ? renderedCell.safeValue : ''" matTooltipPosition="above">{{renderedCell.safeValue}}</div>
+}" [matTooltip]="isOverflow() ? renderedCell.safeValue : ''" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(renderedCell)">{{renderedCell.safeValue}}</div>

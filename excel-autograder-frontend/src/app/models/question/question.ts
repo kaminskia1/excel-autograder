@@ -1,73 +1,48 @@
-import { Cell } from 'exceljs';
-import { ICellAddress, QuestionType } from './misc';
-import { WorkbookService } from '../workbook/workbook.service';
+import { Workbook } from 'exceljs';
 import { IModel } from '../model';
-import { IFacet } from './fascet/facet';
+import { Facet, IFacet, IFacetPartial } from './facet/facet';
+import { FacetFactory } from './facet/facet.factory';
 
 export interface IQuestionPartial {
-  targetCell?: ICellAddress
-  type: QuestionType
-  points: number
-  targetValue?: string
-  attributes: Array<IFacet>
+  facets: Array<IFacetPartial>
 }
 
 export interface IQuestion extends IQuestionPartial, IModel<IQuestionPartial> {
-  getTargetCell(): Cell | undefined
-  setTargetCell(cell: Cell | ICellAddress | undefined): void
+  facets: Array<IFacet>
 }
 
 export class Question implements IQuestion {
-  targetCell?: ICellAddress;
+  facets: Array<Facet> = [];
 
-  type: QuestionType;
-
-  points: number;
-
-  targetValue?: string;
-
-  attributes: Array<IFacet> = [];
-
-  private cache: { targetCell?: Cell } = {};
-
-  constructor(
-    question: IQuestionPartial,
-    private workbookService: WorkbookService,
-  ) {
-    this.targetCell = question.targetCell;
-    this.type = question.type;
-    this.points = question.points;
-    this.targetValue = question.targetValue;
-    this.attributes = question.attributes;
+  constructor(question: IQuestionPartial, private facetFactory: FacetFactory) {
+    this.facets = question.facets.map((attr) => this.facetFactory.createFacet(attr));
   }
 
   getSerializable(): IQuestionPartial {
     return {
-      targetCell: this.targetCell,
-      type: this.type,
-      points: this.points,
-      targetValue: this.targetValue,
-      attributes: this.attributes,
+      facets: this.facets.map((attr) => attr.getSerializable()),
     };
   }
 
-  getTargetCell(): Cell | undefined {
-    if (this.cache.targetCell) return this.cache.targetCell;
-    if (this.targetCell) return this.workbookService.getCell(this.targetCell);
-    return undefined;
+  getMaxPoints(): number {
+    return this.facets.reduce((acc, facet) => acc + facet.getMaxPoints(), 0);
   }
 
-  setTargetCell(cell: Cell | ICellAddress | undefined) {
-    if (cell === undefined) {
-      this.targetCell = undefined;
-      delete this.cache.targetCell;
-      return;
-    }
-    if ('fullAddress' in cell) {
-      this.cache.targetCell = cell;
-      this.targetCell = cell.fullAddress;
-    } else {
-      this.targetCell = cell;
-    }
+  getPoints(workbook: Workbook): number {
+    return this.facets.reduce((acc, facet) => acc + facet.evaluatePoints(workbook), 0);
+  }
+
+  getFacets(): Array<Facet> {
+    return this.facets;
+  }
+
+  createFacet(iFacet: IFacetPartial): Facet {
+    const facet = this.facetFactory.createFacet(iFacet);
+    this.facets.push(facet);
+    return facet;
+  }
+
+  removeFacet(idx: number): void {
+    this.facets.splice(idx, 1);
   }
 }
