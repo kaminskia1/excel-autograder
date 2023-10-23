@@ -8,6 +8,7 @@ import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { Assignment } from '../../models/assignment/assignment';
 import { WorkbookFactory } from '../../models/workbook/workbook.factory';
 import { FancyWorkbook } from '../../models/workbook/workbook';
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-grader',
@@ -15,9 +16,13 @@ import { FancyWorkbook } from '../../models/workbook/workbook';
   styleUrls: ['./grader.component.scss'],
 })
 export class GraderComponent implements OnInit {
-  assignment: Assignment | null = null;
+  masterAssignment: Assignment | null = null;
 
-  assignmentWorkbook: FancyWorkbook | null = null;
+  masterWorkbook: FancyWorkbook | null = null;
+
+  userWorkbooks: Array<FancyWorkbook> = [];
+
+  dataSource = new MatTableDataSource<FancyWorkbook>(this.userWorkbooks);
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +49,7 @@ export class GraderComponent implements OnInit {
   registerAssignment(id: string) {
     this.assignmentService.retrieve(id).subscribe((iAssignment) => {
       const assignment = this.assignmentFactory.createAssignment(iAssignment);
-      this.assignment = assignment;
+      this.masterAssignment = assignment;
       this.questionService.loadQuestions(assignment);
       this.activateWorkbook(assignment);
     });
@@ -54,7 +59,7 @@ export class GraderComponent implements OnInit {
     assignment.getFile().subscribe((file) => {
       this.workbookService.loadWorkbook(file);
       this.workbookFactory.loadWorkbook(file).then((workbook: FancyWorkbook) => {
-        this.assignmentWorkbook = workbook;
+        this.masterWorkbook = workbook;
       });
     });
   }

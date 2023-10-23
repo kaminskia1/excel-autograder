@@ -42,7 +42,9 @@ export class Question implements IQuestion {
     return facet;
   }
 
-  removeFacet(idx: number): void {
-    this.facets.splice(idx, 1);
+  removeFacet(facet: Facet): void {
+    if (this.facets.indexOf(facet) === -1) throw new Error('Facet not found in question');
+    this.facets.splice(this.facets.indexOf(facet), 1);
   }
+
 }

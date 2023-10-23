@@ -11,20 +11,13 @@ import { Assignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { QuestionService } from '../../models/question/question.service';
-import { Facet, FacetType } from '../../models/question/facet/facet';
-import {
-  FunctionListFacetComponent,
-} from '../../models/question/facet/types/function-list.facet/function-list.facet.component';
-import {
-  ValueFacetComponent,
-} from '../../models/question/facet/types/value.facet/value.facet.component';
+import { Facet } from '../../models/question/facet/facet';
 import {
   FunctionChainFacetComponent,
 } from '../../models/question/facet/types/function-chain.facet/function-chain.facet.component';
-import {
-  FunctionContainsFacetComponent,
-} from '../../models/question/facet/types/function-contains.facet/function-contains.facet.component';
 import { Question } from '../../models/question/question';
+import {HeaderComponent} from "../../models/question/facet/header/header/header.component";
+import {FacetLibrary, FacetType} from "../../models/question/facet/types/lib";
 
 @Component({
   selector: 'app-wizard',
@@ -137,50 +130,14 @@ export class WizardComponent implements AfterViewInit {
   }
 
   addFacetComponent(facet: Facet) {
-    let com;
-    switch (facet.type) {
-      case FacetType.FunctionChainFacet:
-        com = this.facetContainer.createComponent(FunctionChainFacetComponent);
-        break;
-      case FacetType.FunctionContainsFacet:
-        com = this.facetContainer.createComponent(FunctionContainsFacetComponent);
-        break;
-      case FacetType.FunctionListFacet:
-        com = this.facetContainer.createComponent(FunctionListFacetComponent);
-        break;
-      case FacetType.ValueFacet:
-        com = this.facetContainer.createComponent(ValueFacetComponent);
-    }
+    const header = this.facetContainer.createComponent(HeaderComponent);
+    const com = FacetLibrary.getFacetComponent(facet, this.facetContainer);
     com.setInput('facet', facet);
     com.setInput('workbookService', this.workbookService);
-  }
-
-  addFacet(question: Question, type: FacetType) {
-    switch (type) {
-      case FacetType.FunctionChainFacet:
-        this.addFacetComponent(question.createFacet({
-          type: FacetType.FunctionChainFacet,
-          points: 0,
-        }));
-        break;
-      case FacetType.FunctionContainsFacet:
-        this.addFacetComponent(question.createFacet({
-          type: FacetType.FunctionContainsFacet,
-          points: 0,
-        }));
-        break;
-      case FacetType.FunctionListFacet:
-        this.addFacetComponent(question.createFacet({
-          type: FacetType.FunctionListFacet,
-          points: 0,
-        }));
-        break;
-      case FacetType.ValueFacet:
-        this.addFacetComponent(question.createFacet({
-          type: FacetType.ValueFacet,
-          points: 0,
-        }));
-    }
+    header.setInput('question', this.activeQuestion);
+    header.setInput('facet', facet);
+    header.setInput('component', com);
+    header.setInput('self', header);
   }
 
   protected readonly FacetType = FacetType;

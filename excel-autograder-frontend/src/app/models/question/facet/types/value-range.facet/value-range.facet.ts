@@ -8,47 +8,54 @@ import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
 import {FacetType} from "../lib";
 
-export interface IValueFacetPartial extends IFacetPartial {
-  targetValue?: string
+export interface IValueRangeFacetPartial extends IFacetPartial {
+  lowerBounds?: number
+  upperBounds?: number
   targetCell?: ICellAddress
 }
 
-export interface IValueFacet extends IValueFacetPartial, IFacet {
+export interface IValueRangeFacet extends IValueRangeFacetPartial, IFacet {
 }
 
-export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacetPartial> {
-  readonly type: FacetType.ValueFacet = FacetType.ValueFacet;
-
-  targetValue?: string;
+export class ValueRangeFacet extends Facet implements IValueRangeFacet, IModel<IValueRangeFacetPartial> {
+  readonly type: FacetType.ValueRangeFacet = FacetType.ValueRangeFacet;
 
   targetCell?: ICellAddress;
 
+  lowerBounds?: number;
+
+  upperBounds?: number;
+
   private cache: { targetCell?: Cell } = {};
 
-  constructor(facet: IValueFacetPartial, workbookService: WorkbookService) {
+  constructor(facet: IValueRangeFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
-    this.targetValue = facet.targetValue;
+    this.lowerBounds = facet.lowerBounds;
+    this.upperBounds = facet.upperBounds;
     this.targetCell = facet.targetCell;
   }
 
   getName(): string {
-    return "Value";
+    return 'Range'
   }
 
-  getSerializable(): IValueFacetPartial {
+  getSerializable(): IValueRangeFacetPartial {
     return {
       type: this.type,
       points: this.points,
-      targetValue: this.targetValue,
+      lowerBounds: this.lowerBounds,
+      upperBounds: this.upperBounds,
       targetCell: this.targetCell,
     };
   }
 
   evaluatePoints(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
+    if (!this.lowerBounds || !this.upperBounds) throw new Error('Boundaries not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) throw new Error('Error reading target cell from workbook');
-    return `${targetCell.value}` === `${this.targetValue}` ? this.points : 0;
+    if (!targetCell) throw new Error('Error reading cell object from workbook');
+    if (!targetCell.value) return 0;
+    return this.lowerBounds < +targetCell.value && +targetCell.value < this.upperBounds ? this.points : 0;
   }
 
   getTargetCell(): Cell | undefined {

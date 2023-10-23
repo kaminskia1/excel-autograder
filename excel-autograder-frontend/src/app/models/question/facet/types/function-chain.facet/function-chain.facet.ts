@@ -1,9 +1,10 @@
 import { Workbook } from 'exceljs';
 import {
-  Facet, FacetType, IFacet, IFacetPartial,
+  Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
 import { WorkbookService } from '../../../../workbook/workbook.service';
+import {FacetType} from "../lib";
 
 export type IFunctionChainFacetPartial = IFacetPartial
 
@@ -17,6 +18,10 @@ export class FunctionChainFacet extends Facet implements
 
   constructor(facet: IFunctionChainFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
+  }
+
+  getName(): string {
+    return 'Function Chain';
   }
 
   getSerializable(): IFunctionChainFacetPartial {

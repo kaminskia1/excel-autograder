@@ -1,16 +1,16 @@
 <mat-drawer-container class="h-100" fullscreen *ngIf="activeAssignment">
-  <mat-drawer mode="side" opened="true" class="sidebar">
+  <mat-drawer mode="side" opened="true" class="sidebar" style="width:400px !important" class="sidebar">
     <mat-toolbar>
       <button mat-icon-button routerLink="/">
         <mat-icon>home</mat-icon>
       </button>
-      <h1>Autograder</h1>
+      <h1 class="ps-2">Questions</h1>
       <div class="spacer"></div>
       <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
       <button class="ms-2 me-2" mat-button (click)="saveQuestions()">Save</button>
     </mat-toolbar>
     <div class="question">
-      <div class="p-2" *ngIf="!questionService.getQuestions().length">No questions found. Begin by adding one <mat-icon>arrow_upward</mat-icon></div>
+      <div class="ps-3 pe-3" *ngIf="!questionService.getQuestions().length">No questions found. Begin by adding one <mat-icon>arrow_upward</mat-icon></div>
 
       <div class="p-1">
         <mat-toolbar class="bg-transparent" *ngIf="activeQuestion">
@@ -18,28 +18,34 @@
           <div class="spacer bg"></div>
 
 
-        <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
-        <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1"(click)="nextQuestion()">></button>
-        <button mat-icon-button [matMenuTriggerFor]="questionMenu">
-          <mat-icon>list</mat-icon>
-        </button>
+          <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
+          <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1" (click)="nextQuestion()">></button>
+          <button mat-icon-button [matMenuTriggerFor]="questionMenu">
+            <mat-icon>list</mat-icon>
+          </button>
 
           <mat-menu #questionMenu="matMenu">
             <button mat-menu-item [matMenuTriggerFor]="attributes">Add Attributes</button>
             <button mat-menu-item [matMenuTriggerFor]="actions">Actions</button>
           </mat-menu>
           <mat-menu #attributes="matMenu">
-            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionChainFacet)">
-              FunctionChainFacet
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 0}))">
+              Value Equals
             </button>
-            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionContainsFacet)">
-              FunctionContainsFacet
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 0}))">
+              Value Range
             </button>
-            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.FunctionListFacet)">
-              FunctionListFacet
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 0}))">
+              Formula Contains
             </button>
-            <button mat-menu-item class="d-block w-100" (click)="addFacet(activeQuestion, FacetType.ValueFacet)">
-              ValueFacet
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 0}))">
+              Formula Regex
+            </button>
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FunctionListFacet, points: 0}))">
+              Function List
+            </button>
+            <button mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FunctionChainFacet, points: 0}))">
+              Function Chain
             </button>
           </mat-menu>
 
@@ -50,8 +56,10 @@
           </mat-menu>
 
         </mat-toolbar>
-        <div class="facet" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by adding an attribute!</div>
-        <ng-container #facetContainer></ng-container>
+        <div class="ps-3 pe-3">
+          <div class="facet" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by adding an attribute!</div>
+          <ng-container #facetContainer></ng-container>
+        </div>
       </div>
     </div>
   </mat-drawer>
@@ -65,14 +73,14 @@
     <div class="excel-table" *ngIf="workbookService.getSheetHeight()">
       <div class="column">
         <div class="cell cell-border"></div>
-        <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getSheetHeight())">{{val}}</div>
+        <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getSheetHeight())">{{val+1}}</div>
         <div class="cell cell-border p-0">
           <button class="w-100 h-100 miw-0" mat-button (click)="workbookService.addRow()">+</button>
         </div>
       </div>
       <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable">
         <div class="cell align-text-center">{{col.letter}}</div>
-        <app-table-cell *ngFor="let rCell of col.values" [renderedCell]="rCell"></app-table-cell>
+        <app-table-cell *ngFor="let rCell of col.values" [renderedCell]="rCell" [hover]="workbookService.isRenderedCellEmitterSubscribed()"></app-table-cell>
       </div>
       <div class="column">
         <div class="cell cell-border p-0">

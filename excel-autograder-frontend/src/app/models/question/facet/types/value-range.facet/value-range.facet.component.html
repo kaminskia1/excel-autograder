@@ -1,22 +1,27 @@
 <div class="pt-2 pb-3">
+  <mat-form-field class="d-block">
+    <mat-label>Points</mat-label>
+    <input matInput [(ngModel)]="facet.points">
+  </mat-form-field>
+
   <div class="d-flex">
-    <mat-form-field class="d-block">
-      <mat-label>Points</mat-label>
-      <input matInput [(ngModel)]="facet.points">
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label>Lower Bounds</mat-label>
+    <input matInput type="number" [(ngModel)]="facet.lowerBounds">
+  </mat-form-field>
     <div class="px-2"></div>
-    <mat-form-field class="d-block">
-      <mat-label>Target Value</mat-label>
-      <input matInput [(ngModel)]="facet.targetValue">
-    </mat-form-field>
-  </div>
+  <mat-form-field>
+    <mat-label>Upper Bounds</mat-label>
+    <input matInput type="number" [(ngModel)]="facet.upperBounds">
+  </mat-form-field>
+    </div>
 
   <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
     <mat-form-field class="d-block">
       <mat-label>Target Cell</mat-label>
       <input class="w-100 hide-disabled" matInput readonly [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
     </mat-form-field>
-    <div class="px-2"></div>
+
     <div class="d-block">
       <button class="w-50" mat-button [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()">Select</button>
       <button class="w-50" mat-button color="accent" [disabled]="!facet.getTargetCell()" (click)="clearTableCell(facet.getTargetCell()); facet.setTargetCell(undefined)">Clear</button>

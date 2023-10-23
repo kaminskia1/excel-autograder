@@ -21,4 +21,10 @@ export class TableCellComponent {
   isOverflow() {
     return this.textElement.nativeElement.offsetWidth < this.textElement.nativeElement.scrollWidth;
   }
+
+  getTooltip(): string {
+    if (this.renderedCell.parent.formula) return `=${this.renderedCell.parent.formula}`;
+    if (this.isOverflow()) return this.renderedCell.safeValue;
+    return ""
+  }
 }

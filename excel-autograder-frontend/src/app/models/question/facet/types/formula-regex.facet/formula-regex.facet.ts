@@ -1,54 +1,63 @@
-import { Cell } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
-import { ICellAddress } from '../../../misc';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
+import {Cell} from "exceljs";
+import {ICellAddress} from "../../../misc";
 import {FacetType} from "../lib";
 
-export interface IValueFacetPartial extends IFacetPartial {
-  targetValue?: string
+export interface IFormulaRegexFacetPartial extends IFacetPartial {
   targetCell?: ICellAddress
+  expression?: string
 }
 
-export interface IValueFacet extends IValueFacetPartial, IFacet {
+export interface IFormulaRegexFacet extends IFormulaRegexFacetPartial, IFacet {
+
 }
 
-export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacetPartial> {
-  readonly type: FacetType.ValueFacet = FacetType.ValueFacet;
+export class FormulaRegexFacet extends Facet implements
+  IFormulaRegexFacet, IModel<IFormulaRegexFacetPartial> {
+  readonly type: FacetType.FormulaRegexFacet = FacetType.FormulaRegexFacet;
 
-  targetValue?: string;
+  expression?: string;
 
   targetCell?: ICellAddress;
 
   private cache: { targetCell?: Cell } = {};
 
-  constructor(facet: IValueFacetPartial, workbookService: WorkbookService) {
+  constructor(facet: IFormulaRegexFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
-    this.targetValue = facet.targetValue;
     this.targetCell = facet.targetCell;
+    this.expression = facet.expression;
   }
 
   getName(): string {
-    return "Value";
+    return 'Formula Regex';
   }
 
-  getSerializable(): IValueFacetPartial {
+  getSerializable(): IFormulaRegexFacetPartial {
     return {
       type: this.type,
       points: this.points,
-      targetValue: this.targetValue,
+      expression: this.expression,
       targetCell: this.targetCell,
     };
   }
 
   evaluatePoints(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
+    if (!this.expression) throw new Error('Target formula not set');
     const targetCell = workbook.getCell(this.targetCell);
+    let expression;
+    try {
+      expression = new RegExp(this.expression);
+    } catch (e) {
+      throw new Error('Error parsing regex')
+    }
     if (!targetCell) throw new Error('Error reading target cell from workbook');
-    return `${targetCell.value}` === `${this.targetValue}` ? this.points : 0;
+    return expression.test(targetCell.formula) ? this.points : 0;
   }
 
   getTargetCell(): Cell | undefined {

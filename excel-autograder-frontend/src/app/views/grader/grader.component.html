@@ -1,4 +1,61 @@
-<div *ngIf="assignment">
-  {{assignment.name}}
-  {{workbookService.getActiveSheet()?.name}}
+<div class="container pt-5" *ngIf="masterAssignment">
+  <div class="row">
+    <div class="col-5 pe-2">
+      <h1>{{masterAssignment.name}}</h1>
+
+      <div class="pb-4" *ngFor="let question of masterAssignment.getQuestions(); let i = index">
+        <h2>Question {{i+1}}</h2>
+        <mat-accordion [multi]="true">
+
+          <mat-expansion-panel *ngIf="!question.getFacets().length" [disabled]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                No Attributes added
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p></p>
+          </mat-expansion-panel>
+
+
+          <mat-expansion-panel *ngFor="let facet of question.getFacets()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{facet.getName()}}
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p></p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+
+    </div>
+
+
+
+    <div class="col-7 ps-2">
+
+      <mat-form-field class="file-drop">
+        <ngx-mat-dropzone [textContent]="'Drag and drop your files here! (.xlsx)'">
+          <input type="file" fileInput multiple />
+        </ngx-mat-dropzone>
+      </mat-form-field>
+      <mat-table *ngIf="userWorkbooks.length" #table [dataSource]="dataSource" class="mat-mdc-elevation-specific">
+
+        <ng-container matColumnDef="originFile.name">
+
+        </ng-container>
+
+        <ng-container matColumnDef="originFile.size">
+
+        </ng-container>
+
+
+      </mat-table>
+    </div>
+  </div>
+
 </div>

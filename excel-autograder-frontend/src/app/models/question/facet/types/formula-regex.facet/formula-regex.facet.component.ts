@@ -1,17 +1,16 @@
-import { Component, Input } from '@angular/core';
-import { Cell } from 'exceljs';
-import { Subscription } from 'rxjs';
-import { FacetComponent } from '../../facet.component';
-import { ValueFacet } from './value.facet';
-import { WorkbookService } from '../../../../workbook/workbook.service';
+import {Component, Input} from '@angular/core';
+import {Subscription} from "rxjs";
+import {Cell} from "exceljs";
+import {FacetComponent} from "../../facet.component";
+import {FormulaRegexFacet} from "./formula-regex.facet";
 
 @Component({
-  selector: 'app-value.facet',
-  templateUrl: './value.facet.component.html',
-  styleUrls: ['./value.facet.component.scss'],
+  selector: 'app-formula-regex.facet',
+  templateUrl: './formula-regex.facet.component.html',
+  styleUrls: ['./formula-regex.facet.component.scss']
 })
-export class ValueFacetComponent extends FacetComponent {
-  @Input() override facet!: ValueFacet;
+export class FormulaRegexFacetComponent extends FacetComponent {
+  @Input() override facet!: FormulaRegexFacet;
 
   selectCellSubscriber?: Subscription;
 

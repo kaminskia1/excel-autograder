@@ -18,6 +18,8 @@ export class FancyWorkbook extends Workbook {
 
   renderedTable: RenderedTable = [];
 
+  originFile?: string;
+
   getSheets(): Array<Worksheet> {
     return this.worksheets;
   }

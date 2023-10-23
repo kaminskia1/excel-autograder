@@ -19,6 +19,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { DropzoneCdkModule } from '@ngx-dropzone/cdk';
+import { DropzoneMaterialModule } from '@ngx-dropzone/material';
 
 import { MatListModule } from '@angular/material/list';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,8 +38,12 @@ import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-d
 import { TableCellComponent } from './views/wizard/table-cell/table-cell.component';
 import { ValueFacetComponent } from './models/question/facet/types/value.facet/value.facet.component';
 import { FunctionChainFacetComponent } from './models/question/facet/types/function-chain.facet/function-chain.facet.component';
-import { FunctionContainsFacetComponent } from './models/question/facet/types/function-contains.facet/function-contains.facet.component';
+import { FormulaContainsFacetComponent } from './models/question/facet/types/formula-contains.facet/formula-contains-facet.component';
 import { FunctionListFacetComponent } from './models/question/facet/types/function-list.facet/function-list.facet.component';
+import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
+import { HeaderComponent } from './models/question/facet/header/header/header.component';
+import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -53,8 +60,11 @@ import { FunctionListFacetComponent } from './models/question/facet/types/functi
     TableCellComponent,
     ValueFacetComponent,
     FunctionChainFacetComponent,
-    FunctionContainsFacetComponent,
+    FormulaContainsFacetComponent,
     FunctionListFacetComponent,
+    ValueRangeFacetComponent,
+    HeaderComponent,
+    FormulaRegexFacetComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +89,10 @@ import { FunctionListFacetComponent } from './models/question/facet/types/functi
     MatTooltipModule,
     MatSnackBarModule,
     NgxMatFileInputModule,
-
+    MatFormFieldModule,
+    DropzoneCdkModule,
+    DropzoneMaterialModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

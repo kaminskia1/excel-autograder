@@ -1,5 +1,5 @@
 .sidebar {
-  min-width: 400px
+  min-width: 400px;
 }
 .excel-table {
   display: flex;
@@ -7,6 +7,11 @@
 
 .column {
   flex: 0 0 auto;
+}
+
+.question {
+  height: calc(100% - 64px);
+  overflow: auto;
 }
 
 .cell {

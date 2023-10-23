@@ -6,8 +6,8 @@
     </mat-form-field>
     <div class="px-2"></div>
     <mat-form-field class="d-block">
-      <mat-label>Target Value</mat-label>
-      <input matInput [(ngModel)]="facet.targetValue">
+      <mat-label>Target Expression</mat-label>
+      <input matInput [(ngModel)]="facet.expression">
     </mat-form-field>
   </div>
 
@@ -16,7 +16,6 @@
       <mat-label>Target Cell</mat-label>
       <input class="w-100 hide-disabled" matInput readonly [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
     </mat-form-field>
-    <div class="px-2"></div>
     <div class="d-block">
       <button class="w-50" mat-button [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()">Select</button>
       <button class="w-50" mat-button color="accent" [disabled]="!facet.getTargetCell()" (click)="clearTableCell(facet.getTargetCell()); facet.setTargetCell(undefined)">Clear</button>

@@ -1,13 +1,7 @@
-import { Workbook } from 'exceljs';
-import { IModel } from '../../model';
-import { WorkbookService } from '../../workbook/workbook.service';
-
-export enum FacetType {
-  FunctionChainFacet = 'FunctionChainFacet',
-  FunctionContainsFacet = 'FunctionContainsFacet',
-  FunctionListFacet = 'FunctionListFacet',
-  ValueFacet = 'ValueFacet',
-}
+import {Workbook} from 'exceljs';
+import {IModel} from '../../model';
+import {WorkbookService} from '../../workbook/workbook.service';
+import {FacetType} from "./types/lib";
 
 export interface IFacetPartial {
   type: FacetType
@@ -17,6 +11,7 @@ export interface IFacetPartial {
 export interface IFacet extends IFacetPartial, IModel<IFacetPartial> {
   evaluatePoints(workbook: Workbook): number
   getMaxPoints(): number
+  getName(): string
 }
 
 export abstract class Facet implements IFacet {
@@ -31,6 +26,8 @@ export abstract class Facet implements IFacet {
   abstract evaluatePoints(workbook: Workbook): number
 
   abstract getSerializable(): IFacetPartial
+
+  abstract getName(): string
 
   getMaxPoints(): number {
     return this.points;

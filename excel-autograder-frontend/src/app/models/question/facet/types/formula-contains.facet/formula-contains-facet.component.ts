@@ -1,17 +1,16 @@
 import { Component, Input } from '@angular/core';
-import { Cell } from 'exceljs';
-import { Subscription } from 'rxjs';
 import { FacetComponent } from '../../facet.component';
-import { ValueFacet } from './value.facet';
-import { WorkbookService } from '../../../../workbook/workbook.service';
+import { FormulaContainsFacet } from './formula-contain.facet';
+import {Cell} from "exceljs";
+import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-value.facet',
-  templateUrl: './value.facet.component.html',
-  styleUrls: ['./value.facet.component.scss'],
+  selector: 'app-formula-contains.facet',
+  templateUrl: './formula-contains-facet.component.html',
+  styleUrls: ['./formula-contains-facet.component.scss'],
 })
-export class ValueFacetComponent extends FacetComponent {
-  @Input() override facet!: ValueFacet;
+export class FormulaContainsFacetComponent extends FacetComponent {
+  @Input() override facet!: FormulaContainsFacet;
 
   selectCellSubscriber?: Subscription;
 

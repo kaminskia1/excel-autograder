@@ -1,54 +1,58 @@
-import { Cell } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
-import { ICellAddress } from '../../../misc';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
+import {Cell} from "exceljs";
+import {ICellAddress} from "../../../misc";
 import {FacetType} from "../lib";
 
-export interface IValueFacetPartial extends IFacetPartial {
-  targetValue?: string
+export interface IFormulaContainsFacetPartial extends IFacetPartial {
   targetCell?: ICellAddress
+  formula?: string
 }
 
-export interface IValueFacet extends IValueFacetPartial, IFacet {
+export interface IFormulaContainsFacet extends IFormulaContainsFacetPartial, IFacet {
+
 }
 
-export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacetPartial> {
-  readonly type: FacetType.ValueFacet = FacetType.ValueFacet;
+export class FormulaContainsFacet extends Facet implements
+  IFormulaContainsFacet, IModel<IFormulaContainsFacetPartial> {
+  readonly type: FacetType.FormulaContainsFacet = FacetType.FormulaContainsFacet;
 
-  targetValue?: string;
+  formula?: string;
 
   targetCell?: ICellAddress;
 
   private cache: { targetCell?: Cell } = {};
 
-  constructor(facet: IValueFacetPartial, workbookService: WorkbookService) {
+  constructor(facet: IFormulaContainsFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
-    this.targetValue = facet.targetValue;
     this.targetCell = facet.targetCell;
+    this.formula = facet.formula;
   }
 
   getName(): string {
-    return "Value";
+    return 'Formula Contains';
   }
 
-  getSerializable(): IValueFacetPartial {
+  getSerializable(): IFormulaContainsFacetPartial {
     return {
       type: this.type,
       points: this.points,
-      targetValue: this.targetValue,
+      formula: this.formula,
       targetCell: this.targetCell,
     };
   }
 
   evaluatePoints(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
+    if (!this.formula) throw new Error('Target formula not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading target cell from workbook');
-    return `${targetCell.value}` === `${this.targetValue}` ? this.points : 0;
+    let cleaned = this.formula.replace(/"([^"]*")/g, '')
+    return targetCell.formula.includes(cleaned) ? this.points : 0;
   }
 
   getTargetCell(): Cell | undefined {

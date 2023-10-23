@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns = ['name', 'updated_at', 'action'];
 
-  dataSource = new MatTableDataSource<IAssignment>(this.assignments);
+  dataSource = new MatTableDataSource<Assignment>(this.assignments);
 
   constructor(
     public dialog: MatDialog,
