@@ -8,7 +8,7 @@ describe('FormulaRegexFacetComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FormulaRegexFacetComponent]
+      declarations: [FormulaRegexFacetComponent],
     });
     fixture = TestBed.createComponent(FormulaRegexFacetComponent);
     component = fixture.componentInstance;

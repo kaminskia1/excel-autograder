@@ -1,7 +1,7 @@
-import {Workbook} from 'exceljs';
-import {IModel} from '../../model';
-import {WorkbookService} from '../../workbook/workbook.service';
-import {FacetType} from "./types/lib";
+import { Workbook } from 'exceljs';
+import { IModel } from '../../model';
+import { WorkbookService } from '../../workbook/workbook.service';
+import { FacetType } from './types/lib';
 
 export interface IFacetPartial {
   type: FacetType
@@ -9,27 +9,27 @@ export interface IFacetPartial {
 }
 
 export interface IFacet extends IFacetPartial, IModel<IFacetPartial> {
-  evaluatePoints(workbook: Workbook): number
-  getMaxPoints(): number
+  evaluateScore(workbook: Workbook): number
+  getMaxScore(): number
   getName(): string
 }
 
 export abstract class Facet implements IFacet {
   abstract readonly type: FacetType;
 
-  points = 0;
+  points: number = 1;
 
   protected constructor(facet: IFacetPartial, protected workbookService: WorkbookService) {
     this.points = facet.points;
   }
 
-  abstract evaluatePoints(workbook: Workbook): number
+  abstract evaluateScore(workbook: Workbook): number
 
   abstract getSerializable(): IFacetPartial
 
   abstract getName(): string
 
-  getMaxPoints(): number {
+  getMaxScore(): number {
     return this.points;
   }
 }

@@ -6,7 +6,7 @@ import { IModel } from '../../../../model';
 import { ICellAddress } from '../../../misc';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import {FacetType} from "../lib";
+import { FacetType } from '../lib';
 
 export interface IValueRangeFacetPartial extends IFacetPartial {
   lowerBounds?: number
@@ -36,7 +36,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet, IModel<I
   }
 
   getName(): string {
-    return 'Range'
+    return 'Range';
   }
 
   getSerializable(): IValueRangeFacetPartial {
@@ -49,7 +49,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet, IModel<I
     };
   }
 
-  evaluatePoints(workbook: FancyWorkbook): number {
+  evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.lowerBounds || !this.upperBounds) throw new Error('Boundaries not set');
     const targetCell = workbook.getCell(this.targetCell);

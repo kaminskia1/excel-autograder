@@ -1,20 +1,19 @@
-import {FunctionChainFacet} from "./function-chain.facet/function-chain.facet";
-import {FormulaContainsFacet} from "./formula-contains.facet/formula-contain.facet";
-import {FunctionListFacet} from "./function-list.facet/function-list.facet";
-import {ValueFacet} from "./value.facet/value.facet";
-import {ValueRangeFacet} from "./value-range.facet/value-range.facet";
-import {Facet} from "../facet";
-import {ViewContainerRef} from "@angular/core";
+import { ViewContainerRef } from '@angular/core';
+import { FunctionChainFacet } from './function-chain.facet/function-chain.facet';
+import { FormulaContainsFacet } from './formula-contains.facet/formula-contain.facet';
+import { FunctionListFacet } from './function-list.facet/function-list.facet';
+import { ValueFacet } from './value.facet/value.facet';
+import { ValueRangeFacet } from './value-range.facet/value-range.facet';
+import { Facet } from '../facet';
 import {
-  FormulaContainsFacetComponent
-} from "./formula-contains.facet/formula-contains-facet.component";
-import {FunctionListFacetComponent} from "./function-list.facet/function-list.facet.component";
-import {ValueFacetComponent} from "./value.facet/value.facet.component";
-import {ValueRangeFacetComponent} from "./value-range.facet/value-range.facet.component";
-import {FunctionChainFacetComponent} from "./function-chain.facet/function-chain.facet.component";
-import {FormulaRegexFacet} from "./formula-regex.facet/formula-regex.facet";
-import {FormulaRegexFacetComponent} from "./formula-regex.facet/formula-regex.facet.component";
-
+  FormulaContainsFacetComponent,
+} from './formula-contains.facet/formula-contains-facet.component';
+import { FunctionListFacetComponent } from './function-list.facet/function-list.facet.component';
+import { ValueFacetComponent } from './value.facet/value.facet.component';
+import { ValueRangeFacetComponent } from './value-range.facet/value-range.facet.component';
+import { FunctionChainFacetComponent } from './function-chain.facet/function-chain.facet.component';
+import { FormulaRegexFacet } from './formula-regex.facet/formula-regex.facet';
+import { FormulaRegexFacetComponent } from './formula-regex.facet/formula-regex.facet.component';
 
 export enum FacetType {
   FunctionChainFacet = 'FunctionChainFacet',
@@ -32,11 +31,10 @@ export class FacetLibrary {
     FormulaRegexFacet,
     FunctionListFacet,
     ValueFacet,
-    ValueRangeFacet
+    ValueRangeFacet,
   };
 
-  static getFacetComponent(facet: Facet, container: ViewContainerRef)
-  {
+  static getFacetComponent(facet: Facet, container: ViewContainerRef) {
     switch (facet.type) {
       case FacetType.FunctionChainFacet:
         return container.createComponent(FunctionChainFacetComponent);

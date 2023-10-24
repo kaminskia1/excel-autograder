@@ -9,5 +9,4 @@ import { FunctionListFacet } from './function-list.facet';
 })
 export class FunctionListFacetComponent extends FacetComponent {
   @Input() override facet!: FunctionListFacet;
-
 }

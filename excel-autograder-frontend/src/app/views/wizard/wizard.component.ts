@@ -16,8 +16,8 @@ import {
   FunctionChainFacetComponent,
 } from '../../models/question/facet/types/function-chain.facet/function-chain.facet.component';
 import { Question } from '../../models/question/question';
-import {HeaderComponent} from "../../models/question/facet/header/header/header.component";
-import {FacetLibrary, FacetType} from "../../models/question/facet/types/lib";
+import { HeaderComponent } from '../../models/question/facet/header/header/header.component';
+import { FacetLibrary, FacetType } from '../../models/question/facet/types/lib';
 
 @Component({
   selector: 'app-wizard',

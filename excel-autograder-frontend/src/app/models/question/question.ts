@@ -24,12 +24,12 @@ export class Question implements IQuestion {
     };
   }
 
-  getMaxPoints(): number {
-    return this.facets.reduce((acc, facet) => acc + facet.getMaxPoints(), 0);
+  getMaxScore(): number {
+    return this.facets.reduce((acc, facet) => acc + facet.getMaxScore(), 0);
   }
 
-  getPoints(workbook: Workbook): number {
-    return this.facets.reduce((acc, facet) => acc + facet.evaluatePoints(workbook), 0);
+  evaluateScore(workbook: Workbook): number {
+    return this.facets.reduce((acc, facet) => acc + facet.evaluateScore(workbook), 0);
   }
 
   getFacets(): Array<Facet> {
@@ -46,5 +46,4 @@ export class Question implements IQuestion {
     if (this.facets.indexOf(facet) === -1) throw new Error('Facet not found in question');
     this.facets.splice(this.facets.indexOf(facet), 1);
   }
-
 }

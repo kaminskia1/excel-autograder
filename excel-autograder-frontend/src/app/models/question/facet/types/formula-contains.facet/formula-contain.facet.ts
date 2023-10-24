@@ -1,12 +1,12 @@
+import { Cell } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import {Cell} from "exceljs";
-import {ICellAddress} from "../../../misc";
-import {FacetType} from "../lib";
+import { ICellAddress } from '../../../misc';
+import { FacetType } from '../lib';
 
 export interface IFormulaContainsFacetPartial extends IFacetPartial {
   targetCell?: ICellAddress
@@ -46,12 +46,12 @@ export class FormulaContainsFacet extends Facet implements
     };
   }
 
-  evaluatePoints(workbook: FancyWorkbook): number {
+  evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.formula) throw new Error('Target formula not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading target cell from workbook');
-    let cleaned = this.formula.replace(/"([^"]*")/g, '')
+    const cleaned = this.formula.replace(/"([^"]*")/g, '');
     return targetCell.formula.includes(cleaned) ? this.points : 0;
   }
 

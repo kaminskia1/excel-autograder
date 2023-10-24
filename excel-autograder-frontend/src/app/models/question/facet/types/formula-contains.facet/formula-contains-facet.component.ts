@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Cell } from 'exceljs';
+import { Subscription } from 'rxjs';
 import { FacetComponent } from '../../facet.component';
 import { FormulaContainsFacet } from './formula-contain.facet';
-import {Cell} from "exceljs";
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-formula-contains.facet',
@@ -18,7 +18,7 @@ export class FormulaContainsFacetComponent extends FacetComponent {
     const rCellEmitter = this.workbookService.getRenderedCellEmitter();
     if (!rCellEmitter) return;
     this.selectCellSubscriber = rCellEmitter.subscribe((cell) => {
-      this.selectCellSubscriber?.unsubscribe()
+      this.selectCellSubscriber?.unsubscribe();
       if (!cell) return;
       this.facet.setTargetCell(cell.parent);
     });

@@ -19,7 +19,7 @@ export class ValueFacetComponent extends FacetComponent {
     const rCellEmitter = this.workbookService.getRenderedCellEmitter();
     if (!rCellEmitter) return;
     this.selectCellSubscriber = rCellEmitter.subscribe((cell) => {
-      this.selectCellSubscriber?.unsubscribe()
+      this.selectCellSubscriber?.unsubscribe();
       if (!cell) return;
       this.facet.setTargetCell(cell.parent);
     });

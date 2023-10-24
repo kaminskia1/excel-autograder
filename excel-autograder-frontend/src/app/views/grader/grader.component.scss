@@ -1,8 +1,25 @@
-.file-drop {
-  cursor: pointer;
-  width: 100%;
+input[type="file"]{
+  display:none;
+}
+
+.wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 1.2em;
+}
+
+.dropzone {
   height: 200px;
-  text-align: center;
-  vertical-align: center;
-  background-color: rgba(0,0,0,0) !important;
+  display: table;
+  width: 100%;
+}
+
+.button {
+  padding:10px;
+  cursor: pointer;
+  border-radius:5px;
+}
+
+.button:hover {
+  background-color: var(--mat-menu-item-hover-state-layer-color);
 }

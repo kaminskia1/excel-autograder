@@ -20,10 +20,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DropzoneCdkModule } from '@ngx-dropzone/cdk';
-import { DropzoneMaterialModule } from '@ngx-dropzone/material';
 
 import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './views/auth/login/login.component';
@@ -43,7 +42,9 @@ import { FunctionListFacetComponent } from './models/question/facet/types/functi
 import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
-import {MatExpansionModule} from "@angular/material/expansion";
+import { Dropzone } from './components/dropzone/dropzone';
+import {MatRippleModule} from "@angular/material/core";
+import {NgxFilesizeModule} from "ngx-filesize";
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
     ValueRangeFacetComponent,
     HeaderComponent,
     FormulaRegexFacetComponent,
+    Dropzone,
   ],
   imports: [
     BrowserModule,
@@ -90,9 +92,9 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatSnackBarModule,
     NgxMatFileInputModule,
     MatFormFieldModule,
-    DropzoneCdkModule,
-    DropzoneMaterialModule,
     MatExpansionModule,
+    MatRippleModule,
+    NgxFilesizeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

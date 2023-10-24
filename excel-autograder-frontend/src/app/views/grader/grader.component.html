@@ -1,8 +1,14 @@
 <div class="container pt-5" *ngIf="masterAssignment">
-  <div class="row">
+  <h1 *ngIf="!masterAssignment.getQuestions().length || !masterAssignment.isQuestionsValid()">{{masterAssignment.name}}</h1>
+  <div *ngIf="!masterAssignment.getQuestions().length" class="p-4 mat-elevation-z2">
+    No questions added.
+  </div>
+  <div *ngIf="!masterAssignment.isQuestionsValid()" class="p-4 mat-elevation-z2">
+    Not all questions are valid.
+  </div>
+  <div class="row" *ngIf="masterAssignment.getQuestions().length && masterAssignment.isQuestionsValid()">
     <div class="col-5 pe-2">
       <h1>{{masterAssignment.name}}</h1>
-
       <div class="pb-4" *ngFor="let question of masterAssignment.getQuestions(); let i = index">
         <h2>Question {{i+1}}</h2>
         <mat-accordion [multi]="true">
@@ -31,31 +37,52 @@
           </mat-expansion-panel>
         </mat-accordion>
       </div>
-
     </div>
-
-
-
     <div class="col-7 ps-2">
-
-      <mat-form-field class="file-drop">
-        <ngx-mat-dropzone [textContent]="'Drag and drop your files here! (.xlsx)'">
-          <input type="file" fileInput multiple />
-        </ngx-mat-dropzone>
-      </mat-form-field>
-      <mat-table *ngIf="userWorkbooks.length" #table [dataSource]="dataSource" class="mat-mdc-elevation-specific">
-
-        <ng-container matColumnDef="originFile.name">
-
-        </ng-container>
-
-        <ng-container matColumnDef="originFile.size">
-
-        </ng-container>
-
-
-      </mat-table>
+      <div class="dropzone mat-elevation-z2" dropzone (filesChange)="addSubmission($event)">
+        <div class="wrapper">
+          <input type="file" accept=".xlsx" id="files" (change)="addSubmission($event.target)" multiple>
+          <div class="d-flex align-items-center justify-content-center">
+            <label mat-ripple for="files" class="button mat-elevation-z2 d-inline-block">Select your files</label>
+            <div class="p-2 d-inline-block">or drop them here!</div>
+          </div>
+        </div>
+      </div>
+      <div class="mat-elevation-z2 mt-5">
+        <div class="p-4" *ngIf="!submissions.length">
+          No submissions added
+        </div>
+        <table mat-table *ngIf="submissions.length" #table [dataSource]="submissionTable" class="">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let submission"> {{ submission.file.name }} </td>
+          </ng-container>
+          <ng-container matColumnDef="size">
+            <th mat-header-cell *matHeaderCellDef> Size </th>
+            <td mat-cell *matCellDef="let submission"> {{ submission.file.size | filesize }} </td>
+          </ng-container>
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef> Score </th>
+            <td mat-cell *matCellDef="let submission"> {{ submission.score }} / {{ submission.maxScore }} </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              <button mat-button color="primary" class="float-end">
+                Export
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let submission">
+              <div class="float-end">
+                <button mat-icon-button color="accent" (click)="removeSubmission(submission)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
     </div>
   </div>
-
 </div>

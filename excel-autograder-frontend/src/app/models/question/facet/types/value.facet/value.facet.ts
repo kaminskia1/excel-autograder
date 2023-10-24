@@ -6,7 +6,7 @@ import { IModel } from '../../../../model';
 import { ICellAddress } from '../../../misc';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import {FacetType} from "../lib";
+import { FacetType } from '../lib';
 
 export interface IValueFacetPartial extends IFacetPartial {
   targetValue?: string
@@ -32,7 +32,7 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
   }
 
   getName(): string {
-    return "Value";
+    return 'Value';
   }
 
   getSerializable(): IValueFacetPartial {
@@ -44,10 +44,11 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
     };
   }
 
-  evaluatePoints(workbook: FancyWorkbook): number {
+  evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading target cell from workbook');
+    console.log(typeof this.points)
     return `${targetCell.value}` === `${this.targetValue}` ? this.points : 0;
   }
 

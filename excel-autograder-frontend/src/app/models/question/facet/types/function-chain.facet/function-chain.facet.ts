@@ -4,7 +4,7 @@ import {
 } from '../../facet';
 import { IModel } from '../../../../model';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import {FacetType} from "../lib";
+import { FacetType } from '../lib';
 
 export type IFunctionChainFacetPartial = IFacetPartial
 
@@ -31,7 +31,7 @@ export class FunctionChainFacet extends Facet implements
     };
   }
 
-  evaluatePoints(workbook: Workbook): number {
+  evaluateScore(workbook: Workbook): number {
     return this.points;
   }
 }

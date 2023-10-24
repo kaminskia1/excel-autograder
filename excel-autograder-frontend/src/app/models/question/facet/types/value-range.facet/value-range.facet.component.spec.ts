@@ -8,7 +8,7 @@ describe('ValueRangeFacetComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ValueRangeFacetComponent]
+      declarations: [ValueRangeFacetComponent],
     });
     fixture = TestBed.createComponent(ValueRangeFacetComponent);
     component = fixture.componentInstance;

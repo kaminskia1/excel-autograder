@@ -148,4 +148,9 @@ export class Assignment implements IAssignment {
   setKey(key: string|undefined) {
     this.cache.key = key;
   }
+
+  isQuestionsValid(): boolean {
+    // @TODO: Implement this
+    return this.getQuestions().length > 0;
+  }
 }
