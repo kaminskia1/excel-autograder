@@ -1,7 +1,7 @@
 # Excel Autograder
 
 
-### Run locally
-`docker-compose up --build`
-
-`docker-compose exec django python manage.py createsuperuser`
+### Run dev
+1. `touch .env`
+2. `docker-compose up --build`
+3. `docker-compose exec django python manage.py createsuperuser`
