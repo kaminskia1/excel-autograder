@@ -28,6 +28,7 @@ export class FunctionListFacet extends Facet implements
     return {
       type: this.type,
       points: this.points,
+      targetCell: this.targetCell,
     };
   }
 

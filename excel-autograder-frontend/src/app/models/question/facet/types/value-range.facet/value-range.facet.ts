@@ -1,9 +1,7 @@
-import { Cell } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
-import { ICellAddress } from '../../../misc';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
 import { FacetType } from '../lib';
@@ -11,22 +9,18 @@ import { FacetType } from '../lib';
 export interface IValueRangeFacetPartial extends IFacetPartial {
   lowerBounds?: number
   upperBounds?: number
-  targetCell?: ICellAddress
 }
 
 export interface IValueRangeFacet extends IValueRangeFacetPartial, IFacet {
 }
 
-export class ValueRangeFacet extends Facet implements IValueRangeFacet, IModel<IValueRangeFacetPartial> {
+export class ValueRangeFacet extends Facet implements IValueRangeFacet,
+  IModel<IValueRangeFacetPartial> {
   readonly type: FacetType.ValueRangeFacet = FacetType.ValueRangeFacet;
-
-  targetCell?: ICellAddress;
 
   lowerBounds?: number;
 
   upperBounds?: number;
-
-  private cache: { targetCell?: Cell } = {};
 
   constructor(facet: IValueRangeFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
@@ -55,26 +49,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet, IModel<I
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading cell object from workbook');
     if (!targetCell.value) return 0;
-    return this.lowerBounds < +targetCell.value && +targetCell.value < this.upperBounds ? this.points : 0;
-  }
-
-  getTargetCell(): Cell | undefined {
-    if (this.cache.targetCell) return this.cache.targetCell;
-    if (this.targetCell) return this.workbookService.getCell(this.targetCell);
-    return undefined;
-  }
-
-  setTargetCell(cell: Cell | ICellAddress | undefined) {
-    if (cell === undefined) {
-      this.targetCell = undefined;
-      delete this.cache.targetCell;
-      return;
-    }
-    if ('fullAddress' in cell) {
-      this.cache.targetCell = cell;
-      this.targetCell = cell.fullAddress;
-    } else {
-      this.targetCell = cell;
-    }
+    return (this.lowerBounds < +targetCell.value
+    ) && +targetCell.value < this.upperBounds ? this.points : 0;
   }
 }

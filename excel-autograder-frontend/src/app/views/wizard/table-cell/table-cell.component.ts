@@ -27,4 +27,11 @@ export class TableCellComponent {
     if (this.isOverflow()) return this.renderedCell.safeValue;
     return '';
   }
+
+  onClick() {
+    console.log(this.renderedCell)
+    if (this.workbookService.isRenderedCellEmitterSubscribed()) {
+      this.workbookService.emitRenderedCell(this.renderedCell);
+    }
+  }
 }

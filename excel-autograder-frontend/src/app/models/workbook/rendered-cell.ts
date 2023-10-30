@@ -16,7 +16,7 @@ export class RenderedCell {
   isHighlightedColor: RenderedCellColor;
 
   constructor(parent: Cell, safeValue = '', isHighlighted = false, isHighlightedColor = {
-    background: 'rgba(0, 0, 0, .075)',
+    background: 'rgba(0, 0, 0, .065)',
     border: 'rgba(0, 0, 0, .125)',
     color: '',
   }) {

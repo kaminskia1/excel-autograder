@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { FunctionChainFacet } from './function-chain.facet';
-import { WorkbookService } from '../../../../workbook/workbook.service';
 import { FacetComponent } from '../../facet.component';
 
 @Component({

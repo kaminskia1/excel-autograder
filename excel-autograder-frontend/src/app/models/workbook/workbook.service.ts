@@ -4,7 +4,6 @@ import { FancyWorkbook } from './workbook';
 import { ICellAddress } from '../question/misc';
 import { WorkbookFactory } from './workbook.factory';
 import { RenderedCell } from './rendered-cell';
-import { Facet } from '../question/facet/facet';
 
 @Injectable({
   providedIn: 'root',

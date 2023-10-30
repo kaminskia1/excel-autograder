@@ -14,7 +14,8 @@ import { RenderedCell, RenderedTable } from './rendered-cell';
 export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|undefined = undefined;
 
-  renderedCellEmitter: EventEmitter<RenderedCell | undefined> = new EventEmitter<RenderedCell | undefined>();
+  renderedCellEmitter: EventEmitter<RenderedCell | undefined
+  > = new EventEmitter<RenderedCell | undefined>();
 
   renderedTable: RenderedTable = [];
 

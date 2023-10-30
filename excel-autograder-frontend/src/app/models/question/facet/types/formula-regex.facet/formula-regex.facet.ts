@@ -1,15 +1,12 @@
-import { Cell } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
 import { IModel } from '../../../../model';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import { ICellAddress } from '../../../misc';
 import { FacetType } from '../lib';
 
 export interface IFormulaRegexFacetPartial extends IFacetPartial {
-  targetCell?: ICellAddress
   expression?: string
 }
 
@@ -22,10 +19,6 @@ export class FormulaRegexFacet extends Facet implements
   readonly type: FacetType.FormulaRegexFacet = FacetType.FormulaRegexFacet;
 
   expression?: string;
-
-  targetCell?: ICellAddress;
-
-  private cache: { targetCell?: Cell } = {};
 
   constructor(facet: IFormulaRegexFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
@@ -58,25 +51,5 @@ export class FormulaRegexFacet extends Facet implements
     }
     if (!targetCell) throw new Error('Error reading target cell from workbook');
     return expression.test(targetCell.formula) ? this.points : 0;
-  }
-
-  getTargetCell(): Cell | undefined {
-    if (this.cache.targetCell) return this.cache.targetCell;
-    if (this.targetCell) return this.workbookService.getCell(this.targetCell);
-    return undefined;
-  }
-
-  setTargetCell(cell: Cell | ICellAddress | undefined) {
-    if (cell === undefined) {
-      this.targetCell = undefined;
-      delete this.cache.targetCell;
-      return;
-    }
-    if ('fullAddress' in cell) {
-      this.cache.targetCell = cell;
-      this.targetCell = cell.fullAddress;
-    } else {
-      this.targetCell = cell;
-    }
   }
 }

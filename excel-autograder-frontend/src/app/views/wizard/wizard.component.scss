@@ -24,7 +24,7 @@
   line-height: 26px;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: 1px solid #E1E1E1
+  border: 1px solid #E1E1E1;
 }
 .cell-border {
   min-width: 10px;
@@ -36,7 +36,6 @@
 .cell-active-hover:hover {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   z-index:100;
-  cursor: pointer
 }
 
 .sheet-active {

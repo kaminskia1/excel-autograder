@@ -8,8 +8,14 @@
   line-height: 26px;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: 1px solid #E1E1E1
+  border: 1px solid #E1E1E1;
+  cursor: pointer;
 }
+
+.cell:hover {
+  background: rgba(0, 0, 0, .025);
+}
+
 .cell-border {
   min-width: 10px;
   width: 36px;
@@ -20,5 +26,5 @@
 .cell-active-hover:hover {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   z-index:100;
-  cursor: pointer
+  background: white;
 }

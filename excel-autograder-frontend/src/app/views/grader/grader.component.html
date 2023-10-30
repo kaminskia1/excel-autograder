@@ -10,7 +10,7 @@
     <div class="col-5 pe-2">
       <h1>{{masterAssignment.name}}</h1>
       <div class="pb-4" *ngFor="let question of masterAssignment.getQuestions(); let i = index">
-        <h2>Question {{i+1}}</h2>
+        <h2>Problem {{i+1}}</h2>
         <mat-accordion [multi]="true">
 
           <mat-expansion-panel *ngIf="!question.getFacets().length" [disabled]="true">
