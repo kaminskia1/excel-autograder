@@ -11,31 +11,15 @@
     </mat-toolbar>
     <div class="question">
       <div class="ps-3 pe-3" *ngIf="!questionService.getQuestions().length">No questions found. Begin by adding one <mat-icon>arrow_upward</mat-icon></div>
-
       <div class="p-1">
         <mat-toolbar class="bg-transparent" *ngIf="activeQuestion">
           <h2>Problem {{questionService.getQuestions().indexOf(activeQuestion)+1}}</h2>
           <div class="spacer bg"></div>
-
-
           <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
           <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1" (click)="nextQuestion()">></button>
           <button mat-icon-button (click)="deleteActiveQuestion()">
             <mat-icon>delete</mat-icon>
           </button>
-
-<!--          <mat-menu #questionMenu="matMenu">-->
-<!--            <button mat-menu-item [matMenuTriggerFor]="attributes">Add Attributes</button>-->
-<!--            <button mat-menu-item [matMenuTriggerFor]="actions">Actions</button>-->
-<!--          </mat-menu>-->
-
-
-<!--          <mat-menu #actions="matMenu">-->
-<!--            <button mat-menu-item>-->
-<!--              Delete-->
-<!--            </button>-->
-<!--          </mat-menu>-->
-
         </mat-toolbar>
         <div class="ps-3 pe-3">
           <div class="facet" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
@@ -84,9 +68,7 @@
             Function Chain
           </button>
         </mat-menu>
-
         </span>
-
       </div>
       <div class="column">
         <div class="cell cell-border p-0">
@@ -94,6 +76,5 @@
         </div>
       </div>
       </div>
-
   </mat-drawer-content>
 </mat-drawer-container>

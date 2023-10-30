@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../services/api/api.service';
 import { IUser, User } from './user';
 import { UserFactory } from './user.factory';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class UserService extends ApiService {
   constructor(
     public override http: HttpClient,
     private userFactory: UserFactory,
-
+    private router: Router,
   ) {
     super(http);
     const user = localStorage.getItem('user');
@@ -27,12 +28,14 @@ export class UserService extends ApiService {
     localStorage.setItem('user', JSON.stringify(user));
     ApiService.registerHeader('Authorization', `Token ${user.token}`);
     this.currentUser.next(user);
+    this.router.navigate(['/']);
   }
 
   private deregisterUser(): void {
     localStorage.removeItem('user');
     ApiService.deregisterHeader('Authorization');
     this.currentUser.next(null);
+    this.router.navigate(['/login']);
   }
 
   public login(username: string, password: string): Observable<IUser> {

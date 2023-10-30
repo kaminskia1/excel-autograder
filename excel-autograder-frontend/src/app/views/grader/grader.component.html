@@ -73,6 +73,9 @@
             </th>
             <td mat-cell *matCellDef="let submission">
               <div class="float-end">
+                <button mat-icon-button color="primary">
+                  <mat-icon>play_arrow</mat-icon>
+                </button>
                 <button mat-icon-button color="accent" (click)="removeSubmission(submission)">
                   <mat-icon>delete</mat-icon>
                 </button>
