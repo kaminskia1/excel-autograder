@@ -99,7 +99,8 @@ export class WizardComponent implements AfterViewInit {
   addQuestion() {
     this.questionService.addQuestion();
     this.setActiveQuestion(
-      this.questionService.getQuestions()[this.questionService.getQuestions().length - 1]);
+      this.questionService.getQuestions()[this.questionService.getQuestions().length - 1],
+    );
   }
 
   prevQuestion() {

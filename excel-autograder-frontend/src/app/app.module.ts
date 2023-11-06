@@ -23,9 +23,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRippleModule } from '@angular/material/core';
+import { NgxFilesizeModule } from 'ngx-filesize';
+import { MatCardModule } from '@angular/material/card';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './views/auth/login/login.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { WizardComponent } from './views/wizard/wizard.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
@@ -43,13 +45,10 @@ import { ValueRangeFacetComponent } from './models/question/facet/types/value-ra
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
 import { Dropzone } from './components/dropzone/dropzone';
-import {MatRippleModule} from "@angular/material/core";
-import {NgxFilesizeModule} from "ngx-filesize";
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     DashboardComponent,
     WizardComponent,
     PageNotFoundComponent,
@@ -95,6 +94,7 @@ import {NgxFilesizeModule} from "ngx-filesize";
     MatExpansionModule,
     MatRippleModule,
     NgxFilesizeModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

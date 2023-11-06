@@ -1,5 +1,5 @@
 import {
-  Directive, HostListener, HostBinding, Output, Input, EventEmitter
+  Directive, HostListener, HostBinding, Output, Input, EventEmitter,
 } from '@angular/core';
 
 @Directive({

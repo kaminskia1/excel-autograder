@@ -1,8 +1,8 @@
-import {Cell, Workbook} from 'exceljs';
+import { Cell, Workbook } from 'exceljs';
 import { IModel } from '../../model';
 import { WorkbookService } from '../../workbook/workbook.service';
 import { FacetType } from './types/lib';
-import {ICellAddress} from '../misc';
+import { ICellAddress } from '../misc';
 
 export interface IFacetPartial {
   type: FacetType

@@ -1,6 +1,16 @@
 import { Observable, of } from 'rxjs';
 import { IApiModel } from '../model';
 
+export interface UserCredentials {
+  username: string|null
+  password: string|null
+}
+
+export interface UserCredentialsNew extends UserCredentials {
+  email: string|null
+  confirmPassword: string|null
+}
+
 export interface IUserPartial {
   uuid: string
   username: string

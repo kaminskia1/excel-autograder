@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
-import { IUser, User } from './user';
+import {
+  IUser, User, UserCredentials, UserCredentialsNew,
+} from './user';
 import { UserFactory } from './user.factory';
-import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root',
@@ -38,11 +40,17 @@ export class UserService extends ApiService {
     this.router.navigate(['/login']);
   }
 
-  public login(username: string, password: string): Observable<IUser> {
-    const req = this.post('auth/login/', { username, password }) as Observable<IUser>;
+  public login(creds: UserCredentials): Observable<IUser> {
+    const req = (this.post('auth/login/', creds) as Observable<IUser>).pipe(shareReplay(1));
     req.subscribe((user: IUser) => {
       this.registerUser(this.userFactory.createUser(user));
     });
+    return req;
+  }
+
+  public register(creds: UserCredentialsNew): Observable<IUser> {
+    const req = (this.post('auth/register/', creds) as Observable<IUser>).pipe(shareReplay(1));
+    req.subscribe((user: IUser) => { });
     return req;
   }
 
@@ -50,14 +58,6 @@ export class UserService extends ApiService {
     this.post('auth/logout/').subscribe(() => {
       this.deregisterUser();
     });
-  }
-
-  public register(username: string, password: string): Observable<IUser> {
-    const req = this.post('auth/register/', { username, password }) as Observable<IUser>;
-    req.subscribe((user: IUser) => {
-      this.registerUser(this.userFactory.createUser(user));
-    });
-    return req;
   }
 
   public isLoggedIn(): boolean {

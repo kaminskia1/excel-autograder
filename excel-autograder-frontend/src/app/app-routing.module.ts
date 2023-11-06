@@ -1,10 +1,10 @@
-import {inject, Injectable, NgModule} from '@angular/core';
+import { inject, Injectable, NgModule } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn, Router,
   RouterModule,
   RouterStateSnapshot,
-  Routes
+  Routes,
 } from '@angular/router';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 import { WizardComponent } from './views/wizard/wizard.component';

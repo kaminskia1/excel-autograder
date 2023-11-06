@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { Workbook } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { QuestionService } from '../../models/question/question.service';
@@ -9,7 +10,6 @@ import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { Assignment } from '../../models/assignment/assignment';
 import { WorkbookFactory } from '../../models/workbook/workbook.factory';
 import { FancyWorkbook } from '../../models/workbook/workbook';
-import {Workbook} from "exceljs";
 
 type Submission = {
   file: File,
@@ -81,31 +81,33 @@ export class GraderComponent implements OnInit {
 
     files.forEach((file) => {
       this.workbookFactory.loadWorkbook(file).then((workbook: FancyWorkbook) => {
-        const submission: Submission = { file, workbook,
+        const submission: Submission = {
+          file,
+          workbook,
           score: this.getScore(workbook),
-          maxScore: this.getMaxScore()
-        }
-        console.log(submission)
-        this.submissions.push(submission)
-        this.submissionTable.data = this.submissions.sort((a, b) => a.file.name.localeCompare(b.file.name));
+          maxScore: this.getMaxScore(),
+        };
+        this.submissions.push(submission);
+        this.submissionTable.data = this.submissions.sort(
+          (a, b) => a.file.name.localeCompare(b.file.name));
       });
     });
   }
 
   removeSubmission(submission: Submission) {
     this.submissions = this.submissions.filter((f) => f !== submission);
-    this.submissionTable.data = this.submissions
+    this.submissionTable.data = this.submissions;
   }
 
   getScore(workbook: FancyWorkbook): number {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()
-      .reduce((acc, que) => acc + que.evaluateScore(workbook), 0)
+      .reduce((acc, que) => acc + que.evaluateScore(workbook), 0);
   }
 
   getMaxScore(): number {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()
-      .reduce(function(acc: number, que) { return acc + que.getMaxScore()}, 0)
+      .reduce((acc: number, que) => acc + que.getMaxScore(), 0);
   }
 }

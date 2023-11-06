@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Cell } from 'exceljs';
 import { WorkbookService } from '../../workbook/workbook.service';
 import { IFacet } from './facet';
-import {Subscription} from "rxjs";
-import {Cell} from "exceljs";
 
 @Component({
   selector: 'app-facet',

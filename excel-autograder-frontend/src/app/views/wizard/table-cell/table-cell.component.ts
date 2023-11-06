@@ -29,7 +29,6 @@ export class TableCellComponent {
   }
 
   onClick() {
-    console.log(this.renderedCell)
     if (this.workbookService.isRenderedCellEmitterSubscribed()) {
       this.workbookService.emitRenderedCell(this.renderedCell);
     }

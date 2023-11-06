@@ -1,6 +1,36 @@
-<button mat-flat-button color="secondary" [value]="isLogin ? 'Login' : 'Register'" (click)="isLogin = !isLogin">
-  {{ isLogin ? 'Register' : 'Login' }}
-</button>
-<mat-divider></mat-divider>
-<app-login *ngIf="isLogin"></app-login>
-<app-register *ngIf="!isLogin"></app-register>
+<mat-drawer-container class="h-100" fullscreen>
+  <div class="h-100 d-flex justify-content-center align-items-center">
+    <mat-card class="p-2" style="width: 400px">
+      <div class="h2 align-text-center pt-5 pb-4">Autograder</div>
+      <mat-card-header>
+        <mat-card-title>{{ isLogin ? "Log In" : "Register" }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content >
+        <mat-divider class="mt-2 mb-3"></mat-divider>
+        <form *ngIf="isLogin" [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
+          <mat-form-field class="d-block" appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+          </mat-form-field>
+          <mat-form-field class="d-block" appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password">
+          </mat-form-field>
+          <div class="row">
+            <div class="col-6 pe-2">
+              <button mat-flat-button class="w-100" color="primary" type="submit" cdkFocusInitial>LOG IN</button>
+            </div>
+            <div class="col-6 ps-2">
+              <button mat-flat-button class="w-100" color="secondary" (click)="isLogin = false">REGISTER</button>
+            </div>
+          </div>
+        </form>
+
+        <span *ngIf="!isLogin">
+          <app-register></app-register>
+          <div class="d-inline-block w-100 text-center mt-4 mb-3">Already have an account? <button class="d-inline-block custom-login-text" (click)="isLogin = true">Log In</button></div>
+        </span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</mat-drawer-container>
