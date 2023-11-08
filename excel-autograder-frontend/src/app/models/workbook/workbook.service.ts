@@ -53,16 +53,31 @@ export class WorkbookService {
     return this.activeWorkbook?.getRenderedCellEmitter();
   }
 
-  addColumn() {
-    this.activeWorkbook?.addColumn();
+  addColumns() {
+    this.activeWorkbook?.addColumns();
   }
 
-  addRow() {
-    this.activeWorkbook?.addRow();
+  addRows() {
+    this.activeWorkbook?.addRows();
   }
 
   getSheetHeight(): number {
     if (this.activeWorkbook === null) return 0;
     return this.activeWorkbook.getSheetHeight();
+  }
+
+  getSheetWidth(): number {
+    if (this.activeWorkbook === null) return 0;
+    return this.activeWorkbook.getSheetWidth();
+  }
+
+  getRenderedSheetHeight(): number {
+    if (this.activeWorkbook === null) return 0;
+    return this.activeWorkbook.getRenderedSheetHeight();
+  }
+
+  getRenderedSheetWidth(): number {
+    if (this.activeWorkbook === null) return 0;
+    return this.activeWorkbook.getRenderedSheetWidth();
   }
 }

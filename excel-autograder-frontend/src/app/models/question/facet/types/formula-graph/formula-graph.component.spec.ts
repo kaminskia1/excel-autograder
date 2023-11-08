@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FunctionChainFacetComponent } from './function-chain.facet.component';
+import { FormulaGraphComponent } from './formula-graph.component';
 
 describe('FunctionChainFacetComponent', () => {
-  let component: FunctionChainFacetComponent;
-  let fixture: ComponentFixture<FunctionChainFacetComponent>;
+  let component: FormulaGraphComponent;
+  let fixture: ComponentFixture<FormulaGraphComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FunctionChainFacetComponent],
+      declarations: [FormulaGraphComponent],
     });
-    fixture = TestBed.createComponent(FunctionChainFacetComponent);
+    fixture = TestBed.createComponent(FormulaGraphComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

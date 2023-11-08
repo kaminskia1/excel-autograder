@@ -38,9 +38,9 @@ import { GraderComponent } from './views/grader/grader.component';
 import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-dialog/new-assignment-dialog.component';
 import { TableCellComponent } from './views/wizard/table-cell/table-cell.component';
 import { ValueFacetComponent } from './models/question/facet/types/value.facet/value.facet.component';
-import { FunctionChainFacetComponent } from './models/question/facet/types/function-chain.facet/function-chain.facet.component';
+import { FormulaGraphComponent } from './models/question/facet/types/formula-graph/formula-graph.component';
 import { FormulaContainsFacetComponent } from './models/question/facet/types/formula-contains.facet/formula-contains-facet.component';
-import { FunctionListFacetComponent } from './models/question/facet/types/function-list.facet/function-list.facet.component';
+import { FormulaListComponent } from './models/question/facet/types/formula-list.facet/formula-list.component';
 import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
@@ -59,9 +59,9 @@ import { Dropzone } from './components/dropzone/dropzone';
     NewAssignmentDialogComponent,
     TableCellComponent,
     ValueFacetComponent,
-    FunctionChainFacetComponent,
+    FormulaGraphComponent,
     FormulaContainsFacetComponent,
-    FunctionListFacetComponent,
+    FormulaListComponent,
     ValueRangeFacetComponent,
     HeaderComponent,
     FormulaRegexFacetComponent,

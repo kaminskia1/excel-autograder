@@ -49,7 +49,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading cell object from workbook');
     if (!targetCell.value) return 0;
-    return (this.lowerBounds < +targetCell.value
-    ) && +targetCell.value < this.upperBounds ? this.points : 0;
+    return (this.lowerBounds <= +targetCell.value
+    ) && +targetCell.value <= this.upperBounds ? this.points : 0;
   }
 }

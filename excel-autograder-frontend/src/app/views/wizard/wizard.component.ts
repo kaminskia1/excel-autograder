@@ -13,8 +13,8 @@ import { WorkbookService } from '../../models/workbook/workbook.service';
 import { QuestionService } from '../../models/question/question.service';
 import { Facet } from '../../models/question/facet/facet';
 import {
-  FunctionChainFacetComponent,
-} from '../../models/question/facet/types/function-chain.facet/function-chain.facet.component';
+  FormulaGraphComponent,
+} from '../../models/question/facet/types/formula-graph/formula-graph.component';
 import { Question } from '../../models/question/question';
 import { HeaderComponent } from '../../models/question/facet/header/header/header.component';
 import { FacetLibrary, FacetType } from '../../models/question/facet/types/lib';
@@ -144,5 +144,5 @@ export class WizardComponent implements AfterViewInit {
 
   protected readonly FacetType = FacetType;
 
-  protected readonly FunctionChainFacetComponent = FunctionChainFacetComponent;
+  protected readonly FunctionChainFacetComponent = FormulaGraphComponent;
 }

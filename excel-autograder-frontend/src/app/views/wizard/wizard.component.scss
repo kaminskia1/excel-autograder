@@ -1,6 +1,7 @@
 .sidebar {
   min-width: 400px;
 }
+
 .excel-table {
   display: flex;
 }
@@ -26,6 +27,7 @@
   text-overflow: ellipsis;
   border: 1px solid #E1E1E1;
 }
+
 .cell-border {
   min-width: 10px;
   width: 36px;
@@ -33,6 +35,7 @@
   text-align: center;
   border: 1px solid #E1E1E1
 }
+
 .cell-active-hover:hover {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   z-index:100;
@@ -41,11 +44,13 @@
 .sheet-active {
   background: rgba(0,0,0,.075);
 }
+
 .column-add {
   margin: 2px;
   width: 30px;
   height: 100%;
 }
+
 .miw-0 {
   min-width: 0;
 }

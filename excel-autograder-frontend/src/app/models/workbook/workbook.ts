@@ -10,6 +10,7 @@ import {
 import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
 import { RenderedCell, RenderedTable } from './rendered-cell';
+import {min} from "rxjs";
 
 export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|undefined = undefined;
@@ -18,7 +19,6 @@ export class FancyWorkbook extends Workbook {
   > = new EventEmitter<RenderedCell | undefined>();
 
   renderedTable: RenderedTable = [];
-
   getSheets(): Array<Worksheet> {
     return this.worksheets;
   }
@@ -30,6 +30,8 @@ export class FancyWorkbook extends Workbook {
   setActiveSheet(sheet: Worksheet): void {
     if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
     this.activeSheet = sheet;
+    this.addColumns(3);
+    this.addRows(5);
     this.refreshTable();
   }
 
@@ -42,15 +44,15 @@ export class FancyWorkbook extends Workbook {
     return this.getWorksheet(address.sheetName).findCell(address.row, address.col);
   }
 
-  addColumn() {
+  addColumns(n = 1) {
     if (!this.activeSheet) return;
-    this.activeSheet.columns = this.activeSheet.columns.concat([{}]);
+    for (let i = 0; i < n; i += 1) this.activeSheet.columns = this.activeSheet.columns.concat([{}]);
     this.refreshTable();
   }
 
-  addRow() {
+  addRows(n = 1) {
     if (!this.activeSheet) return;
-    this.activeSheet.addRow([]);
+    for (let i = 0; i < n; i += 1) this.activeSheet.addRow([]);
     this.refreshTable();
   }
 
@@ -64,7 +66,22 @@ export class FancyWorkbook extends Workbook {
 
   getSheetHeight(): number {
     if (!this.activeSheet) return 0;
+    console.log('h', this.activeSheet.rowCount);
     return this.activeSheet.rowCount;
+  }
+
+  getSheetWidth(): number {
+    if (!this.activeSheet) return 0;
+    return this.activeSheet.columnCount;
+  }
+
+  getRenderedSheetHeight(): number {
+    console.log('rs', this.renderedTable[0].values.length);
+    return this.renderedTable[0].values.length;
+  }
+
+  getRenderedSheetWidth(): number {
+    return this.renderedTable.length;
   }
 
   isRenderedCellEmitterSubscribed(): boolean {
@@ -101,7 +118,9 @@ export class FancyWorkbook extends Workbook {
       this.renderedTable = [];
       return;
     }
-    for (let i = 1; i <= this.activeSheet.columns.length; i += 1) {
+    // Capping max number of columns to prevent browser from hanging
+    const cols = this.activeSheet.columns.length < 50 ? this.activeSheet.columns.length : 50;
+    for (let i = 1; i <= cols; i += 1) {
       const column = this.activeSheet.getColumn(i);
       if (column === null || column.eachCell === null
         || column.letter === null || column.values === null) {
@@ -109,7 +128,10 @@ export class FancyWorkbook extends Workbook {
         return;
       }
       table.push({ letter: column.letter, values: Array<RenderedCell>() });
+      let count = 0;
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
+        count += 1;
+        if (count > 99) return;
         table[i - 1].values.push(
           new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text),
         );

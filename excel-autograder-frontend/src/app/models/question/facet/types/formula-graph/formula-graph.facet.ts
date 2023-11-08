@@ -6,25 +6,25 @@ import { IModel } from '../../../../model';
 import { WorkbookService } from '../../../../workbook/workbook.service';
 import { FacetType } from '../lib';
 
-export type IFunctionListFacetPartial = IFacetPartial
+export type IFunctionChainFacetPartial = IFacetPartial
 
-export interface IFunctionListFacet extends IFunctionListFacetPartial, IFacet {
+export interface IFunctionChainFacet extends IFunctionChainFacetPartial, IFacet {
 
 }
 
-export class FunctionListFacet extends Facet implements
-  IFunctionListFacet, IModel<IFunctionListFacetPartial> {
-  readonly type: FacetType.FunctionListFacet = FacetType.FunctionListFacet;
+export class FormulaGraphFacet extends Facet implements
+  IFunctionChainFacet, IModel<IFunctionChainFacetPartial> {
+  readonly type: FacetType.FormulaGraphFacet = FacetType.FormulaGraphFacet;
 
-  constructor(facet: IFunctionListFacetPartial, workbookService: WorkbookService) {
+  constructor(facet: IFunctionChainFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
   }
 
   getName(): string {
-    return 'Function List';
+    return 'Formula Graph';
   }
 
-  getSerializable(): IFunctionListFacetPartial {
+  getSerializable(): IFunctionChainFacetPartial {
     return {
       type: this.type,
       points: this.points,
