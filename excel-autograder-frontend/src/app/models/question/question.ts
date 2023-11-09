@@ -1,4 +1,3 @@
-import { Workbook } from 'exceljs';
 import { IModel } from '../model';
 import { Facet, IFacet, IFacetPartial } from './facet/facet';
 import { FacetFactory } from './facet/facet.factory';

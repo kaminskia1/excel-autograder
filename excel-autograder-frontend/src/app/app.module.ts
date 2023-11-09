@@ -44,7 +44,7 @@ import { FormulaListComponent } from './models/question/facet/types/formula-list
 import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
-import { Dropzone } from './components/dropzone/dropzone';
+import { DropzoneDirective } from './components/dropzone/dropzone.directive';
 
 @NgModule({
   declarations: [
@@ -65,7 +65,7 @@ import { Dropzone } from './components/dropzone/dropzone';
     ValueRangeFacetComponent,
     HeaderComponent,
     FormulaRegexFacetComponent,
-    Dropzone,
+    DropzoneDirective,
   ],
   imports: [
     BrowserModule,

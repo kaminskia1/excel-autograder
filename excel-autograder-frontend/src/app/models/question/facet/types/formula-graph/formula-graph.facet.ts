@@ -1,4 +1,3 @@
-import { Workbook } from 'exceljs';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';

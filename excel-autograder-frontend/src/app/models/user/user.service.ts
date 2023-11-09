@@ -50,7 +50,7 @@ export class UserService extends ApiService {
 
   public register(creds: UserCredentialsNew): Observable<IUser> {
     const req = (this.post('auth/register/', creds) as Observable<IUser>).pipe(shareReplay(1));
-    req.subscribe((user: IUser) => { });
+    req.subscribe((user: IUser) => user);
     return req;
   }
 

@@ -32,7 +32,7 @@ export class FormulaListFacet extends Facet implements
 
   formulas?: Array<string>;
 
-  private formulasCalled: Array<string> = [];
+  private remFormulas: Array<string> = [];
 
   constructor(facet: IFormulaListFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
@@ -52,21 +52,15 @@ export class FormulaListFacet extends Facet implements
   }
 
   evaluateScore(workbook: FancyWorkbook): number {
-    this.formulasCalled = [];
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.formulas) throw new Error('Target formulas not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading target cell from workbook');
     if (Object.prototype.hasOwnProperty.call(targetCell, 'error')) return 0;
     if (targetCell.formula == null) return 0;
-
+    this.remFormulas = this.formulas;
     this.recurse(workbook, targetCell);
-    for (let i = 0; i < this.formulas.length; i += 1) {
-      if (!this.formulasCalled.includes(this.formulas[i])) {
-        return 0;
-      }
-    }
-    return this.points;
+    return this.remFormulas.length ? 0 : this.points;
   }
 
   private recurse(workbook: FancyWorkbook, currentCell: Cell) {
@@ -75,8 +69,15 @@ export class FormulaListFacet extends Facet implements
     if (!formula) return;
 
     // get and save all formulas present
-    const fns = formula.match(/[A-Z]+\(/g);
-    if (fns) this.formulasCalled = this.formulasCalled.concat(fns.map((x) => x.slice(0, -1)));
+    // @TODO: Check for any other characters that may also need to be included
+    const fns = formula.match(/[A-Z.]+\(/g);
+    if (fns) {
+      fns.map((x) => x.slice(0, -1)).forEach((form: string) => {
+        if (this.remFormulas.includes(form)) {
+          this.remFormulas.splice(this.remFormulas.indexOf(form), 1);
+        }
+      });
+    }
 
     const matches = match(formula.replace('$', ''));
     if (!matches) return;

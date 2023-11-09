@@ -1,12 +1,12 @@
 import {
-  Directive, HostListener, HostBinding, Output, Input, EventEmitter,
+  Directive, HostListener, HostBinding, Output, EventEmitter,
 } from '@angular/core';
 
 @Directive({
-  selector: '[dropzone]',
+  selector: '[appDropzone]',
 })
 
-export class Dropzone {
+export class DropzoneDirective {
   @Output() private filesChange : EventEmitter<FileList> = new EventEmitter();
 
   @HostBinding('style.border') private border = 'none';

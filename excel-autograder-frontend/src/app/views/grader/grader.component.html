@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="col-7 ps-2">
-      <div class="dropzone mat-elevation-z2" dropzone (filesChange)="addSubmission($event)">
+      <div class="dropzone mat-elevation-z2" appDropzone (filesChange)="addSubmission($event)">
         <div class="wrapper">
           <input type="file" accept=".xlsx" id="files" (change)="addSubmission($event.target)" multiple>
           <div class="d-flex align-items-center justify-content-center">
