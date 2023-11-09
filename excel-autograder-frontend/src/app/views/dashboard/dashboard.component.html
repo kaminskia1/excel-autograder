@@ -25,11 +25,11 @@
           <button mat-icon-button disabled *ngIf="assignment.questions.length" [routerLink]="'wizard/' + assignment.uuid">
             <mat-icon>check_circle_outline</mat-icon>
           </button>
-          <button mat-icon-button color="primary" [routerLink]="'grader/' + assignment.uuid">
-            <mat-icon>play_arrow</mat-icon>
-          </button>
           <button mat-icon-button color="primary" [routerLink]="'wizard/' + assignment.uuid">
             <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" [routerLink]="'grader/' + assignment.uuid">
+            <mat-icon>play_arrow</mat-icon>
           </button>
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>list</mat-icon>

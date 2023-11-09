@@ -5,6 +5,7 @@ import {
 import { IModel } from '../../../../model';
 import { WorkbookService } from '../../../../workbook/workbook.service';
 import { FacetType } from '../lib';
+import { FancyWorkbook } from '../../../../workbook/workbook';
 
 export type IFunctionChainFacetPartial = IFacetPartial
 
@@ -32,7 +33,7 @@ export class FormulaGraphFacet extends Facet implements
     };
   }
 
-  evaluateScore(workbook: Workbook): number {
+  evaluateScore(workbook: FancyWorkbook): number {
     return this.points;
   }
 }

@@ -89,7 +89,8 @@ export class GraderComponent implements OnInit {
         };
         this.submissions.push(submission);
         this.submissionTable.data = this.submissions.sort(
-          (a, b) => a.file.name.localeCompare(b.file.name));
+          (a, b) => a.file.name.localeCompare(b.file.name),
+        );
       });
     });
   }

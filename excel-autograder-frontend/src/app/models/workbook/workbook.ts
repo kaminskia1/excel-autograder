@@ -10,7 +10,6 @@ import {
 import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
 import { RenderedCell, RenderedTable } from './rendered-cell';
-import {min} from "rxjs";
 
 export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|undefined = undefined;
@@ -19,6 +18,7 @@ export class FancyWorkbook extends Workbook {
   > = new EventEmitter<RenderedCell | undefined>();
 
   renderedTable: RenderedTable = [];
+
   getSheets(): Array<Worksheet> {
     return this.worksheets;
   }
@@ -66,7 +66,6 @@ export class FancyWorkbook extends Workbook {
 
   getSheetHeight(): number {
     if (!this.activeSheet) return 0;
-    console.log('h', this.activeSheet.rowCount);
     return this.activeSheet.rowCount;
   }
 
@@ -76,7 +75,6 @@ export class FancyWorkbook extends Workbook {
   }
 
   getRenderedSheetHeight(): number {
-    console.log('rs', this.renderedTable[0].values.length);
     return this.renderedTable[0].values.length;
   }
 

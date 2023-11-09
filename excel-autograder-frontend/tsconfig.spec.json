@@ -12,3 +12,5 @@
     "src/**/*.d.ts"
   ]
 }
+
+[{"facets": [{"type": "FormulaListFacet", "points": 1, "formulas": ["SUM"], "targetCell": {"col": 1, "row": 18, "address": "A18", "sheetName": "Sheet1"}}]}]

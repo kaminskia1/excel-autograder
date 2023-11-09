@@ -14,7 +14,8 @@ export interface IFormulaContainsFacet extends IFormulaContainsFacetPartial, IFa
 
 }
 
-export class FormulaContainsFacet extends Facet implements IFormulaContainsFacet, IModel<IFormulaContainsFacetPartial> {
+export class FormulaContainsFacet extends Facet implements
+  IFormulaContainsFacet, IModel<IFormulaContainsFacetPartial> {
   readonly type: FacetType.FormulaContainsFacet = FacetType.FormulaContainsFacet;
 
   formula?: string;

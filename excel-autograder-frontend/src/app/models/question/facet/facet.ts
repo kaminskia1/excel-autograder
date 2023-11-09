@@ -3,6 +3,7 @@ import { IModel } from '../../model';
 import { WorkbookService } from '../../workbook/workbook.service';
 import { FacetType } from './types/lib';
 import { ICellAddress } from '../misc';
+import { FancyWorkbook } from '../../workbook/workbook';
 
 export interface IFacetPartial {
   type: FacetType
@@ -11,7 +12,7 @@ export interface IFacetPartial {
 }
 
 export interface IFacet extends IFacetPartial, IModel<IFacetPartial> {
-  evaluateScore(workbook: Workbook): number
+  evaluateScore(workbook: FancyWorkbook): number
   getMaxScore(): number
   getName(): string
   getTargetCell(): Cell | undefined
@@ -32,7 +33,7 @@ export abstract class Facet implements IFacet {
     this.targetCell = facet.targetCell;
   }
 
-  abstract evaluateScore(workbook: Workbook): number
+  abstract evaluateScore(workbook: FancyWorkbook): number
 
   abstract getSerializable(): IFacetPartial
 

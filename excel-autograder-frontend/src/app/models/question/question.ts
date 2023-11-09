@@ -2,6 +2,7 @@ import { Workbook } from 'exceljs';
 import { IModel } from '../model';
 import { Facet, IFacet, IFacetPartial } from './facet/facet';
 import { FacetFactory } from './facet/facet.factory';
+import { FancyWorkbook } from '../workbook/workbook';
 
 export interface IQuestionPartial {
   facets: Array<IFacetPartial>
@@ -28,7 +29,7 @@ export class Question implements IQuestion {
     return this.facets.reduce((acc, facet) => acc + facet.getMaxScore(), 0);
   }
 
-  evaluateScore(workbook: Workbook): number {
+  evaluateScore(workbook: FancyWorkbook): number {
     return this.facets.reduce((acc, facet) => acc + facet.evaluateScore(workbook), 0);
   }
 
