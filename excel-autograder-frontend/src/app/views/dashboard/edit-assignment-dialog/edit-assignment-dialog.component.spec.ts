@@ -8,7 +8,7 @@ describe('RenameAssignmentDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [EditAssignmentDialogComponent]
+      declarations: [EditAssignmentDialogComponent],
     });
     fixture = TestBed.createComponent(EditAssignmentDialogComponent);
     component = fixture.componentInstance;

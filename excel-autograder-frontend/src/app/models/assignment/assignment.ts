@@ -6,6 +6,11 @@ import { IUser } from '../user/user';
 import { AssignmentService } from './assignment.service';
 import { IApiModel } from '../model';
 
+export interface EncodedAssignment {
+  name: string
+  questions: Array<IQuestion>
+  file: string
+}
 export interface IAssignmentPartial {
   readonly uuid: string;
   readonly created_at: string;

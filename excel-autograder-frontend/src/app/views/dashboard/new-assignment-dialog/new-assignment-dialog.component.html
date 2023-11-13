@@ -11,7 +11,7 @@
       <ngx-mat-file-input formControlName="file" [accept]="'.xlsx'"></ngx-mat-file-input>
 
     </mat-form-field>
-      <mat-checkbox class="d-inline-block" formControlName="encrypted">Encrypted?</mat-checkbox>
+<!--    <mat-checkbox class="d-inline-block" formControlName="encrypted">Encrypted?</mat-checkbox>-->
     <p *ngIf="newAssignmentForm.value.encrypted">File Password</p>
     <mat-form-field class="d-block" appearance="fill" *ngIf="newAssignmentForm.value.encrypted">
       <input matInput formControlName="key">

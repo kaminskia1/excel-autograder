@@ -11,8 +11,12 @@ import {
   ExportAssignmentDialogComponent,
 } from './export-assignment-dialog/export-assignment-dialog.component';
 import {
-  EditAssignmentDialogComponent
-} from "./edit-assignment-dialog/edit-assignment-dialog.component";
+  EditAssignmentDialogComponent,
+} from './edit-assignment-dialog/edit-assignment-dialog.component';
+import { Question } from '../../models/question/question';
+import {
+  ImportAssignmentDialogComponent,
+} from './import-assignment-dialog/import-assignment-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -81,7 +85,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  download(assignment: Assignment) {
+  openDownloadDialog(assignment: Assignment) {
     assignment.getFile().subscribe((file) => {
       const blobUrl = URL.createObjectURL(file);
       const aElement = document.createElement('a');
@@ -97,6 +101,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openExportDialog(assignment: Assignment) {
+    // @TODO: Clean this up (move to assignment or modular encoding class?)
     assignment.getFile().subscribe((file) => {
       const encodeBlobToBase64 = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -108,7 +113,7 @@ export class DashboardComponent implements OnInit {
         const xp = {
           name: assignment.name,
           file: base64,
-          questions: assignment.questions,
+          questions: assignment.questions.map((q: Question) => q.getSerializable()),
         };
         const encode = (str: string):string => Buffer.from(str, 'binary').toString('base64');
         this.dialog.open(ExportAssignmentDialogComponent, {
@@ -116,6 +121,29 @@ export class DashboardComponent implements OnInit {
           data: encode(JSON.stringify(xp)),
         });
       });
+    });
+  }
+
+  openImportDialog() {
+    const importAssignmentEmitter = new EventEmitter<Assignment | null>();
+    importAssignmentEmitter.subscribe((assignment: Assignment | null) => {
+      if (assignment) {
+        assignment.save().subscribe({
+          next: (iLiveAssignment: IAssignment) => {
+            const liveAssignment = this.assignmentFactory.createAssignment(iLiveAssignment);
+            this.snackBar.open('Assignment imported!', 'Close', { duration: 1500 });
+            this.assignments.push(liveAssignment);
+            this.dataSource.data = this.assignments;
+          },
+          error: () => {
+            this.snackBar.open('Failed to import assignment!', 'Close', { duration: 1500 });
+          },
+        });
+      }
+    });
+    this.dialog.open(ImportAssignmentDialogComponent, {
+      width: '300px',
+      data: importAssignmentEmitter,
     });
   }
 

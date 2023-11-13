@@ -1,9 +1,11 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  Component, Input, OnDestroy, OnInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { FacetComponent } from '../../facet.component';
 import { FormulaListFacet } from './formula-list.facet';
-import {FORMULAS} from "../../facet";
-import {ReplaySubject, Subject, takeUntil} from "rxjs";
+import { FORMULAS } from '../../facet';
 
 @Component({
   selector: 'app-formula-list.facet',
@@ -19,14 +21,14 @@ export class FormulaListComponent extends FacetComponent implements OnInit, OnDe
 
   filteredFormulas: ReplaySubject<Array<string>> = new ReplaySubject<Array<string>>(1);
 
-  protected _onDestroy = new Subject<void>();
+  protected onDestroy = new Subject<void>();
 
   ngOnInit() {
     this.facet.formulas = this.facet.formulas || [];
     this.filteredFormulas.next(this.formulas);
 
     this.bankFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
+      .pipe(takeUntil(this.onDestroy))
       .subscribe(() => {
         this.filterBanksMulti();
       });
@@ -42,7 +44,7 @@ export class FormulaListComponent extends FacetComponent implements OnInit, OnDe
   }
 
   ngOnDestroy() {
-    this._onDestroy.next();
-    this._onDestroy.complete();
+    this.onDestroy.next();
+    this.onDestroy.complete();
   }
 }

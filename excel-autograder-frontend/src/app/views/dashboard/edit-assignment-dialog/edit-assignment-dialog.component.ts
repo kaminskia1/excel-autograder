@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Inject} from '@angular/core';
-import {Assignment, IAssignment, IAssignmentPartial} from "../../../models/assignment/assignment";
-import {FormBuilder, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {AssignmentFactory} from "../../../models/assignment/assignment.factory";
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Assignment } from '../../../models/assignment/assignment';
+import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
 
 @Component({
   selector: 'app-edit-assignment-dialog',
   templateUrl: './edit-assignment-dialog.component.html',
-  styleUrls: ['./edit-assignment-dialog.component.scss']
+  styleUrls: ['./edit-assignment-dialog.component.scss'],
 })
 export class EditAssignmentDialogComponent {
   assignmentForm;
@@ -20,7 +20,7 @@ export class EditAssignmentDialogComponent {
   ) {
     this.assignmentForm = this.formBuilder.group({
       name: [data.name, Validators.required],
-      file: [null, Validators.required],
+      file: [null],
       encrypted: [false],
       key: [''],
       questions: [[]],

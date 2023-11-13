@@ -8,7 +8,7 @@ describe('ExportAssignmentDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ExportAssignmentDialogComponent]
+      declarations: [ExportAssignmentDialogComponent],
     });
     fixture = TestBed.createComponent(ExportAssignmentDialogComponent);
     component = fixture.componentInstance;

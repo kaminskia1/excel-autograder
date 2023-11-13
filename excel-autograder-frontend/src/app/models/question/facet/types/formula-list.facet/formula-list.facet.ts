@@ -97,6 +97,7 @@ export class FormulaListFacet extends Facet implements
         const range = workbook.getRange(parsedAddr);
         for (let col = range.left; col <= range.right; col += 1) {
           for (let row = range.top; row <= range.bottom; row += 1) {
+            // @TODO: Verify that worksheet exists before grabbing it, so this does not hang.
             const nextCell = workbook.getWorksheet(sheetName).getCell(row, col);
             if (!nextCell) throw new Error('Error reading coords');
             if (nextCell.formula) this.recurse(workbook, nextCell);

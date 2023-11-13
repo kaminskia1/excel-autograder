@@ -51,6 +51,7 @@ import { FormulaRegexFacetComponent } from './models/question/facet/types/formul
 import { DropzoneDirective } from './components/dropzone/dropzone.directive';
 import { ExportAssignmentDialogComponent } from './views/dashboard/export-assignment-dialog/export-assignment-dialog.component';
 import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment-dialog/edit-assignment-dialog.component';
+import { ImportAssignmentDialogComponent } from './views/dashboard/import-assignment-dialog/import-assignment-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment
     DropzoneDirective,
     ExportAssignmentDialogComponent,
     EditAssignmentDialogComponent,
+    ImportAssignmentDialogComponent,
   ],
   imports: [
     BrowserModule,
