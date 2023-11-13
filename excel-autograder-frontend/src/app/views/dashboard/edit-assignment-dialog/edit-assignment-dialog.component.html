@@ -1,19 +1,18 @@
 
-<h1 mat-dialog-title>New Assignment</h1>
-<form [formGroup]="newAssignmentForm" (ngSubmit)="create()">
+<h1 mat-dialog-title>Edit Assignment</h1>
+<form [formGroup]="assignmentForm" (ngSubmit)="update()">
   <div mat-dialog-content>
     <p>Name</p>
     <mat-form-field class="d-block" appearance="fill">
       <input matInput formControlName="name">
     </mat-form-field>
-    <p>File</p>
     <mat-form-field class="d-block" appearance="fill">
       <ngx-mat-file-input formControlName="file" [accept]="'.xlsx'"></ngx-mat-file-input>
 
     </mat-form-field>
       <mat-checkbox class="d-inline-block" formControlName="encrypted">Encrypted?</mat-checkbox>
-    <p *ngIf="newAssignmentForm.value.encrypted">File Password</p>
-    <mat-form-field class="d-block" appearance="fill" *ngIf="newAssignmentForm.value.encrypted">
+    <p *ngIf="assignmentForm.value.encrypted">File Password</p>
+    <mat-form-field class="d-block" appearance="fill" *ngIf="assignmentForm.value.encrypted">
       <input matInput formControlName="key">
     </mat-form-field>
   </div>

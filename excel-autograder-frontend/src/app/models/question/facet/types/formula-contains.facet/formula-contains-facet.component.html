@@ -2,19 +2,18 @@
   <div class="d-flex">
     <mat-form-field class="d-block">
       <mat-label>Points</mat-label>
-      <input matInput [(ngModel)]="facet.points">
+      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
     <div class="px-2"></div>
-    <mat-form-field class="d-block">
-      <mat-label>Target Value</mat-label>
-      <input matInput [(ngModel)]="facet.formula">
-    </mat-form-field>
+    <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
+      <mat-form-field class="d-block">
+        <mat-label>Target Cell</mat-label>
+        <input class="w-100 hide-disabled" matInput readonly [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()" [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
+      </mat-form-field>
+    </span>
   </div>
-
-  <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
-    <mat-form-field class="d-block">
-      <mat-label>Target Cell</mat-label>
-      <input class="w-100 hide-disabled" matInput readonly [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()" [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
-    </mat-form-field>
-  </span>
+  <mat-form-field class="d-block">
+    <mat-label>Target Value</mat-label>
+    <input matInput [(ngModel)]="facet.formula" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+  </mat-form-field>
 </div>

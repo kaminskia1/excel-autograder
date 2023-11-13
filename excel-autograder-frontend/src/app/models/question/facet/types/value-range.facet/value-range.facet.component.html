@@ -1,25 +1,26 @@
 <div class="pt-2 pb-3">
-  <mat-form-field class="d-block">
-    <mat-label>Points</mat-label>
-    <input matInput [(ngModel)]="facet.points">
-  </mat-form-field>
-
   <div class="d-flex">
-  <mat-form-field>
-    <mat-label>Lower Bounds</mat-label>
-    <input matInput type="number" [(ngModel)]="facet.lowerBounds">
-  </mat-form-field>
-    <div class="px-2"></div>
-  <mat-form-field>
-    <mat-label>Upper Bounds</mat-label>
-    <input matInput type="number" [(ngModel)]="facet.upperBounds">
-  </mat-form-field>
-    </div>
-
-  <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
     <mat-form-field class="d-block">
-      <mat-label>Target Cell</mat-label>
-      <input class="w-100 hide-disabled" matInput readonly [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()" [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
+      <mat-label>Points</mat-label>
+      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
-  </span>
+    <div class="px-2"></div>
+    <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
+      <mat-form-field class="d-block">
+        <mat-label>Target Cell</mat-label>
+        <input class="w-100 hide-disabled" matInput readonly [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()" [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
+      </mat-form-field>
+    </span>
+  </div>
+  <div class="d-flex">
+    <mat-form-field>
+      <mat-label>Lower Bounds</mat-label>
+      <input matInput type="number" [(ngModel)]="facet.lowerBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    </mat-form-field>
+      <div class="px-2"></div>
+    <mat-form-field>
+      <mat-label>Upper Bounds</mat-label>
+      <input matInput type="number" [(ngModel)]="facet.upperBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    </mat-form-field>
+  </div>
 </div>

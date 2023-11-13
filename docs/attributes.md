@@ -72,7 +72,7 @@ Checks that a target cell's formula explicitly contains the provided value.
 
 
 
-## Function list
+## Formula list
 Recurses through all cells referenced from a target cell's formula and checks that a list of 
 formulas are present
 ## Function Graph

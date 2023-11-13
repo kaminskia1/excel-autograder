@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -26,6 +27,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { MatCardModule } from '@angular/material/card';
+import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
@@ -45,6 +49,8 @@ import { ValueRangeFacetComponent } from './models/question/facet/types/value-ra
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
 import { DropzoneDirective } from './components/dropzone/dropzone.directive';
+import { ExportAssignmentDialogComponent } from './views/dashboard/export-assignment-dialog/export-assignment-dialog.component';
+import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment-dialog/edit-assignment-dialog.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +72,8 @@ import { DropzoneDirective } from './components/dropzone/dropzone.directive';
     HeaderComponent,
     FormulaRegexFacetComponent,
     DropzoneDirective,
+    ExportAssignmentDialogComponent,
+    EditAssignmentDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,6 +103,10 @@ import { DropzoneDirective } from './components/dropzone/dropzone.directive';
     MatRippleModule,
     NgxFilesizeModule,
     MatCardModule,
+    MatLegacyChipsModule,
+    MatAutocompleteModule,
+    NgxMatSelectSearchModule,
+    ClipboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

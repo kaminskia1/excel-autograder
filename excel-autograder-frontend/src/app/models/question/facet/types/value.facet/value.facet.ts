@@ -7,7 +7,7 @@ import { WorkbookService } from '../../../../workbook/workbook.service';
 import { FacetType } from '../lib';
 
 export interface IValueFacetPartial extends IFacetPartial {
-  targetValue?: string
+  value?: string
 }
 
 export interface IValueFacet extends IValueFacetPartial, IFacet {
@@ -16,22 +16,30 @@ export interface IValueFacet extends IValueFacetPartial, IFacet {
 export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacetPartial> {
   readonly type: FacetType.ValueFacet = FacetType.ValueFacet;
 
-  targetValue?: string;
+  value?: string;
 
   constructor(facet: IValueFacetPartial, workbookService: WorkbookService) {
     super(facet, workbookService);
-    this.targetValue = facet.targetValue;
+    this.value = facet.value;
   }
 
   getName(): string {
-    return 'Value';
+    return 'Value Equals';
+  }
+
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+      `Value: ${this.value ?? 'Not set'}`,
+    ];
   }
 
   getSerializable(): IValueFacetPartial {
     return {
       type: this.type,
       points: this.points,
-      targetValue: this.targetValue,
+      value: this.value,
       targetCell: this.targetCell,
     };
   }
@@ -40,6 +48,6 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
     if (!this.targetCell) throw new Error('Target cell not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) throw new Error('Error reading target cell from workbook');
-    return `${targetCell.value}` === `${this.targetValue}` ? this.points : 0;
+    return `${targetCell.value}` === `${this.value}` ? this.points : 0;
   }
 }

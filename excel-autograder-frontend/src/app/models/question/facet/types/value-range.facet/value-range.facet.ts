@@ -30,7 +30,16 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
   }
 
   getName(): string {
-    return 'Range';
+    return 'Value Range';
+  }
+
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+      `Lower Bounds: ${this.lowerBounds ?? 'Not set'}`,
+      `Upper Bounds: ${this.upperBounds ?? 'Not set'}`,
+    ];
   }
 
   getSerializable(): IValueRangeFacetPartial {

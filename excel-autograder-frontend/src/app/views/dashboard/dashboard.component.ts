@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +7,12 @@ import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment, IAssignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { NewAssignmentDialogComponent } from './new-assignment-dialog/new-assignment-dialog.component';
+import {
+  ExportAssignmentDialogComponent,
+} from './export-assignment-dialog/export-assignment-dialog.component';
+import {
+  EditAssignmentDialogComponent
+} from "./edit-assignment-dialog/edit-assignment-dialog.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -86,6 +93,50 @@ export class DashboardComponent implements OnInit {
       URL.revokeObjectURL(blobUrl);
       aElement.remove();
       this.snackBar.open('Assignment file downloaded!', 'Close', { duration: 1500 });
+    });
+  }
+
+  openExportDialog(assignment: Assignment) {
+    assignment.getFile().subscribe((file) => {
+      const encodeBlobToBase64 = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+      encodeBlobToBase64(file).then((base64) => {
+        const xp = {
+          name: assignment.name,
+          file: base64,
+          questions: assignment.questions,
+        };
+        const encode = (str: string):string => Buffer.from(str, 'binary').toString('base64');
+        this.dialog.open(ExportAssignmentDialogComponent, {
+          width: '300px',
+          data: encode(JSON.stringify(xp)),
+        });
+      });
+    });
+  }
+
+  openEditDialog(assignment: Assignment) {
+    const assignmentEmitter = new EventEmitter<Assignment | null>();
+    assignmentEmitter.subscribe((as: Assignment | null) => {
+      if (as) {
+        as.save().subscribe({
+          next: () => {
+            this.snackBar.open('Assignment updated!', 'Close', { duration: 1500 });
+            this.dataSource.data = this.assignments;
+          },
+          error: () => {
+            this.snackBar.open('Failed to update assignment!', 'Close', { duration: 1500 });
+          },
+        });
+      }
+    });
+    this.dialog.open(EditAssignmentDialogComponent, {
+      width: '300px',
+      data: assignment,
     });
   }
 }

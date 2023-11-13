@@ -1,0 +1,12 @@
+
+<h1 mat-dialog-title>Export Assignment</h1>
+<div mat-dialog-content>
+  <p>Copy this!</p>
+  <mat-form-field class="d-block" appearance="fill">
+    <textarea class="w-100" matInput readonly [value]="data"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="container">
+  <button mat-button color="primary" type="submit" cdkFocusInitial [cdkCopyToClipboard]="data" (click)="copied()">Copy</button>
+  <button mat-button (click)="dialogRef.close()">Close</button>
+</div>

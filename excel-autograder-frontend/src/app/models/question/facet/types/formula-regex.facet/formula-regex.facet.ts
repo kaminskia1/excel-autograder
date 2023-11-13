@@ -30,6 +30,14 @@ export class FormulaRegexFacet extends Facet implements
     return 'Formula Regex';
   }
 
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+      `Expression: ${this.expression ?? 'Not set'}`,
+    ];
+  }
+
   getSerializable(): IFormulaRegexFacetPartial {
     return {
       type: this.type,

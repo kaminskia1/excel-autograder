@@ -1,1 +1,28 @@
-List {{facet.points}}
+<div class="pt-2 pb-3">
+  <div class="d-flex">
+    <mat-form-field class="d-block">
+      <mat-label>Points</mat-label>
+      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    </mat-form-field>
+    <div class="px-2"></div>
+    <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
+      <mat-form-field class="d-block">
+        <mat-label>Target Cell</mat-label>
+        <input class="w-100 hide-disabled" matInput readonly [disabled]="workbookService.isRenderedCellEmitterSubscribed()" (click)="grabCell()" [value]="(facet.getTargetCell()?.fullAddress?.sheetName ? facet.getTargetCell()?.fullAddress?.sheetName + ': ' : '') + (facet.getTargetCell()?.address ?? '')">
+      </mat-form-field>
+    </span>
+  </div>
+    <mat-form-field class="d-block" [matTooltip]="(facet.formulas ?? '').toString()" matTooltipPosition="above">
+      <mat-select [(ngModel)]="facet.formulas" placeholder="Select" [multiple]="true" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+        <mat-option>
+          <ngx-mat-select-search [formControl]="bankFilterCtrl"
+          placeholderLabel="Search..."
+          noEntriesFoundLabel="No results found."></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let formula of filteredFormulas | async" [value]="formula">
+          {{formula}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+</div>

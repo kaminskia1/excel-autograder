@@ -6,10 +6,14 @@ import {
   CellRichTextValue,
   Workbook,
   Worksheet,
+  Range,
 } from 'exceljs';
 import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
 import { RenderedCell, RenderedTable } from './rendered-cell';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const colCache = require('exceljs/lib/utils/col-cache');
 
 export class FancyWorkbook extends Workbook {
   activeSheet: Worksheet|undefined = undefined;
@@ -84,6 +88,14 @@ export class FancyWorkbook extends Workbook {
 
   isRenderedCellEmitterSubscribed(): boolean {
     return this.renderedCellEmitter.observed;
+  }
+
+  /**
+   * Gets a `Range` from an address range (i.e. `A1:B2`)
+   * @param tlbr
+   */
+  getRange(tlbr: string): Range {
+    return colCache.decode(tlbr);
   }
 
   static getCellSafeValue(cell: Cell): {type: string, text: string} {

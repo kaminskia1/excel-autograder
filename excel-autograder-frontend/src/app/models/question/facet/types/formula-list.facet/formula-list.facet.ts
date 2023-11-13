@@ -40,7 +40,15 @@ export class FormulaListFacet extends Facet implements
   }
 
   getName(): string {
-    return 'Function List';
+    return 'Formula List';
+  }
+
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+      `Formulas: ${this.formulas?.toString() ?? 'Not set'}`,
+    ];
   }
 
   getSerializable(): IFormulaListFacetPartial {
@@ -48,6 +56,7 @@ export class FormulaListFacet extends Facet implements
       type: this.type,
       points: this.points,
       targetCell: this.targetCell,
+      formulas: this.formulas,
     };
   }
 
@@ -64,11 +73,8 @@ export class FormulaListFacet extends Facet implements
   }
 
   private recurse(workbook: FancyWorkbook, currentCell: Cell) {
-    // get the current cell's formula
     const { formula } = currentCell;
     if (!formula) return;
-
-    // get and save all formulas present
     // @TODO: Check for any other characters that may also need to be included
     const fns = formula.match(/[A-Z.]+\(/g);
     if (fns) {
@@ -78,25 +84,27 @@ export class FormulaListFacet extends Facet implements
         }
       });
     }
-
     const matches = match(formula.replace('$', ''));
     if (!matches) return;
     matches.forEach((addr: string) => {
-      if (addr.includes(':')) {
+      let { sheetName } = currentCell.fullAddress;
+      let parsedAddr = addr;
+      if (addr.includes('!')) {
+        [sheetName, parsedAddr] = addr.split('!');
+      }
+      if (parsedAddr.includes(':')) {
         // range
-
-        // @TODO: Finish this
-
+        const range = workbook.getRange(parsedAddr);
+        for (let col = range.left; col <= range.right; col += 1) {
+          for (let row = range.top; row <= range.bottom; row += 1) {
+            const nextCell = workbook.getWorksheet(sheetName).getCell(row, col);
+            if (!nextCell) throw new Error('Error reading coords');
+            if (nextCell.formula) this.recurse(workbook, nextCell);
+          }
+        }
       } else {
         // singular
-        let { sheetName } = currentCell.fullAddress;
-        if (addr.includes('!')) {
-          // Different sheet
-          sheetName = 'asd'; // @TODO fix
-        }
-        const coords = addr.match(/[A-Z]*[0-9]*$/);
-        if (!coords || !coords.length) throw new Error('Error parsing coords');
-        const nextCell = workbook.getWorksheet(sheetName).findCell(coords[0], '');
+        const nextCell = workbook.getWorksheet(sheetName).getCell(parsedAddr, '');
         if (!nextCell) throw new Error('Error reading coords');
         if (nextCell.formula) this.recurse(workbook, nextCell);
       }

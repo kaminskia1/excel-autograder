@@ -21,7 +21,6 @@
               <mat-panel-description>
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p></p>
           </mat-expansion-panel>
 
 
@@ -31,9 +30,12 @@
                 {{facet.getName()}}
               </mat-panel-title>
               <mat-panel-description>
+                Points: {{facet.points}}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p></p>
+            <mat-list>
+              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item"></mat-list-item>
+            </mat-list>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
@@ -63,7 +65,7 @@
           </ng-container>
           <ng-container matColumnDef="score">
             <th mat-header-cell *matHeaderCellDef> Score </th>
-            <td mat-cell *matCellDef="let submission"> {{ submission.score }} / {{ submission.maxScore }} </td>
+            <td mat-cell *matCellDef="let submission"> {{ submission.score }} / {{ submission.maxScore }} - {{ (submission.score / submission.maxScore) | percent }}</td>
           </ng-container>
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef>

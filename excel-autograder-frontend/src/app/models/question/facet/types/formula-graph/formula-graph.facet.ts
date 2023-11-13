@@ -24,6 +24,13 @@ export class FormulaGraphFacet extends Facet implements
     return 'Formula Graph';
   }
 
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+    ];
+  }
+
   getSerializable(): IFunctionChainFacetPartial {
     return {
       type: this.type,

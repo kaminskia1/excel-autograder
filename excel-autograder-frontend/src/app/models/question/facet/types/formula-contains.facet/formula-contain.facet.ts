@@ -29,6 +29,13 @@ export class FormulaContainsFacet extends Facet implements
     return 'Formula Contains';
   }
 
+  getInfo(): Array<string> {
+    return [
+      `Points: ${this.points ?? 'Not set'}`,
+      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
+      `Formula: ${this.formula ?? 'Not set'}`];
+  }
+
   getSerializable(): IFormulaContainsFacetPartial {
     return {
       type: this.type,
