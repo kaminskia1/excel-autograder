@@ -1,14 +1,13 @@
 services:
   django:
     build:
-      context: excel-autograder-backend
       dockerfile: Dockerfile
     container_name: django
     restart: unless-stopped
     env_file: .env
     volumes:
       - /app/static
-      - ./excel-autograder-backend:/app
+      - ./:/app
     ports:
       - "8000:8000"
     networks:
@@ -19,14 +18,14 @@ services:
 
   angular:
     build:
-      context: excel-autograder-frontend
+      context: public
       dockerfile: Dockerfile
     image: nodejs
     container_name: angular
     restart: unless-stopped
     env_file: .env
     volumes:
-      - ./excel-autograder-frontend:/app
+      - ./public:/app
       - node_modules:/app/node_modules
     ports:
       - "80:4200"
@@ -70,5 +69,5 @@ volumes:
 
 secrets:
   postgres-password:
-    file: excel-autograder-backend/db/password.txt
+    file: db/password.txt
 
