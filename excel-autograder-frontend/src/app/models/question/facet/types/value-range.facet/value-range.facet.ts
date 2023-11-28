@@ -35,7 +35,6 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
       `Lower Bounds: ${this.lowerBounds ?? 'Not set'}`,
       `Upper Bounds: ${this.upperBounds ?? 'Not set'}`,
@@ -56,9 +55,14 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.lowerBounds || !this.upperBounds) throw new Error('Boundaries not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) throw new Error('Error reading cell object from workbook');
+    if (!targetCell) return 0;
     if (!targetCell.value) return 0;
     return (this.lowerBounds <= +targetCell.value
     ) && +targetCell.value <= this.upperBounds ? this.points : 0;
+  }
+
+  isValid(): boolean {
+    return this.lowerBounds !== null && this.upperBounds !== null
+      && this.points != null && this.targetCell !== null;
   }
 }

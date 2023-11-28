@@ -31,7 +31,6 @@ export class FormulaContainsFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
       `Formula: ${this.formula ?? 'Not set'}`];
   }
@@ -47,10 +46,14 @@ export class FormulaContainsFacet extends Facet implements
 
   evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
-    if (!this.formula) throw new Error('Target formula not set');
+    if (!this.formula) throw new Error('Formula cell not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) throw new Error('Error reading target cell from workbook');
+    if (!targetCell) return 0;
     const cleaned = this.formula.replace(/"([^"]*")/g, '');
     return targetCell.formula.includes(cleaned) ? this.points : 0;
+  }
+
+  isValid(): boolean {
+    return this.formula !== null && this.points != null && this.targetCell !== null;
   }
 }

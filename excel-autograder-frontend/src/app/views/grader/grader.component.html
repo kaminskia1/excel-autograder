@@ -8,11 +8,16 @@
   </div>
   <div class="row" *ngIf="masterAssignment.getQuestions().length && masterAssignment.isQuestionsValid()">
     <div class="col-5 pe-2">
-      <h1>{{masterAssignment.name}}</h1>
+      <div class="d-flex">
+        <h1 class="d-inline-block">{{masterAssignment.name}}</h1>
+        <div class="spacer"></div>
+        <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" (click)="edit()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
       <div class="pb-4" *ngFor="let question of masterAssignment.getQuestions(); let i = index">
         <h2>Problem {{i+1}}</h2>
         <mat-accordion [multi]="true">
-
           <mat-expansion-panel *ngIf="!question.getFacets().length" [disabled]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -22,26 +27,38 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
-
-
           <mat-expansion-panel *ngFor="let facet of question.getFacets()">
             <mat-expansion-panel-header>
               <mat-panel-title>
+                <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)">
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet) !== 0" class="align-middle green me-1">check</mat-icon>
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet) === 0" class="align-middle red me-1">close</mat-icon>
+                </span>
                 {{facet.getName()}}
               </mat-panel-title>
               <mat-panel-description>
-                Points: {{facet.points}}
+                <span *ngIf="!facet.isValid()" class="red">Invalid</span>
+                <span *ngIf="facet.isValid()">Points: {{facet.points}}</span>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item"></mat-list-item>
+              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item">
+              </mat-list-item>
             </mat-list>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
     </div>
     <div class="col-7 ps-2">
-      <div class="dropzone mat-elevation-z2" appDropzone (filesChange)="addSubmission($event)">
+      <div class="mat-elevation-z2 mt-5" *ngIf="!areAllFacetsValid()">
+        <div class="p-4">
+          <h3 class="red">Errors</h3>
+          <ul>
+            <li>Not all attributes are valid. Please correct them before adding submissions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="dropzone mat-elevation-z2" *ngIf="areAllFacetsValid()" appDropzone (filesChange)="addSubmission($event)">
         <div class="wrapper">
           <input type="file" accept=".xlsx" id="files" (change)="addSubmission($event.target)" multiple>
           <div class="d-flex align-items-center justify-content-center">
@@ -50,35 +67,43 @@
           </div>
         </div>
       </div>
-      <div class="mat-elevation-z2 mt-5">
+      <div class="mat-elevation-z2 mt-5" *ngIf="areAllFacetsValid()">
         <div class="p-4" *ngIf="!submissions.length">
           No submissions added
         </div>
         <table mat-table *ngIf="submissions.length" #table [dataSource]="submissionTable" class="">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let submission"> {{ submission.file.name }} </td>
+            <td mat-cell *matCellDef="let submission">
+              <span *ngIf="submission === activeSubmission" class="am-active">{{ submission.file.name }}</span>
+              <span *ngIf="submission !== activeSubmission">{{ submission.file.name }}</span>
+            </td>
           </ng-container>
           <ng-container matColumnDef="size">
             <th mat-header-cell *matHeaderCellDef> Size </th>
             <td mat-cell *matCellDef="let submission"> {{ submission.file.size | filesize }} </td>
           </ng-container>
-          <ng-container matColumnDef="score">
+          <ng-container matColumnDef="scoreRatio">
             <th mat-header-cell *matHeaderCellDef> Score </th>
-            <td mat-cell *matCellDef="let submission"> {{ submission.score }} / {{ submission.maxScore }} - {{ (submission.score / submission.maxScore) | percent }}</td>
+            <td mat-cell *matCellDef="let submission">{{ submission.score }} / {{ submission.maxScore }}</td>
+          </ng-container>
+          <ng-container matColumnDef="scorePercent">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let submission">{{ (submission.score / submission.maxScore) | percent }}</td>
           </ng-container>
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef>
-              <button mat-button color="primary" class="float-end">
-                Export
-              </button>
+            <!-- @TODO: Add export -->
+<!--              <button mat-button color="primary" class="float-end">-->
+<!--                Export-->
+<!--              </button>-->
             </th>
             <td mat-cell *matCellDef="let submission">
               <div class="float-end">
-                <button mat-icon-button color="primary">
+                <button mat-icon-button matTooltip="Activate" matTooltipPosition="above" color="primary" (click)="setActiveSubmission(submission)">
                   <mat-icon>play_arrow</mat-icon>
                 </button>
-                <button mat-icon-button color="accent" (click)="removeSubmission(submission)">
+                <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" color="accent" (click)="removeSubmission(submission)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>

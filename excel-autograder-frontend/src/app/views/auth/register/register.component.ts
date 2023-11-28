@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { UserService } from '../../../models/user/user.service';
 import { IUser, UserCredentials, UserCredentialsNew } from '../../../models/user/user';
 
@@ -17,7 +19,6 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private router: Router,
   ) {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],

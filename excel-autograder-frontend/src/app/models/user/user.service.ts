@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
 import {
-  IUser, User, UserCredentials, UserCredentialsNew,
+  IUser, User, UserCredentials, UserCredentialsNew, UserCredentialsReset,
 } from './user';
 import { UserFactory } from './user.factory';
 
@@ -51,6 +51,12 @@ export class UserService extends ApiService {
   public register(creds: UserCredentialsNew): Observable<IUser> {
     const req = (this.post('auth/register/', creds) as Observable<IUser>).pipe(shareReplay(1));
     req.subscribe((user: IUser) => user);
+    return req;
+  }
+
+  public reset(creds: UserCredentialsReset): Observable<boolean> {
+    const req = (this.post('auth/reset/', creds) as Observable<boolean>).pipe(shareReplay(1));
+    req.subscribe((success: boolean) => success);
     return req;
   }
 

@@ -11,6 +11,10 @@ export interface UserCredentialsNew extends UserCredentials {
   confirmPassword: string|null
 }
 
+export interface UserCredentialsReset {
+  username: string|null
+}
+
 export interface IUserPartial {
   uuid: string
   username: string

@@ -29,7 +29,6 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
       `Value: ${this.value ?? 'Not set'}`,
     ];
@@ -47,7 +46,11 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
   evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) throw new Error('Error reading target cell from workbook');
+    if (!targetCell) return 0;
     return `${targetCell.value}` === `${this.value}` ? this.points : 0;
+  }
+
+  isValid(): boolean {
+    return this.value !== null && this.points != null && this.targetCell !== null;
   }
 }

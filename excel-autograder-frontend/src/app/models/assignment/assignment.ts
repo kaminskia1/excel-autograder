@@ -155,7 +155,6 @@ export class Assignment implements IAssignment {
   }
 
   isQuestionsValid(): boolean {
-    // @TODO: Implement this
     return this.getQuestions().length > 0;
   }
 }

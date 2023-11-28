@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component, EventEmitter, Input, Output,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Cell } from 'exceljs';
 import { WorkbookService } from '../../workbook/workbook.service';
@@ -13,6 +15,8 @@ export abstract class FacetComponent {
 
   @Input() workbookService!: WorkbookService;
 
+  @Output() valueChange = new EventEmitter<IFacet>();
+
   selectCellSubscriber?: Subscription;
 
   grabCell() {
@@ -24,6 +28,7 @@ export abstract class FacetComponent {
       }, 2);
       if (!cell) return;
       this.facet.setTargetCell(cell.parent);
+      this.valueChange.emit(this.facet);
     });
   }
 

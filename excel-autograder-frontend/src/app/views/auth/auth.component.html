@@ -3,11 +3,11 @@
     <mat-card class="p-2" style="width: 400px">
       <div class="h2 align-text-center pt-5 pb-4">Autograder</div>
       <mat-card-header>
-        <mat-card-title>{{ isLogin ? "Log In" : "Register" }}</mat-card-title>
+        <mat-card-title>{{ page }}</mat-card-title>
       </mat-card-header>
-      <mat-card-content >
+      <mat-card-content>
         <mat-divider class="mt-2 mb-3"></mat-divider>
-        <form *ngIf="isLogin" [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
+        <form *ngIf="page === PAGE.LOGIN" [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
           <mat-form-field class="d-block" appearance="fill">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username">
@@ -21,14 +21,21 @@
               <button mat-flat-button class="w-100" color="primary" type="submit" cdkFocusInitial>LOG IN</button>
             </div>
             <div class="col-6 ps-2">
-              <button mat-flat-button class="w-100" color="secondary" (click)="isLogin = false">REGISTER</button>
+              <button mat-flat-button class="w-100" color="secondary" (click)="page = PAGE.REGISTER">REGISTER</button>
             </div>
           </div>
         </form>
 
-        <span *ngIf="!isLogin">
+        <span *ngIf="page === PAGE.RESET">
+          <app-reset></app-reset>
+          <div class="d-inline-block w-100 text-center mt-4">Remembered your password? <button class="d-inline-block custom-login-text" (click)="page = PAGE.LOGIN">Log In</button></div>
+        </span>
+        <span *ngIf="page === PAGE.REGISTER">
           <app-register></app-register>
-          <div class="d-inline-block w-100 text-center mt-4 mb-3">Already have an account? <button class="d-inline-block custom-login-text" (click)="isLogin = true">Log In</button></div>
+          <div class="d-inline-block w-100 text-center mt-4">Already have an account? <button class="d-inline-block custom-login-text" (click)="page = PAGE.LOGIN">Log In</button></div>
+        </span>
+        <span *ngIf="page === PAGE.LOGIN && failedLogin">
+          <div class="d-inline-block w-100 text-center mt-4 text-danger" color="accent">Invalid Credentials. <button class="d-inline-block custom-login-text text-danger" (click)="page = PAGE.RESET">Forgot Password?</button></div>
         </span>
       </mat-card-content>
     </mat-card>

@@ -32,7 +32,6 @@ export class FormulaRegexFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
       `Expression: ${this.expression ?? 'Not set'}`,
     ];
@@ -49,15 +48,26 @@ export class FormulaRegexFacet extends Facet implements
 
   evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
-    if (!this.expression) throw new Error('Target formula not set');
+    if (!this.expression) throw new Error('Expression not set');
     const targetCell = workbook.getCell(this.targetCell);
+    if (!targetCell) return 0;
     let expression;
     try {
       expression = new RegExp(this.expression);
     } catch (e) {
       throw new Error('Error parsing regex');
     }
-    if (!targetCell) throw new Error('Error reading target cell from workbook');
     return expression.test(targetCell.formula) ? this.points : 0;
+  }
+
+  isValid(): boolean {
+    if (!this.expression) return false;
+    let expression;
+    try {
+      expression = new RegExp(this.expression);
+    } catch {
+      return false;
+    }
+    return expression !== null && this.points != null && this.targetCell !== null;
   }
 }

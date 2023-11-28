@@ -9,7 +9,7 @@
     </ng-container>
     <ng-container matColumnDef="updated_at">
       <th mat-header-cell *matHeaderCellDef> Last Modified </th>
-      <td mat-cell *matCellDef="let element"> {{element.updated_at | date: 'dd/MM/yyyy'}} </td>
+      <td mat-cell *matCellDef="let element">{{element.updated_at | date: 'dd/MM/yyyy'}}</td>
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
@@ -23,14 +23,16 @@
       </th>
       <td mat-cell *matCellDef="let assignment">
         <div class="float-end">
-          <button mat-icon-button disabled *ngIf="assignment.questions.length">
-            <mat-icon>check_circle_outline</mat-icon>
-          </button>
-          <button mat-icon-button color="primary" [routerLink]="'wizard/' + assignment.uuid">
+          <div class="d-inline-block" [matTooltip]="assignment.questions.length === 1 ? '1 Question' : assignment.questions.length + ' Questions'" matTooltipPosition="above">
+            <button mat-icon-button disabled *ngIf="assignment.questions.length">
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+          </div>
+          <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" [routerLink]="'/wizard/' + assignment.uuid">
             <mat-icon>edit</mat-icon>
           </button>
           <!-- @TODO: Also check that atleast 1 facet exists -->
-          <button mat-icon-button color="primary" [disabled]="!assignment.questions.length" [routerLink]="'grader/' + assignment.uuid">
+          <button mat-icon-button color="primary" matTooltip="Run" matTooltipPosition="above" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
             <mat-icon>play_arrow</mat-icon>
           </button>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">

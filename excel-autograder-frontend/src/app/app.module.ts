@@ -52,6 +52,8 @@ import { DropzoneDirective } from './components/dropzone/dropzone.directive';
 import { ExportAssignmentDialogComponent } from './views/dashboard/export-assignment-dialog/export-assignment-dialog.component';
 import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment-dialog/edit-assignment-dialog.component';
 import { ImportAssignmentDialogComponent } from './views/dashboard/import-assignment-dialog/import-assignment-dialog.component';
+import { ResetComponent } from './views/auth/reset/reset.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +78,8 @@ import { ImportAssignmentDialogComponent } from './views/dashboard/import-assign
     ExportAssignmentDialogComponent,
     EditAssignmentDialogComponent,
     ImportAssignmentDialogComponent,
+    ResetComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

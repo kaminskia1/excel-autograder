@@ -26,7 +26,6 @@ export class FormulaGraphFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
     ];
   }
@@ -41,5 +40,9 @@ export class FormulaGraphFacet extends Facet implements
 
   evaluateScore(workbook: FancyWorkbook): number {
     return this.points;
+  }
+
+  isValid(): boolean {
+    return false;
   }
 }

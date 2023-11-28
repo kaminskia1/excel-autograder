@@ -17,6 +17,9 @@ import { Question } from '../../models/question/question';
 import {
   ImportAssignmentDialogComponent,
 } from './import-assignment-dialog/import-assignment-dialog.component';
+import {
+  ConfirmationDialogComponent,
+} from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -71,17 +74,28 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteItem(assignment: Assignment) {
-    assignment.destroy().subscribe({
-      next: () => {
-        this.snackBar.open('Assignment deleted!', 'Close', { duration: 1500 });
-        this.assignments = this.assignments.filter(
-          (removed) => removed.uuid !== assignment.uuid,
-        );
-        this.dataSource.data = this.assignments;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Delete',
+        message: 'This assignment will be permanently removed.',
       },
-      error: () => {
-        this.snackBar.open('Failed to delete assignment!', 'Close', { duration: 1500 });
-      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        assignment.destroy().subscribe({
+          next: () => {
+            this.snackBar.open('Assignment deleted!', 'Close', { duration: 1500 });
+            this.assignments = this.assignments.filter(
+              (removed) => removed.uuid !== assignment.uuid,
+            );
+            this.dataSource.data = this.assignments;
+          },
+          error: () => {
+            this.snackBar.open('Failed to delete assignment!', 'Close', { duration: 1500 });
+          },
+        });
+      }
     });
   }
 

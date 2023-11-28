@@ -25,8 +25,7 @@ export class EditAssignmentDialogComponent {
       key: [''],
       questions: [[]],
     });
-    data.getFile().subscribe((file) => {
-    });
+    data.getFile();
 
     this.assignmentForm.get('encrypted')?.valueChanges.subscribe((value) => {
       if (value) {

@@ -2,7 +2,7 @@
   <div class="d-flex">
     <mat-form-field class="d-block">
       <mat-label>Points</mat-label>
-      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
     <div class="px-2"></div>
     <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
@@ -13,7 +13,7 @@
     </span>
   </div>
     <mat-form-field class="d-block" [matTooltip]="(facet.formulas ?? '').toString()" matTooltipPosition="above">
-      <mat-select [(ngModel)]="facet.formulas" placeholder="Select" [multiple]="true" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <mat-select (change)="valueChange.emit(facet)" [(ngModel)]="facet.formulas" placeholder="Select" [multiple]="true" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
         <mat-option>
           <ngx-mat-select-search [formControl]="bankFilterCtrl"
           placeholderLabel="Search..."

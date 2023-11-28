@@ -45,7 +45,11 @@ export class FancyWorkbook extends Workbook {
   }
 
   getCell(address: ICellAddress): Cell | undefined {
-    return this.getWorksheet(address.sheetName).findCell(address.row, address.col);
+    try {
+      return this.getWorksheet(address.sheetName).findCell(address.row, address.col);
+    } catch (e) {
+      return undefined;
+    }
   }
 
   addColumns(n = 1) {

@@ -1,13 +1,14 @@
 <mat-drawer-container class="h-100" fullscreen *ngIf="activeAssignment">
   <mat-drawer mode="side" opened="true" class="sidebar" style="width:400px !important" class="sidebar">
     <mat-toolbar>
-      <button mat-icon-button routerLink="/">
+      <button mat-icon-button routerLink="/" matTooltip="Home" matTooltipPosition="above">
         <mat-icon>home</mat-icon>
       </button>
-      <h1 class="ps-2">Problems</h1>
+      <h1 class="ps-2">Problems </h1>
       <div class="spacer"></div>
       <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
-      <button class="ms-2 me-2" mat-button (click)="saveQuestions()">Save</button>
+      <button class="ms-2 me-2" mat-button [routerLink]="'/grader/' + activeAssignment.uuid">Run</button>
+
     </mat-toolbar>
     <div class="question">
       <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!questionService.getQuestions().length">No problems found. Begin by adding one!</div>
@@ -17,7 +18,7 @@
           <div class="spacer bg"></div>
           <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
           <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1" (click)="nextQuestion()">></button>
-          <button mat-icon-button (click)="deleteActiveQuestion()">
+          <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" (click)="deleteActiveQuestion()">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-toolbar>
@@ -35,6 +36,7 @@
       <div class="sheet-selector ps-4">
         <button mat-button *ngFor="let item of workbookService.getSheets()" (click)="this.workbookService.setActiveSheet(item)" [ngClass]="workbookService.getActiveSheet() === item ? 'sheet-active' : ''" class="ms-1 me-1 d-inline-block">{{item.name}}</button>
       </div>
+      <div class="spacer"></div>
     </mat-toolbar>
     <div class="w-fit-content">
       <div class="excel-table" *ngIf="workbookService.getSheetHeight()">
@@ -63,9 +65,9 @@
             <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
               Formula List
             </button>
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">
-              Formula Graph
-            </button>
+<!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
+<!--              Formula Graph-->
+<!--            </button>-->
           </mat-menu>
           </span>
         </div>

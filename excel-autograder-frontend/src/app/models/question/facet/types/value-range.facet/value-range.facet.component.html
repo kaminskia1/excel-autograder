@@ -2,7 +2,7 @@
   <div class="d-flex">
     <mat-form-field class="d-block">
       <mat-label>Points</mat-label>
-      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
     <div class="px-2"></div>
     <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
@@ -15,12 +15,12 @@
   <div class="d-flex">
     <mat-form-field>
       <mat-label>Lower Bounds</mat-label>
-      <input matInput type="number" [(ngModel)]="facet.lowerBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput type="number" (change)="valueChange.emit(facet)" [(ngModel)]="facet.lowerBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
       <div class="px-2"></div>
     <mat-form-field>
       <mat-label>Upper Bounds</mat-label>
-      <input matInput type="number" [(ngModel)]="facet.upperBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput type="number" (change)="valueChange.emit(facet)" [(ngModel)]="facet.upperBounds" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
   </div>
 </div>

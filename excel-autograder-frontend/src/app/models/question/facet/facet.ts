@@ -44,6 +44,8 @@ export abstract class Facet implements IFacet {
 
   abstract getInfo(): Array<string>
 
+  abstract isValid(): boolean
+
   getMaxScore(): number {
     return this.points;
   }

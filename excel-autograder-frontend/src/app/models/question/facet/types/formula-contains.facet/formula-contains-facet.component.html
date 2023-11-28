@@ -2,7 +2,7 @@
   <div class="d-flex">
     <mat-form-field class="d-block">
       <mat-label>Points</mat-label>
-      <input matInput [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
     <div class="px-2"></div>
     <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
@@ -14,6 +14,6 @@
   </div>
   <mat-form-field class="d-block">
     <mat-label>Target Value</mat-label>
-    <input matInput [(ngModel)]="facet.formula" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.formula" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
   </mat-form-field>
 </div>

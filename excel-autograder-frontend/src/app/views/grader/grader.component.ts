@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { QuestionService } from '../../models/question/question.service';
@@ -9,12 +10,17 @@ import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { Assignment } from '../../models/assignment/assignment';
 import { WorkbookFactory } from '../../models/workbook/workbook.factory';
 import { FancyWorkbook } from '../../models/workbook/workbook';
+import { Facet } from '../../models/question/facet/facet';
+import {
+  ConfirmationDialogComponent,
+} from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 type Submission = {
   file: File,
   workbook: FancyWorkbook,
   score: number,
   maxScore: number,
+  responses: Map<Facet, number>
 }
 
 @Component({
@@ -29,18 +35,22 @@ export class GraderComponent implements OnInit {
 
   submissions: Submission[] = [];
 
+  activeSubmission: Submission | null = null;
+
   submissionTable = new MatTableDataSource<Submission>(this.submissions);
 
-  displayedColumns: string[] = ['name', 'size', 'score', 'action'];
+  displayedColumns: string[] = ['name', 'size', 'scoreRatio', 'scorePercent', 'action'];
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     public workbookService: WorkbookService,
     public workbookFactory: WorkbookFactory,
     public assignmentService: AssignmentService,
     public questionService: QuestionService,
     public assignmentFactory: AssignmentFactory,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -85,6 +95,7 @@ export class GraderComponent implements OnInit {
           workbook,
           score: this.getScore(workbook),
           maxScore: this.getMaxScore(),
+          responses: this.getResponses(workbook),
         };
         this.submissions.push(submission);
         this.submissionTable.data = this.submissions.sort(
@@ -95,8 +106,19 @@ export class GraderComponent implements OnInit {
   }
 
   removeSubmission(submission: Submission) {
-    this.submissions = this.submissions.filter((f) => f !== submission);
-    this.submissionTable.data = this.submissions;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Delete',
+        message: 'This submission will be lost.',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.submissions = this.submissions.filter((f) => f !== submission);
+        this.submissionTable.data = this.submissions;
+      }
+    });
   }
 
   getScore(workbook: FancyWorkbook): number {
@@ -105,9 +127,50 @@ export class GraderComponent implements OnInit {
       .reduce((acc, que) => acc + que.evaluateScore(workbook), 0);
   }
 
+  getResponses(workbook: FancyWorkbook): Map<Facet, number> {
+    if (!this.masterAssignment) throw Error('No master assignment selected!');
+    return this.masterAssignment.getQuestions()
+      .reduce((acc, que) => {
+        const responses = que.evaluateResponses(workbook);
+        responses.forEach((val, key) => acc.set(key, val));
+        return acc;
+      }, new Map());
+  }
+
   getMaxScore(): number {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()
       .reduce((acc: number, que) => acc + que.getMaxScore(), 0);
+  }
+
+  setActiveSubmission(submission: Submission) {
+    this.activeSubmission = submission;
+  }
+
+  areAllFacetsValid(): boolean {
+    if (!this.masterAssignment) return false;
+    return this.masterAssignment.getQuestions().every(
+      (que) => que.getFacets().every((fac) => fac.isValid()),
+    );
+  }
+
+  edit() {
+    if (!this.masterAssignment) return;
+    if (!this.submissions.length) {
+      this.router.navigate(['wizard', this.masterAssignment.uuid]);
+      return;
+    }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Navigate',
+        message: 'Any uploaded submissions will be lost.',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && this.masterAssignment) {
+        this.router.navigate(['wizard', this.masterAssignment.uuid]);
+      }
+    });
   }
 }

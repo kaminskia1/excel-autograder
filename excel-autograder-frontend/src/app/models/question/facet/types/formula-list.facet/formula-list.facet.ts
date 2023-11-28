@@ -45,7 +45,6 @@ export class FormulaListFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Points: ${this.points ?? 'Not set'}`,
       `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
       `Formulas: ${this.formulas?.toString() ?? 'Not set'}`,
     ];
@@ -60,11 +59,16 @@ export class FormulaListFacet extends Facet implements
     };
   }
 
+  isValid(): boolean {
+    return this.points != null && this.targetCell != null
+      && this.formulas != null && this.formulas.length > 0;
+  }
+
   evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
-    if (!this.formulas) throw new Error('Target formulas not set');
+    if (!this.formulas) throw new Error('Formulas cell not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) throw new Error('Error reading target cell from workbook');
+    if (!targetCell) return 0;
     if (Object.prototype.hasOwnProperty.call(targetCell, 'error')) return 0;
     if (targetCell.formula == null) return 0;
     this.remFormulas = this.formulas;
