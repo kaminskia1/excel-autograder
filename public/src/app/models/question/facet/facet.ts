@@ -32,7 +32,7 @@ export abstract class Facet implements IFacet {
   private cache: { targetCell?: Cell } = {};
 
   protected constructor(facet: IFacetPartial, protected workbookService: WorkbookService) {
-    this.points = facet.points ?? 1;
+    this.points = +facet.points ?? 1;
     this.targetCell = facet.targetCell;
   }
 
