@@ -103,6 +103,7 @@ export class FancyWorkbook extends Workbook {
   }
 
   static getCellSafeValue(cell: Cell): {type: string, text: string, value: string} {
+    // @TODO clean this up using proper interface checks (see comment below)
     const val = cell.value;
     if (cell.value === null) return { type: 'null', text: '', value: '' };
     if (typeof val === 'number') return { type: 'number', text: val.toString(), value: val.toString() };
@@ -116,8 +117,7 @@ export class FancyWorkbook extends Workbook {
     if (Object.prototype.hasOwnProperty.call(val, 'formula')) {
       const fv: CellFormulaValue = val as CellFormulaValue;
       if (fv.result !== undefined) {
-        // @ts-ignore
-        if (fv.result.error) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
+        if (Object.prototype.hasOwnProperty.call(fv.result, 'error')) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
         if (fv.result instanceof Date) return { type: 'formula', text: `𝑓: ${fv.result.toISOString()}"`, value: fv.result.toISOString() };
         return { type: 'formula', text: `𝑓: ${fv.result}`, value: fv.result.toString() };
       }
@@ -125,6 +125,10 @@ export class FancyWorkbook extends Workbook {
     }
     return { type: 'unknown', text: 'ERROR', value: 'ERROR' };
   }
+
+  // isCellErrorValue(value: unknown): value is CellErrorValue {
+  //   return typeof value === 'object' && value !== null && 'formula' in value;
+  // }
 
   private refreshTable(): void {
     const table: RenderedTable = [];

@@ -6,6 +6,7 @@ import { FacetComponent } from '../../facet.component';
 import {
   ConfirmationDialogComponent,
 } from '../../../../../components/confirmation-dialog/confirmation-dialog.component';
+import {CellFormulaValue} from "exceljs";
 
 @Component({
   selector: 'app-header',
