@@ -33,7 +33,15 @@ RUN adduser \
 USER appuser
 
 # Copy the source code into the container.
-COPY . .
+COPY assignments assignments
+COPY core core
+COPY db db
+COPY static static
+COPY users users
+COPY manage.py manage.py
+COPY Procfile Procfile
+COPY requirements.txt requirements.txt
+
 
 # Expose the port that the application listens on.
 EXPOSE 8000

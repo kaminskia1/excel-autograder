@@ -48,7 +48,7 @@ export class FormulaContainsFacet extends Facet implements
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.formula) throw new Error('Formula cell not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) return 0;
+    if (!targetCell || !targetCell.formula) return 0;
     const cleaned = this.formula.replace(/"([^"]*")/g, '');
     return targetCell.formula.includes(cleaned) ? this.points : 0;
   }

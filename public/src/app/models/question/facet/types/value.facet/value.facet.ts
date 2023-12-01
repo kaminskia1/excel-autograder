@@ -47,7 +47,7 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
     if (!this.targetCell) throw new Error('Target cell not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) return 0;
-    return `${targetCell.value}` === `${this.value}` ? this.points : 0;
+    return FancyWorkbook.getCellSafeValue(targetCell).value === `${this.value}` ? this.points : 0;
   }
 
   isValid(): boolean {

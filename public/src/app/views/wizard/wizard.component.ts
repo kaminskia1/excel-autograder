@@ -156,6 +156,7 @@ export class WizardComponent implements AfterViewInit {
     header.setInput('facet', facet);
     header.setInput('component', com);
     header.setInput('self', header);
+    header.instance.facetDeleted.subscribe(() => { this.saveQuestions(); });
     this.saveQuestions();
   }
 

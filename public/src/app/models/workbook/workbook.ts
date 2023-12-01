@@ -102,28 +102,28 @@ export class FancyWorkbook extends Workbook {
     return colCache.decode(tlbr);
   }
 
-  static getCellSafeValue(cell: Cell): {type: string, text: string} {
+  static getCellSafeValue(cell: Cell): {type: string, text: string, value: string} {
     const val = cell.value;
-    if (cell.value === null) return { type: 'null', text: '' };
-    if (typeof val === 'number') return { type: 'number', text: val.toString() };
-    if (typeof val === 'string') return { type: 'string', text: val };
-    if (typeof val === 'boolean') return { type: 'boolean', text: val.toString() };
-    if (val instanceof Date) return { type: 'date', text: val.toISOString() };
-    if (val === undefined) return { type: 'null', text: '' };
-    if (Object.prototype.hasOwnProperty.call(val, 'error')) return { type: 'error', text: (val as CellErrorValue).error };
-    if (Object.prototype.hasOwnProperty.call(val, 'richText')) return { type: 'richText', text: (val as CellRichTextValue).richText.join('') };
-    if (Object.prototype.hasOwnProperty.call(val, 'text')) return { type: 'text', text: (val as CellHyperlinkValue).text };
+    if (cell.value === null) return { type: 'null', text: '', value: '' };
+    if (typeof val === 'number') return { type: 'number', text: val.toString(), value: val.toString() };
+    if (typeof val === 'string') return { type: 'string', text: val, value: val };
+    if (typeof val === 'boolean') return { type: 'boolean', text: val.toString(), value: val.toString() };
+    if (val instanceof Date) return { type: 'date', text: val.toISOString(), value: val.toISOString()};
+    if (val === undefined) return { type: 'null', text: '', value: '' };
+    if (Object.prototype.hasOwnProperty.call(val, 'error')) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
+    if (Object.prototype.hasOwnProperty.call(val, 'richText')) return { type: 'richText', text: (val as CellRichTextValue).richText.join(''), value: (val as CellRichTextValue).richText.join('') };
+    if (Object.prototype.hasOwnProperty.call(val, 'text')) return { type: 'text', text: (val as CellHyperlinkValue).text, value: (val as CellHyperlinkValue).text };
     if (Object.prototype.hasOwnProperty.call(val, 'formula')) {
       const fv: CellFormulaValue = val as CellFormulaValue;
       if (fv.result !== undefined) {
         // @ts-ignore
-        if (fv.result.error) return fv.result.error;
-        if (fv.result instanceof Date) return { type: 'formula', text: `𝑓: ${fv.result.toISOString()}"` };
-        return { type: 'formula', text: `𝑓: ${fv.result}` };
+        if (fv.result.error) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
+        if (fv.result instanceof Date) return { type: 'formula', text: `𝑓: ${fv.result.toISOString()}"`, value: fv.result.toISOString() };
+        return { type: 'formula', text: `𝑓: ${fv.result}`, value: fv.result.toString() };
       }
-      return { type: 'formula', text: `=${fv.formula}` };
+      return { type: 'formula', text: `=${fv.formula}`, value: fv.formula };
     }
-    return { type: 'unknown', text: 'ERROR' };
+    return { type: 'unknown', text: 'ERROR', value: 'ERROR' };
   }
 
   private refreshTable(): void {

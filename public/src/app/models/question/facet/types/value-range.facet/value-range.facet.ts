@@ -56,9 +56,9 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
     if (!this.lowerBounds || !this.upperBounds) throw new Error('Boundaries not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) return 0;
-    if (!targetCell.value) return 0;
-    return (this.lowerBounds <= +targetCell.value
-    ) && +targetCell.value <= this.upperBounds ? this.points : 0;
+    const value = +FancyWorkbook.getCellSafeValue(targetCell).value;
+    if (Number.isNaN(value)) return 0;
+    return (this.lowerBounds <= value) && value <= this.upperBounds ? this.points : 0;
   }
 
   isValid(): boolean {

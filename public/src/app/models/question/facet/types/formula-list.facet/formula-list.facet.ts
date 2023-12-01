@@ -71,7 +71,7 @@ export class FormulaListFacet extends Facet implements
     if (!targetCell) return 0;
     if (Object.prototype.hasOwnProperty.call(targetCell, 'error')) return 0;
     if (targetCell.formula == null) return 0;
-    this.remFormulas = this.formulas;
+    this.remFormulas = [...this.formulas];
     this.recurse(workbook, targetCell);
     return this.remFormulas.length ? 0 : this.points;
   }

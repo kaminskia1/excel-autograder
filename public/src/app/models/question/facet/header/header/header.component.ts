@@ -1,6 +1,6 @@
-import { Component, ComponentRef, Input } from '@angular/core';
+import {Component, ComponentRef, EventEmitter, Input, Output} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Facet } from '../../facet';
+import {Facet, IFacet} from '../../facet';
 import { Question } from '../../../question';
 import { FacetComponent } from '../../facet.component';
 import {
@@ -21,6 +21,8 @@ export class HeaderComponent {
 
   @Input() self!: ComponentRef<HeaderComponent>;
 
+  @Output() facetDeleted = new EventEmitter<IFacet>();
+
   constructor(
     private dialog: MatDialog,
   ) {}
@@ -36,6 +38,7 @@ export class HeaderComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.question.removeFacet(this.facet);
+        this.facetDeleted.emit(this.facet);
         this.component.destroy();
         this.self.destroy(); // inception
       }

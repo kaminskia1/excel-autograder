@@ -50,7 +50,7 @@ export class FormulaRegexFacet extends Facet implements
     if (!this.targetCell) throw new Error('Target cell not set');
     if (!this.expression) throw new Error('Expression not set');
     const targetCell = workbook.getCell(this.targetCell);
-    if (!targetCell) return 0;
+    if (!targetCell || !targetCell.formula) return 0;
     let expression;
     try {
       expression = new RegExp(this.expression);
