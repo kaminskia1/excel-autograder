@@ -12,8 +12,16 @@
   cursor: pointer;
 }
 
-.cell:hover {
-  background: rgba(0, 0, 0, .025);
+.hover {
+  cursor: pointer;
+  position: relative;
+  margin-top: -36px;
+  width: 100%;
+  height: 36px;
+}
+
+.hover:hover {
+  background: rgba(0, 0, 0, .025) !important;
 }
 
 .cell-border {

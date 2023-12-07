@@ -110,7 +110,7 @@ export class FancyWorkbook extends Workbook {
     if (typeof val === 'number') return { type: 'number', text: val.toString(), value: val.toString() };
     if (typeof val === 'string') return { type: 'string', text: val, value: val };
     if (typeof val === 'boolean') return { type: 'boolean', text: val.toString(), value: val.toString() };
-    if (val instanceof Date) return { type: 'date', text: val.toISOString(), value: val.toISOString()};
+    if (val instanceof Date) return { type: 'date', text: val.toISOString(), value: val.toISOString() };
     if (val === undefined) return { type: 'null', text: '', value: '' };
     if (Object.prototype.hasOwnProperty.call(val, 'error')) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
     if (Object.prototype.hasOwnProperty.call(val, 'richText')) return { type: 'richText', text: (val as CellRichTextValue).richText.join(''), value: (val as CellRichTextValue).richText.join('') };
