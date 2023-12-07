@@ -13,7 +13,7 @@
     </span>
   </div>
     <mat-form-field class="d-block" [matTooltip]="(facet.formulas ?? '').toString()" matTooltipPosition="above">
-      <mat-select (change)="valueChange.emit(facet)" [(ngModel)]="facet.formulas" placeholder="Select" [multiple]="true" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <mat-select (selectionChange)="valueChange.emit(facet)" [(ngModel)]="facet.formulas" placeholder="Select" [multiple]="true" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
         <mat-option>
           <ngx-mat-select-search [formControl]="bankFilterCtrl"
           placeholderLabel="Search..."
