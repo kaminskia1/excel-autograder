@@ -33,6 +33,7 @@ export class FancyWorkbook extends Workbook {
 
   setActiveSheet(sheet: Worksheet): void {
     if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
+    if (this.activeSheet === sheet) return;
     this.activeSheet = sheet;
     this.addColumns(3);
     this.addRows(5);
