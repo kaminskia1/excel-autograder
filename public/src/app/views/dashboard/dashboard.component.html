@@ -13,13 +13,9 @@
     </ng-container>
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
-        <button mat-button color="primary" class="float-end" (click)="openNewDialog()">
-          New
-        </button>
+        <button mat-button color="primary" class="float-end" (click)="openNewDialog()">Create</button>
 
-        <button mat-button color="primary" class="float-end me-2" (click)="openImportDialog()">
-          Import
-        </button>
+        <button mat-button color="primary" class="float-end me-2" (click)="openImportDialog()">Import</button>
       </th>
       <td mat-cell *matCellDef="let assignment">
         <div class="float-end">
@@ -32,25 +28,17 @@
             <mat-icon>edit</mat-icon>
           </button>
           <!-- @TODO: Also check that atleast 1 facet exists -->
-          <button mat-icon-button color="primary" matTooltip="Run" matTooltipPosition="above" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
-            <mat-icon>play_arrow</mat-icon>
+          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
+            <mat-icon class="green">play_arrow</mat-icon>
           </button>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
             <mat-icon>list</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item class="d-block w-100" (click)="openDownloadDialog(assignment)">
-              Download
-            </button>
-            <button mat-menu-item class="d-block w-100" (click)="openEditDialog(assignment)">
-              Edit
-            </button>
-            <button mat-menu-item class="d-block w-100" (click)="openExportDialog(assignment)">
-              Export
-            </button>
-            <button mat-menu-item color="accent" class="d-block w-100 alert" (click)="deleteItem(assignment)">
-              Delete
-            </button>
+            <button mat-menu-item class="d-block w-100" (click)="openDownloadDialog(assignment)">Download</button>
+            <button mat-menu-item class="d-block w-100" (click)="openEditDialog(assignment)">Edit</button>
+            <button mat-menu-item class="d-block w-100" (click)="openExportDialog(assignment)">Export</button>
+            <button mat-menu-item color="accent" class="d-block w-100 alert" (click)="deleteItem(assignment)">Delete</button>
           </mat-menu>
         </div>
       </td>

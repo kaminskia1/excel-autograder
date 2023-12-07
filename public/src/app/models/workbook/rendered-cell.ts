@@ -28,6 +28,7 @@ export class RenderedCell {
 }
 
 export type RenderedColumn = {
+  width: number,
   letter: string,
   values: Array<RenderedCell>
 }

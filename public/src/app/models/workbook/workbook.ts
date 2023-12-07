@@ -146,7 +146,11 @@ export class FancyWorkbook extends Workbook {
         this.renderedTable = [];
         return;
       }
-      table.push({ letter: column.letter, values: Array<RenderedCell>() });
+      table.push({
+        width: column.width ?? 8,
+        letter: column.letter,
+        values: Array<RenderedCell>(),
+      });
       let count = 0;
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
         count += 1;

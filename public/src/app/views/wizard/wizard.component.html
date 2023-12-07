@@ -34,7 +34,7 @@
     <mat-toolbar>
       <h1>{{ activeAssignment.name }}</h1>
       <div class="sheet-selector ps-4">
-        <button mat-button *ngFor="let item of workbookService.getSheets()" (click)="this.workbookService.setActiveSheet(item)" [ngClass]="workbookService.getActiveSheet() === item ? 'sheet-active' : ''" class="ms-1 me-1 d-inline-block">{{item.name}}</button>
+        <button mat-button class="ms-1 me-1 d-inline-block" *ngFor="let item of workbookService.getSheets()" (click)="this.workbookService.setActiveSheet(item)" [ngClass]="workbookService.getActiveSheet() === item ? 'sheet-active' : ''">{{item.name}}</button>
       </div>
       <div class="spacer"></div>
     </mat-toolbar>
@@ -44,7 +44,7 @@
           <div class="cell cell-border"></div>
           <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getRenderedSheetHeight())">{{val+1}}</div>
         </div>
-        <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable">
+        <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable" [ngStyle]="{ width: (col.width * 7.5) + 'px' }">
           <div class="cell align-text-center">{{col.letter}}</div>
           <span *ngFor="let rCell of col.values">
 
