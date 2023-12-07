@@ -10,4 +10,4 @@
   'background': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.background : '',
   'min-height': renderedCell.height + 'px',
   'margin-top': '-' + renderedCell.height + 'px'
-}" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="c();workbookService.emitRenderedCell(renderedCell)"></div>
+}" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(renderedCell)"></div>
