@@ -7,6 +7,7 @@ import {
   Workbook,
   Worksheet,
   Range,
+  Row,
 } from 'exceljs';
 import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
@@ -51,6 +52,11 @@ export class FancyWorkbook extends Workbook {
     } catch (e) {
       return undefined;
     }
+  }
+
+  getRow(row: number): Row | undefined {
+    if (!this.activeSheet) return undefined;
+    return this.activeSheet.getRow(row);
   }
 
   addColumns(n = 1) {
@@ -106,30 +112,31 @@ export class FancyWorkbook extends Workbook {
   static getCellSafeValue(cell: Cell): {type: string, text: string, value: string} {
     // @TODO clean this up using proper interface checks (see comment below)
     const val = cell.value;
+
+    const isCellErrorValue = (c: unknown): c is CellErrorValue => typeof c === 'object' && c !== null && 'error' in c;
+    const isCellRichTextValue = (c: unknown): c is CellRichTextValue => typeof c === 'object' && c !== null && 'richText' in c;
+    const isCellHyperlinkValue = (c: unknown): c is CellHyperlinkValue => typeof c === 'object' && c !== null && 'hyperlink' in c;
+    const isCellFormulaValue = (c: unknown): c is CellFormulaValue => typeof c === 'object' && c !== null && 'formula' in c;
+
     if (cell.value === null) return { type: 'null', text: '', value: '' };
     if (typeof val === 'number') return { type: 'number', text: val.toString(), value: val.toString() };
     if (typeof val === 'string') return { type: 'string', text: val, value: val };
     if (typeof val === 'boolean') return { type: 'boolean', text: val.toString(), value: val.toString() };
     if (val instanceof Date) return { type: 'date', text: val.toISOString(), value: val.toISOString() };
     if (val === undefined) return { type: 'null', text: '', value: '' };
-    if (Object.prototype.hasOwnProperty.call(val, 'error')) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
-    if (Object.prototype.hasOwnProperty.call(val, 'richText')) return { type: 'richText', text: (val as CellRichTextValue).richText.join(''), value: (val as CellRichTextValue).richText.join('') };
-    if (Object.prototype.hasOwnProperty.call(val, 'text')) return { type: 'text', text: (val as CellHyperlinkValue).text, value: (val as CellHyperlinkValue).text };
-    if (Object.prototype.hasOwnProperty.call(val, 'formula')) {
-      const fv: CellFormulaValue = val as CellFormulaValue;
-      if (fv.result !== undefined) {
-        if (Object.prototype.hasOwnProperty.call(fv.result, 'error')) return { type: 'error', text: (val as CellErrorValue).error.toString(), value: (val as CellErrorValue).error.toString() };
-        if (fv.result instanceof Date) return { type: 'formula', text: `𝑓: ${fv.result.toISOString()}"`, value: fv.result.toISOString() };
-        return { type: 'formula', text: `𝑓: ${fv.result}`, value: fv.result.toString() };
+    if (isCellErrorValue(val)) return { type: 'error', text: val.error.toString(), value: val.error.toString() };
+    if (isCellRichTextValue(val)) return { type: 'richText', text: val.richText.map(v => v.text).join(''), value: val.richText.join('') };
+    if (isCellHyperlinkValue(val)) return { type: 'text', text: val.text, value: val.text };
+    if (isCellFormulaValue(val)) {
+      if (val.result !== undefined) {
+        if (isCellErrorValue(val.result)) return { type: 'error', text: val.result.error.toString(), value: val.result.error.toString() };
+        if (val.result instanceof Date) return { type: 'formula', text: `𝑓: ${val.result.toISOString()}"`, value: val.result.toISOString() };
+        return { type: 'formula', text: `𝑓: ${val.result}`, value: val.result.toString() };
       }
-      return { type: 'formula', text: `=${fv.formula}`, value: fv.formula };
+      return { type: 'formula', text: `=${val.formula}`, value: val.formula };
     }
     return { type: 'unknown', text: 'ERROR', value: 'ERROR' };
   }
-
-  // isCellErrorValue(value: unknown): value is CellErrorValue {
-  //   return typeof value === 'object' && value !== null && 'formula' in value;
-  // }
 
   private refreshTable(): void {
     const table: RenderedTable = [];
@@ -155,8 +162,9 @@ export class FancyWorkbook extends Workbook {
       column.eachCell({ includeEmpty: true }, (cell: Cell) => {
         count += 1;
         if (count > 99) return;
+        const height = (this.getRow(count)?.height ?? 15) * 2;
         table[i - 1].values.push(
-          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text),
+          new RenderedCell(cell, height, FancyWorkbook.getCellSafeValue(cell).text),
         );
       });
     }

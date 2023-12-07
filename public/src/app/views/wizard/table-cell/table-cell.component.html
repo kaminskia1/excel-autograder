@@ -3,8 +3,11 @@
   'border-color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.border : '',
   'color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.color : '',
   'position': renderedCell.isHighlighted ? 'relative' : 'inherit',
-  'border-radius': renderedCell.isHighlighted ? '2px' : ''
+  'border-radius': renderedCell.isHighlighted ? '2px' : '',
+  'min-height': renderedCell.height + 'px',
 }">{{renderedCell.safeValue}}</div>
 <div class="hover" [ngClass]="{'cell-active-hover': hover}" [ngStyle]="{
   'background': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.background : '',
-}" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(renderedCell)"></div>
+  'min-height': renderedCell.height + 'px',
+  'margin-top': '-' + renderedCell.height + 'px'
+}" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="c();workbookService.emitRenderedCell(renderedCell)"></div>

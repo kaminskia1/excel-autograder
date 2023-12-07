@@ -1,8 +1,6 @@
 <div class="container mt-4">
-
   <h1>Documents</h1>
   <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z2">
-
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
@@ -14,7 +12,6 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>
         <button mat-button color="primary" class="float-end" (click)="openNewDialog()">Create</button>
-
         <button mat-button color="primary" class="float-end me-2" (click)="openImportDialog()">Import</button>
       </th>
       <td mat-cell *matCellDef="let assignment">
@@ -29,7 +26,7 @@
           </button>
           <!-- @TODO: Also check that atleast 1 facet exists -->
           <button mat-icon-button matTooltip="Run" matTooltipPosition="above" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
-            <mat-icon class="green">play_arrow</mat-icon>
+            <mat-icon [ngClass]="assignment.questions.length ? 'green' : 'red'">play_arrow</mat-icon>
           </button>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
             <mat-icon>list</mat-icon>
@@ -43,8 +40,6 @@
         </div>
       </td>
     </ng-container>
-
-
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>

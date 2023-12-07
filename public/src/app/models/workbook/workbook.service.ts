@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Worksheet, Cell } from 'exceljs';
+import { Worksheet, Cell, Row } from 'exceljs';
 import { FancyWorkbook } from './workbook';
 import { ICellAddress } from '../question/misc';
 import { WorkbookFactory } from './workbook.factory';
@@ -79,5 +79,9 @@ export class WorkbookService {
   getRenderedSheetWidth(): number {
     if (this.activeWorkbook === null) return 0;
     return this.activeWorkbook.getRenderedSheetWidth();
+  }
+
+  getRow(row: number): Row | undefined {
+    return this.activeWorkbook?.getRow(row);
   }
 }

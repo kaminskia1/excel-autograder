@@ -8,7 +8,6 @@
       <div class="spacer"></div>
       <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
       <button class="ms-2 me-2" mat-button [routerLink]="'/grader/' + activeAssignment.uuid">Run</button>
-
     </mat-toolbar>
     <div class="question">
       <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!questionService.getQuestions().length">No problems found. Begin by adding one!</div>
@@ -42,12 +41,11 @@
       <div class="excel-table" *ngIf="workbookService.getSheetHeight()">
         <div class="column">
           <div class="cell cell-border"></div>
-          <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getRenderedSheetHeight())">{{val+1}}</div>
+          <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getRenderedSheetHeight())" [ngStyle]="{'min-height': (workbookService.getRow(val+1)?.height ?? 15) * 2 + 'px' }">{{val+1}}</div>
         </div>
         <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable" [ngStyle]="{ width: (col.width * 7.5) + 'px' }">
           <div class="cell align-text-center">{{col.letter}}</div>
           <span *ngFor="let rCell of col.values">
-
           <app-table-cell [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null" [renderedCell]="rCell" [hover]="workbookService.isRenderedCellEmitterSubscribed()"></app-table-cell>
           <mat-menu #menu="matMenu">
             <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, targetCell: rCell.parent.fullAddress}))">

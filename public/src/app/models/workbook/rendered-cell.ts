@@ -45,12 +45,15 @@ export class RenderedCell {
 
   isHighlightedColor: RenderedCellColor;
 
-  constructor(parent: Cell, safeValue = '', isHighlighted = false, isHighlightedColor = {
+  height: number;
+
+  constructor(parent: Cell, height = 2, safeValue = '', isHighlighted = false, isHighlightedColor = {
     background: 'rgba(0, 0, 0, .065)',
     border: 'rgba(0, 0, 0, .125)',
     color: '',
   }) {
     this.parent = parent;
+    this.height = height;
     this.fill = isFillStandard(parent.fill) ? toRGB(parent.fill.fgColor) : '';
     this.safeValue = safeValue;
     this.isHighlighted = isHighlighted;
