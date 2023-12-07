@@ -21,7 +21,7 @@
 }
 
 .hover:hover {
-  background: rgba(0, 0, 0, .025) !important;
+  background: rgba(0, 0, 0, .025);
 }
 
 .cell-border {
@@ -34,5 +34,5 @@
 .cell-active-hover:hover {
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
   z-index:100;
-  background: white;
+  background: rgba(0,0,0,0);
 }

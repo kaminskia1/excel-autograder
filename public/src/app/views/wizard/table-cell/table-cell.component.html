@@ -1,10 +1,10 @@
-<div #cell class="cell" [ngClass]="{'cell-active-hover': hover, 'cell-active': renderedCell.isHighlighted}" [ngStyle]="{
+<div #cell class="cell" [ngClass]="{'cell-active': renderedCell.isHighlighted}" [ngStyle]="{
   'background': renderedCell.fill,
   'border-color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.border : '',
   'color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.color : '',
   'position': renderedCell.isHighlighted ? 'relative' : 'inherit',
   'border-radius': renderedCell.isHighlighted ? '2px' : ''
 }">{{renderedCell.safeValue}}</div>
-<div class="hover" [ngStyle]="{
+<div class="hover" [ngClass]="{'cell-active-hover': hover}" [ngStyle]="{
   'background': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.background : '',
 }" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(renderedCell)"></div>
