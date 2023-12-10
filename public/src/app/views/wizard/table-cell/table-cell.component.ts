@@ -23,6 +23,9 @@ export class TableCellComponent {
   }
 
   getTooltip(): string {
+    if (this.renderedCell.parent.value instanceof Date) {
+      return this.renderedCell.parent.value.toISOString();
+    }
     if (this.renderedCell.parent.formula) return `=${this.renderedCell.parent.formula}`;
     if (this.isOverflow()) return this.renderedCell.safeValue;
     return '';

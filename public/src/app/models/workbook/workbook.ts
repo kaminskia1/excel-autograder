@@ -70,13 +70,11 @@ export class FancyWorkbook extends Workbook {
   addColumns(n = 1) {
     if (!this.activeSheet) return;
     for (let i = 0; i < n; i += 1) this.activeSheet.columns = this.activeSheet.columns.concat([{}]);
-    this.genRenderedTable();
   }
 
   addRows(n = 1) {
     if (!this.activeSheet) return;
     for (let i = 0; i < n; i += 1) this.activeSheet.addRow([]);
-    this.genRenderedTable();
   }
 
   emitRenderedCell(rCell: RenderedCell) {
@@ -130,7 +128,7 @@ export class FancyWorkbook extends Workbook {
     if (typeof val === 'number') return { type: 'number', text: val.toString(), value: val.toString() };
     if (typeof val === 'string') return { type: 'string', text: val, value: val };
     if (typeof val === 'boolean') return { type: 'boolean', text: val.toString(), value: val.toString() };
-    if (val instanceof Date) return { type: 'date', text: val.toISOString(), value: val.toISOString() };
+    if (val instanceof Date) return { type: 'date', text: val.toString(), value: val.toISOString() };
     if (val === undefined) return { type: 'null', text: '', value: '' };
     if (isCellErrorValue(val)) return { type: 'error', text: val.error.toString(), value: val.error.toString() };
     if (isCellRichTextValue(val)) return { type: 'richText', text: val.richText.map((v) => v.text).join(''), value: val.richText.join('') };
@@ -138,7 +136,7 @@ export class FancyWorkbook extends Workbook {
     if (isCellFormulaValue(val)) {
       if (val.result !== undefined) {
         if (isCellErrorValue(val.result)) return { type: 'error', text: val.result.error.toString(), value: val.result.error.toString() };
-        if (val.result instanceof Date) return { type: 'formula', text: val.result.toISOString(), value: val.result.toISOString() };
+        if (val.result instanceof Date) return { type: 'formula', text: val.result.toString(), value: val.result.toISOString() };
         return { type: 'formula', text: `${val.result}`, value: val.result.toString() };
       }
       return { type: 'formula', text: '#N/A', value: val.formula };
@@ -157,7 +155,7 @@ export class FancyWorkbook extends Workbook {
     const cols: number = this.activeSheet.columnCount < 50 ? this.activeSheet.columnCount : 50;
 
     this.activeSheet.eachRow({ includeEmpty: true }, (row: Row) => {
-      if (row.number > 100) return;
+      if (row.number > 99) return;
       table.push({
         rowHeight: (row.height ?? 15) * 2,
         values: Array<RenderedCell>(),

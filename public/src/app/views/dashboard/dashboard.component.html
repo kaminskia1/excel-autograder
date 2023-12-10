@@ -25,8 +25,8 @@
             <mat-icon>edit</mat-icon>
           </button>
           <!-- @TODO: Also check that atleast 1 facet exists -->
-          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
-            <mat-icon [ngClass]="assignment.questions.length ? 'green' : 'red'">play_arrow</mat-icon>
+          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" *ngIf="assignment.questions.length" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
+            <mat-icon class="green">play_arrow</mat-icon>
           </button>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
             <mat-icon>list</mat-icon>
