@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Worksheet, Cell, Row } from 'exceljs';
+import { Worksheet, Cell, Row, Column } from 'exceljs';
 import { FancyWorkbook } from './workbook';
 import { ICellAddress } from '../question/misc';
 import { WorkbookFactory } from './workbook.factory';
@@ -83,5 +83,9 @@ export class WorkbookService {
 
   getRow(row: number): Row | undefined {
     return this.activeWorkbook?.getRow(row);
+  }
+
+  getColumn(indexOrKey: number | string): Column | undefined {
+    return this.activeWorkbook?.getColumn(indexOrKey);
   }
 }

@@ -37,39 +37,38 @@
       </div>
       <div class="spacer"></div>
     </mat-toolbar>
-    <div class="w-fit-content">
+    <div class="excel-table-parent">
       <div class="excel-table" *ngIf="workbookService.getSheetHeight()">
-        <div class="column">
+        <div class="excel-row sticky-top" style="height: 30px">
           <div class="cell cell-border"></div>
-          <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getRenderedSheetHeight())" [ngStyle]="{'min-height': (workbookService.getRow(val+1)?.height ?? 15) * 2 + 'px' }">{{val+1}}</div>
+          <div class="cell cell-border" *ngFor="let val of range(0, workbookService.getRenderedSheetWidth())" [ngStyle]="{'min-width': (workbookService.getColumn(val+1)?.width ?? 8) * 7.5 + 'px' }">
+            {{workbookService.getColumn(val+1)?.letter}}</div>
         </div>
-        <div class="column" *ngFor="let col of workbookService.activeWorkbook?.renderedTable" [ngStyle]="{ width: (col.width * 7.5) + 'px' }">
-          <div class="cell align-text-center">{{col.letter}}</div>
-          <span *ngFor="let rCell of col.values">
-          <app-table-cell [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null" [renderedCell]="rCell" [hover]="workbookService.isRenderedCellEmitterSubscribed()"></app-table-cell>
-          <mat-menu #menu="matMenu">
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
-              Value Equals
-            </button>
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
-              Value Range
-            </button>
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
-              Formula Contains
-            </button>
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
-              Formula Regex
-            </button>
-            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
-              Formula List
-            </button>
-<!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
-<!--              Formula Graph-->
-<!--            </button>-->
-          </mat-menu>
+        <div class="excel-row" *ngFor="let row of workbookService.activeWorkbook?.renderedTable; let i = index" [ngStyle]="{ height: row.rowHeight + 'px' }">
+          <div class="cell align-text-center cell-border" style="height: 100%">{{ i+1 }}</div>
+          <span *ngFor="let rCell of row.values">
+            <app-table-cell  *ngIf="rCell.width >= 0" [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null" [renderedCell]="rCell" [hover]="workbookService.isRenderedCellEmitterSubscribed()"></app-table-cell>
+            <mat-menu #menu="matMenu">
+              <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+                Value Equals
+              </button>
+              <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+                Value Range
+              </button>
+              <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+                Formula Contains
+              </button>
+              <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+                Formula Regex
+              </button>
+              <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+                Formula List
+              </button>
+  <!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
+  <!--              Formula Graph-->
+  <!--            </button>-->
+            </mat-menu>
           </span>
-        </div>
-        <div class="column">
         </div>
       </div>
     </div>

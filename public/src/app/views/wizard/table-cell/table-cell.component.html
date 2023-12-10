@@ -4,10 +4,14 @@
   'color': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.color : '',
   'position': renderedCell.isHighlighted ? 'relative' : 'inherit',
   'border-radius': renderedCell.isHighlighted ? '2px' : '',
-  'min-height': renderedCell.height + 'px',
+  'height': renderedCell.height + 'px',
+  'width': renderedCell.width + 'px',
+  'text-align': renderedCell.align,
 }">{{renderedCell.safeValue}}</div>
-<div class="hover" [ngClass]="{'cell-active-hover': hover}" [ngStyle]="{
+<div class="cell hover" [ngClass]="{'cell-active-hover': hover}" [ngStyle]="{
   'background': renderedCell.isHighlighted ? renderedCell.isHighlightedColor.background : '',
-  'min-height': renderedCell.height + 'px',
-  'margin-top': '-' + renderedCell.height + 'px'
+  'height': renderedCell.height + 'px',
+  'width': renderedCell.width + 'px',
+  'margin-top': '-' + renderedCell.height + 'px',
+  'margin-left': '-' + renderedCell.width + 'px',
 }" [matTooltip]="getTooltip()" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(renderedCell)"></div>

@@ -34,6 +34,17 @@ function toRGB(fill: Partial<Color> | undefined): string {
   return `rgb(${fn(theme[0], tint)}, ${fn(theme[1], tint)}, ${fn(theme[2], tint)})`;
 }
 
+export class CellSize {
+  height: number;
+
+  width: number;
+
+  constructor(height: number, width: number) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
 export class RenderedCell {
   parent: Cell;
 
@@ -45,25 +56,47 @@ export class RenderedCell {
 
   isHighlightedColor: RenderedCellColor;
 
+  width: number;
+
   height: number;
 
-  constructor(parent: Cell, height = 2, safeValue = '', isHighlighted = false, isHighlightedColor = {
-    background: 'rgba(0, 0, 0, .065)',
-    border: 'rgba(0, 0, 0, .125)',
-    color: '',
-  }) {
+  align: string;
+
+  constructor(
+    parent: Cell,
+    safeValue: string,
+    width: number,
+    height: number,
+    isHighlighted = false,
+    isHighlightedColor = {
+      background: 'rgba(0, 0, 0, .065)',
+      border: 'rgba(0, 0, 0, .125)',
+      color: '',
+    },
+  ) {
     this.parent = parent;
+    this.width = width;
     this.height = height;
+    if (!Number.isNaN(Number(safeValue)) && safeValue.length > 0) {
+      this.align = 'right';
+    } else if (parent.alignment?.horizontal) {
+      this.align = parent.alignment.horizontal;
+    } else {
+      this.align = 'left';
+    }
     this.fill = isFillStandard(parent.fill) ? toRGB(parent.fill.fgColor) : '';
     this.safeValue = safeValue;
     this.isHighlighted = isHighlighted;
     this.isHighlightedColor = isHighlightedColor;
   }
+
+  isFillStandard() {
+    return isFillStandard(this.parent.fill);
+  }
 }
 
-export type RenderedColumn = {
-  width: number,
-  letter: string,
+export type RenderedRow = {
+  rowHeight: number,
   values: Array<RenderedCell>
 }
-export type RenderedTable = Array<RenderedColumn>
+export type RenderedTable = Array<RenderedRow>

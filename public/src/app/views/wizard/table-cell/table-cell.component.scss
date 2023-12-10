@@ -1,36 +1,9 @@
-.cell {
-  height: 30px;
-  width: 100%;
-  padding: 3px;
-  margin-top: -1px;
-  margin-left: -1px;
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border: 1px solid #E1E1E1;
-  cursor: pointer;
-}
-
 .hover {
   cursor: pointer;
   position: relative;
-  width: 100%;
-  height: 30px;
+  height: 100%;
 }
 
 .hover:hover {
   background: rgba(0, 0, 0, .025);
-}
-
-.cell-border {
-  min-width: 10px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  border: 1px solid #E1E1E1
-}
-.cell-active-hover:hover {
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-  z-index:100;
-  background: rgba(0,0,0,0);
 }

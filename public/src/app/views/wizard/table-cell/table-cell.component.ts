@@ -7,7 +7,7 @@ import { RenderedCell } from '../../../models/workbook/rendered-cell';
 @Component({
   selector: 'app-table-cell',
   templateUrl: './table-cell.component.html',
-  styleUrls: ['./table-cell.component.scss'],
+  styleUrls: ['./table-cell.component.scss', '../wizard.component.scss'],
 })
 export class TableCellComponent {
   @ViewChild('cell', { static: true }) textElement!: ElementRef;
