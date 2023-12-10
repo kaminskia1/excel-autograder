@@ -56,7 +56,9 @@ export class RenderedCell {
 
   isHighlightedColor: RenderedCellColor;
 
-  width: number;
+  displayWidth: number;
+
+  actionWidth: number;
 
   height: number;
 
@@ -65,8 +67,9 @@ export class RenderedCell {
   constructor(
     parent: Cell,
     safeValue: string,
-    width: number,
     height: number,
+    displayWidth: number,
+    actionWidth?: number,
     isHighlighted = false,
     isHighlightedColor = {
       background: 'rgba(0, 0, 0, .065)',
@@ -75,7 +78,8 @@ export class RenderedCell {
     },
   ) {
     this.parent = parent;
-    this.width = width;
+    this.displayWidth = displayWidth;
+    this.actionWidth = actionWidth ?? displayWidth;
     this.height = height;
     if (!Number.isNaN(Number(safeValue)) && safeValue.length > 0) {
       this.align = 'right';
@@ -96,7 +100,7 @@ export class RenderedCell {
 }
 
 export type RenderedRow = {
-  rowHeight: number,
+  height: number,
   values: Array<RenderedCell>
 }
 export type RenderedTable = Array<RenderedRow>

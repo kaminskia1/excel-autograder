@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Worksheet, Cell, Row, Column } from 'exceljs';
+import {
+  Worksheet, Cell, Row, Column,
+} from 'exceljs';
 import { FancyWorkbook } from './workbook';
 import { ICellAddress } from '../question/misc';
 import { WorkbookFactory } from './workbook.factory';

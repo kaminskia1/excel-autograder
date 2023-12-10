@@ -6,7 +6,6 @@
 }
 .excel-table {
   width: fit-content;
-  padding-top: 1px;
 }
 
 .sidebar {
@@ -22,43 +21,30 @@
   overflow: auto;
 }
 
+.sheet-active {
+  background: rgba(0,0,0,.075);
+}
+
+.excel-row {
+  display: flex;
+}
+
 .cell {
   display: inline-block;
   height: 100%;
   padding: 5px;
-  margin-top: -1px;
   margin-left: -1px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border: 1px solid #E1E1E1;
 }
 
 .cell-border {
   width: 30px;
   height: 30px;
   text-align: center;
-  border: 1px solid #E1E1E1;
+  border-bottom: 1px solid #E1E1E1;
+  border-right: 1px solid #E1E1E1;
+  border-left: 1px solid #E1E1E1;
   background-color: whitesmoke;
 }
-
-.cell-active-hover:hover {
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-  z-index:100;
-}
-
-.sheet-active {
-  background: rgba(0,0,0,.075);
-}
-
-.column-add {
-  margin: 2px;
-  width: 30px;
-  height: 100%;
-}
-
-.miw-0 {
-  min-width: 0;
-}
-.excel-row {
-  display: flex;
+.cell-border-top {
+  border-top: 1px solid #E1E1E1;
 }

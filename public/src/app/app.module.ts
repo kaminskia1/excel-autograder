@@ -40,7 +40,6 @@ import { RegisterComponent } from './views/auth/register/register.component';
 import { QuestionComponent } from './components/question/question.component';
 import { GraderComponent } from './views/grader/grader.component';
 import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-dialog/new-assignment-dialog.component';
-import { TableCellComponent } from './views/wizard/table-cell/table-cell.component';
 import { ValueFacetComponent } from './models/question/facet/types/value.facet/value.facet.component';
 import { FormulaGraphComponent } from './models/question/facet/types/formula-graph/formula-graph.component';
 import { FormulaContainsFacetComponent } from './models/question/facet/types/formula-contains.facet/formula-contains-facet.component';
@@ -54,6 +53,7 @@ import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment
 import { ImportAssignmentDialogComponent } from './views/dashboard/import-assignment-dialog/import-assignment-dialog.component';
 import { ResetComponent } from './views/auth/reset/reset.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { TableRowComponent } from './views/wizard/table-row/table-row.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +66,6 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     QuestionComponent,
     GraderComponent,
     NewAssignmentDialogComponent,
-    TableCellComponent,
     ValueFacetComponent,
     FormulaGraphComponent,
     FormulaContainsFacetComponent,
@@ -80,6 +79,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     ImportAssignmentDialogComponent,
     ResetComponent,
     ConfirmationDialogComponent,
+    TableRowComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,31 @@
+.action {
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+}
+
+.action:hover {
+  background: rgba(0, 0, 0, .025);
+}
+
+.background {
+  overflow: hidden;
+  border-bottom: 1px solid #E1E1E1;
+  border-right: 1px solid #E1E1E1;
+}
+
+.foreground {
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+}
+
+.ro {
+  margin-top: -1px;
+}
+
+
+.cell-active-hover:hover {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+  z-index:100;
+}

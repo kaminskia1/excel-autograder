@@ -1,0 +1,57 @@
+<div class="ro">
+  <div class="d-flex">
+    <div class="cell cell-border background"></div>
+    <div class="cell background" *ngFor="let rCell of row.values" [ngClass]="{'cell-active': rCell.isHighlighted}" [ngStyle]="{
+      'background-color': rCell.fill,
+      'border-color': rCell.isHighlighted ? rCell.isHighlightedColor.border : '',
+      'color': rCell.isHighlighted ? rCell.isHighlightedColor.color : '',
+      'position': rCell.isHighlighted ? 'relative' : 'inherit',
+      'border-radius': rCell.isHighlighted ? '2px' : '',
+      'height': rCell.height + 'px',
+      'width': rCell.actionWidth + 'px',
+    }"></div>
+  </div>
+  <div class="d-flex" [ngStyle]="{'margin-top': '-' + row.height + 'px'}">
+    <div class="cell align-text-center cell-border"></div>
+    <span *ngFor="let rCell of row.values" [ngStyle]="{'height': row.height + 'px'}">
+      <div class="cell foreground" *ngIf="rCell.displayWidth >= 0" [ngClass]="{'cell-active': rCell.isHighlighted}" [ngStyle]="{
+        'position': rCell.isHighlighted ? 'relative' : 'inherit',
+        'border-radius': rCell.isHighlighted ? '2px' : '',
+        'height': rCell.height + 'px',
+        'width': rCell.displayWidth + 'px',
+        'text-align': rCell.align,
+      }">{{rCell.safeValue}}</div>
+    </span>
+  </div>
+  <div class="d-flex" [ngStyle]="{'margin-top': '-' + row.height + 'px'}">
+    <div class="cell cell-border" [ngStyle]="{'height': row.height + 'px',}">{{ index + 1 }}</div>
+    <span *ngFor="let rCell of row.values">
+      <div class="cell action" [ngClass]="{'cell-active-hover': workbookService.isRenderedCellEmitterSubscribed()}" [ngStyle]="{
+        'background': rCell.isHighlighted ? rCell.isHighlightedColor.background : '',
+        'height': rCell.height + 'px',
+        'width': rCell.actionWidth + 'px',
+      }" [matTooltip]="getTooltip(rCell)" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(rCell)"
+           [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null"></div>
+      <mat-menu #menu="matMenu">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+          Value Equals
+        </button>
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+          Value Range
+        </button>
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+          Formula Contains
+        </button>
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+          Formula Regex
+        </button>
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+          Formula List
+        </button>
+        <!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
+        <!--              Formula Graph-->
+        <!--            </button>-->
+      </mat-menu>
+    </span>
+  </div>
+</div>

@@ -46,7 +46,7 @@ export class FancyWorkbook extends Workbook {
 
   getTableCellByAddress(address: ICellAddress): RenderedCell | undefined {
     if (this.activeSheet?.name !== address.sheetName) return undefined;
-    return this.renderedTable[address.col - 1].values[address.row - 1] || undefined;
+    return this.renderedTable[address.row - 1].values[address.col - 1] || undefined;
   }
 
   getCell(address: ICellAddress): Cell | undefined {
@@ -157,34 +157,34 @@ export class FancyWorkbook extends Workbook {
     this.activeSheet.eachRow({ includeEmpty: true }, (row: Row) => {
       if (row.number > 99) return;
       table.push({
-        rowHeight: (row.height ?? 15) * 2,
+        height: (row.height > 15 ? row.height : 15) * 2,
         values: Array<RenderedCell>(),
       });
       for (let i = 1; i <= cols; i += 1) {
         const cell = row.getCell(i);
         const width = (this.getColumn(i)?.width ?? 8) * 7.5;
-        const height = (row.height > 15 ? row.height : 15) * 2;
         table[table.length - 1].values.push(
-          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(cell).text, width, height),
+          new RenderedCell(cell, FancyWorkbook.getCellSafeValue(
+            cell,
+          ).text, table[table.length - 1].height, width, width),
         );
       }
     });
 
-    for (let row = 0; row < table.length; row += 1) {
-      for (let cellIdx = 0; cellIdx < table[row].values.length - 1; cellIdx += 1) {
-        const cell = table[row].values[cellIdx];
-        if (cell.safeValue.length > 0 && this.getTextWidth(cell.safeValue) > cell.width) {
+    for (let r = 0; r < table.length; r += 1) {
+      const row = table[r].values;
+      for (let cellIdx = 0; cellIdx < row.length - 1; cellIdx += 1) {
+        const cell = row[cellIdx];
+        if (cell.safeValue.length > 0 && this.getTextWidth(cell.safeValue) > cell.displayWidth) {
           const baseWidth = this.getTextWidth(cell.safeValue);
 
           // identified overflow
           let next = cellIdx + 1;
-          while (cell.width < baseWidth) {
+          while (cell.displayWidth < baseWidth) {
             // if *next* cell is not empty, or it has a background, we are done here
-            if (next === table[row].values.length
-              || table[row].values[next].safeValue.length > 0
-              || table[row].values[next].isFillStandard()) break;
-            cell.width += table[row].values[next].width - 1;
-            table[row].values[next].width = -1;
+            if (next === row.length || row[next].safeValue.length > 0) break;
+            cell.displayWidth += row[next].displayWidth - 1;
+            row[next].displayWidth = -1;
             next += 1;
           }
         }
