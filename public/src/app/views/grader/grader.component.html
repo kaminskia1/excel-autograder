@@ -15,6 +15,35 @@
           <mat-icon>edit</mat-icon>
         </button>
       </div>
+      <div class="pb-4" *ngIf="activeSubmission">
+        <h2>{{ activeSubmission.file.name }}</h2>
+        <mat-accordion [multi]="true">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Metadata
+              </mat-panel-title>
+              <mat-panel-description>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item *ngIf="activeSubmission.workbook.creator"><b>Creator:</b> {{ activeSubmission.workbook.creator }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.company"><b>Company:</b> {{ activeSubmission.workbook.company }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.lastModifiedBy"><b>Last Modified By:</b> {{ activeSubmission.workbook.lastModifiedBy}}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.modified"><b>Last Modified:</b> {{ activeSubmission.workbook.modified | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.created"><b>Created:</b> {{ activeSubmission.workbook.created | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.lastPrinted"><b>Last Printed:</b> {{ activeSubmission.workbook.lastPrinted | date:'MMMM dd, yyyy. h:mm a'}}</mat-list-item>
+
+              <mat-list-item *ngIf="activeSubmission.workbook.manager"><b>Manager:</b> {{ activeSubmission.workbook.manager }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.title"><b>Title:</b> {{ activeSubmission.workbook.title }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.subject"><b>Subject:</b> {{ activeSubmission.workbook.subject }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.description"><b>Description:</b> {{ activeSubmission.workbook.description }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.keywords"><b>Keywords:</b> {{ activeSubmission.workbook.keywords }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.category"><b>Category:</b> {{ activeSubmission.workbook.category }}</mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
       <div class="pb-4" *ngFor="let question of masterAssignment.getQuestions(); let i = index">
         <h2>Problem {{i+1}}</h2>
         <mat-accordion [multi]="true">
