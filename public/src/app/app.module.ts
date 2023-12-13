@@ -45,6 +45,7 @@ import { FormulaGraphComponent } from './models/question/facet/types/formula-gra
 import { FormulaContainsFacetComponent } from './models/question/facet/types/formula-contains.facet/formula-contains-facet.component';
 import { FormulaListComponent } from './models/question/facet/types/formula-list.facet/formula-list.component';
 import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
+import { ValueLengthFacetComponent } from './models/question/facet/types/value-length.facet/value-length.facet.component';
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
 import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
 import { DropzoneDirective } from './components/dropzone/dropzone.directive';
@@ -71,6 +72,7 @@ import { TableRowComponent } from './views/wizard/table-row/table-row.component'
     FormulaContainsFacetComponent,
     FormulaListComponent,
     ValueRangeFacetComponent,
+    ValueLengthFacetComponent,
     HeaderComponent,
     FormulaRegexFacetComponent,
     DropzoneDirective,

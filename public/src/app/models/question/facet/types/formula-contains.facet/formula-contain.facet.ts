@@ -39,6 +39,7 @@ export class FormulaContainsFacet extends Facet implements
     return {
       type: this.type,
       points: this.points,
+      review: this.review,
       formula: this.formula,
       targetCell: this.targetCell,
     };

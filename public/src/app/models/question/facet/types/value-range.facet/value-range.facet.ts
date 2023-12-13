@@ -45,6 +45,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
     return {
       type: this.type,
       points: this.points,
+      review: this.review,
       lowerBounds: this.lowerBounds,
       upperBounds: this.upperBounds,
       targetCell: this.targetCell,

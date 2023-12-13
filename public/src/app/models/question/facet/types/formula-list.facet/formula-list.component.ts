@@ -6,6 +6,7 @@ import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { FacetComponent } from '../../facet.component';
 import { FormulaListFacet } from './formula-list.facet';
 import { FORMULAS } from '../../facet';
+import {QuestionFlag} from "../../../misc";
 
 @Component({
   selector: 'app-formula-list.facet',
@@ -47,4 +48,6 @@ export class FormulaListComponent extends FacetComponent implements OnInit, OnDe
     this.onDestroy.next();
     this.onDestroy.complete();
   }
+
+  protected readonly QuestionFlag = QuestionFlag;
 }

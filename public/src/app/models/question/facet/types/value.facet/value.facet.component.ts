@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FacetComponent } from '../../facet.component';
 import { ValueFacet } from './value.facet';
+import {QuestionFlag} from "../../../misc";
 
 @Component({
   selector: 'app-value.facet',
@@ -9,4 +10,5 @@ import { ValueFacet } from './value.facet';
 })
 export class ValueFacetComponent extends FacetComponent {
   @Input() override facet!: ValueFacet;
+    protected readonly QuestionFlag = QuestionFlag;
 }

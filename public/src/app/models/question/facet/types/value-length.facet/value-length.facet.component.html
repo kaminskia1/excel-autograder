@@ -2,7 +2,7 @@
   <div class="d-flex">
     <mat-form-field class="d-block">
       <mat-label>Points</mat-label>
-      <input matInput type="number" (change)="valueChange.emit(facet)" [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+      <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.points" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
     </mat-form-field>
     <div class="px-2"></div>
     <span (mouseenter)="highlightTableCell(facet.getTargetCell())" (mouseleave)="clearTableCell(facet.getTargetCell())">
@@ -12,10 +12,17 @@
       </mat-form-field>
     </span>
   </div>
-  <mat-form-field class="d-block">
-    <mat-label>Target Value</mat-label>
-    <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.value" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
-  </mat-form-field>
+  <div class="d-flex">
+    <mat-form-field>
+      <mat-label>Min Length</mat-label>
+      <input matInput type="number" (change)="valueChange.emit(facet)" [(ngModel)]="facet.minLength" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    </mat-form-field>
+      <div class="px-2"></div>
+    <mat-form-field>
+      <mat-label>Max Length</mat-label>
+      <input matInput type="number" (change)="valueChange.emit(facet)" [(ngModel)]="facet.maxLength" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
+    </mat-form-field>
+  </div>
   <mat-form-field class="d-block">
     <mat-select (selectionChange)="valueChange.emit(facet)" [(ngModel)]="facet.review" placeholder="Flag for Review">
       <mat-option [value]="QuestionFlag.None">Do not flag answers</mat-option>

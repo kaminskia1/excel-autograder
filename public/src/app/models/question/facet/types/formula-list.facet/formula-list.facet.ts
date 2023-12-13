@@ -54,6 +54,7 @@ export class FormulaListFacet extends Facet implements
     return {
       type: this.type,
       points: this.points,
+      review: this.review,
       targetCell: this.targetCell,
       formulas: this.formulas,
     };

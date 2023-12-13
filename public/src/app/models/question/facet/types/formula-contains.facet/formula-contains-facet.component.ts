@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FacetComponent } from '../../facet.component';
 import { FormulaContainsFacet } from './formula-contain.facet';
+import {QuestionFlag} from "../../../misc";
 
 @Component({
   selector: 'app-formula-contains.facet',
@@ -9,4 +10,5 @@ import { FormulaContainsFacet } from './formula-contain.facet';
 })
 export class FormulaContainsFacetComponent extends FacetComponent {
   @Input() override facet!: FormulaContainsFacet;
+    protected readonly QuestionFlag = QuestionFlag;
 }

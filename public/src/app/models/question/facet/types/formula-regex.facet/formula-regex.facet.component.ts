@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FacetComponent } from '../../facet.component';
 import { FormulaRegexFacet } from './formula-regex.facet';
+import {QuestionFlag} from "../../../misc";
 
 @Component({
   selector: 'app-formula-regex.facet',
@@ -9,4 +10,5 @@ import { FormulaRegexFacet } from './formula-regex.facet';
 })
 export class FormulaRegexFacetComponent extends FacetComponent {
   @Input() override facet!: FormulaRegexFacet;
+    protected readonly QuestionFlag = QuestionFlag;
 }

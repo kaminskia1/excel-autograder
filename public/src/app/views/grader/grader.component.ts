@@ -39,7 +39,7 @@ export class GraderComponent implements OnInit {
 
   submissionTable = new MatTableDataSource<Submission>(this.submissions);
 
-  displayedColumns: string[] = ['name', 'size', 'scoreRatio', 'scorePercent', 'action'];
+  displayedColumns: string[] = ['name', 'size', 'score', 'action'];
 
   constructor(
     private route: ActivatedRoute,

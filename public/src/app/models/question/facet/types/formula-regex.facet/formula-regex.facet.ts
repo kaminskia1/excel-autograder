@@ -41,6 +41,7 @@ export class FormulaRegexFacet extends Facet implements
     return {
       type: this.type,
       points: this.points,
+      review: this.review,
       expression: this.expression,
       targetCell: this.targetCell,
     };

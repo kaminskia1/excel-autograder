@@ -16,4 +16,12 @@
     <mat-label>Target Expression</mat-label>
     <input matInput (change)="valueChange.emit(facet)" [(ngModel)]="facet.expression" [disabled]="workbookService.isRenderedCellEmitterSubscribed()">
   </mat-form-field>
+  <mat-form-field class="d-block">
+    <mat-select (selectionChange)="valueChange.emit(facet)" [(ngModel)]="facet.review" placeholder="Flag for Review">
+      <mat-option [value]="QuestionFlag.None">Do not flag answers</mat-option>
+      <mat-option [value]="QuestionFlag.Incorrect">Flag incorrect answers</mat-option>
+      <mat-option [value]="QuestionFlag.Correct">Flag correct answers</mat-option>
+      <mat-option [value]="QuestionFlag.Always">Flag all answers</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>

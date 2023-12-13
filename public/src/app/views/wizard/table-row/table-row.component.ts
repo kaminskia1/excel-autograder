@@ -6,6 +6,7 @@ import { WorkbookService } from '../../../models/workbook/workbook.service';
 import { Question } from '../../../models/question/question';
 import { Facet } from '../../../models/question/facet/facet';
 import { FacetType } from '../../../models/question/facet/types/lib';
+import {QuestionFlag} from "../../../models/question/misc";
 
 @Component({
   selector: 'app-table-row',
@@ -32,4 +33,5 @@ export class TableRowComponent {
   }
 
   protected readonly FacetType = FacetType;
+  protected readonly QuestionFlag = QuestionFlag;
 }

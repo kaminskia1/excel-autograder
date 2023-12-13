@@ -10,3 +10,10 @@ export interface ICellAddress {
   row: number;
   col: number;
 }
+
+export enum QuestionFlag {
+  None = 'QuestionFlag.None',
+  Incorrect = 'QuestionFlag.Incorrect',
+  Correct = 'QuestionFlag.Correct',
+  Always = 'QuestionFlag.Always',
+}

@@ -38,6 +38,7 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
     return {
       type: this.type,
       points: this.points,
+      review: this.review,
       value: this.value,
       targetCell: this.targetCell,
     };

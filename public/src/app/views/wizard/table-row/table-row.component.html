@@ -33,19 +33,22 @@
       }" [matTooltip]="getTooltip(rCell)" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(rCell)"
            [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null"></div>
       <mat-menu #menu="matMenu">
-        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Value Equals
         </button>
-        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueRangeFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Value Range
         </button>
-        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueLengthFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
+          Value Length
+        </button>
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaContainsFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Formula Contains
         </button>
-        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaRegexFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Formula Regex
         </button>
-        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, targetCell: rCell.parent.fullAddress}))">
+        <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Formula List
         </button>
         <!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
