@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValueRangeFacetComponent } from './value-range.facet.component';
+import { ValueRangeCreateComponent } from './value-range-create.component';
 
 describe('ValueRangeFacetComponent', () => {
-  let component: ValueRangeFacetComponent;
-  let fixture: ComponentFixture<ValueRangeFacetComponent>;
+  let component: ValueRangeCreateComponent;
+  let fixture: ComponentFixture<ValueRangeCreateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ValueRangeFacetComponent],
+      declarations: [ValueRangeCreateComponent],
     });
-    fixture = TestBed.createComponent(ValueRangeFacetComponent);
+    fixture = TestBed.createComponent(ValueRangeCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

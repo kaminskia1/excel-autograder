@@ -51,9 +51,6 @@
         <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.FormulaListFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">
           Formula List
         </button>
-        <!--            <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetComponent(activeQuestion.createFacet({type: FacetType.FormulaGraphFacet, points: 0, targetCell: rCell.parent.fullAddress}))">-->
-        <!--              Formula Graph-->
-        <!--            </button>-->
       </mat-menu>
     </span>
   </div>

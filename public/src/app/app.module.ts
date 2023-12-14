@@ -40,14 +40,13 @@ import { RegisterComponent } from './views/auth/register/register.component';
 import { QuestionComponent } from './components/question/question.component';
 import { GraderComponent } from './views/grader/grader.component';
 import { NewAssignmentDialogComponent } from './views/dashboard/new-assignment-dialog/new-assignment-dialog.component';
-import { ValueFacetComponent } from './models/question/facet/types/value.facet/value.facet.component';
-import { FormulaGraphComponent } from './models/question/facet/types/formula-graph/formula-graph.component';
-import { FormulaContainsFacetComponent } from './models/question/facet/types/formula-contains.facet/formula-contains-facet.component';
-import { FormulaListComponent } from './models/question/facet/types/formula-list.facet/formula-list.component';
-import { ValueRangeFacetComponent } from './models/question/facet/types/value-range.facet/value-range.facet.component';
-import { ValueLengthFacetComponent } from './models/question/facet/types/value-length.facet/value-length.facet.component';
+import { ValueCreateComponent } from './models/question/facet/types/value.facet/create/value-create.component';
+import { FormulaContainsCreateComponent } from './models/question/facet/types/formula-contains.facet/create/formula-contains-create.component';
+import { FormulaListCreateComponent } from './models/question/facet/types/formula-list.facet/create/formula-list-create.component';
+import { ValueRangeCreateComponent } from './models/question/facet/types/value-range.facet/create/value-range-create.component';
+import { ValueLengthCreateComponent } from './models/question/facet/types/value-length.facet/create/value-length-create.component';
 import { HeaderComponent } from './models/question/facet/header/header/header.component';
-import { FormulaRegexFacetComponent } from './models/question/facet/types/formula-regex.facet/formula-regex.facet.component';
+import { FormulaRegexCreateComponent } from './models/question/facet/types/formula-regex.facet/create/formula-regex-create.component';
 import { DropzoneDirective } from './components/dropzone/dropzone.directive';
 import { ExportAssignmentDialogComponent } from './views/dashboard/export-assignment-dialog/export-assignment-dialog.component';
 import { EditAssignmentDialogComponent } from './views/dashboard/edit-assignment-dialog/edit-assignment-dialog.component';
@@ -55,6 +54,14 @@ import { ImportAssignmentDialogComponent } from './views/dashboard/import-assign
 import { ResetComponent } from './views/auth/reset/reset.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { TableRowComponent } from './views/wizard/table-row/table-row.component';
+import { FormulaContainsReviewComponent } from './models/question/facet/types/formula-contains.facet/review/formula-contains-review.component';
+import { FormulaListReviewComponent } from './models/question/facet/types/formula-list.facet/review/formula-list-review.component';
+import { FormulaRegexReviewComponent } from './models/question/facet/types/formula-regex.facet/review/formula-regex-review.component';
+import { ValueLengthReviewComponent } from './models/question/facet/types/value-length.facet/review/value-length-review.component';
+import { ValueRangeReviewComponent } from './models/question/facet/types/value-range.facet/review/value-range-review.component';
+import { ValueReviewComponent } from './models/question/facet/types/value.facet/review/value-review.component';
+import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
+import { ExportDialogComponent } from './views/grader/export/export-dialog.component';
 
 @NgModule({
   declarations: [
@@ -67,14 +74,13 @@ import { TableRowComponent } from './views/wizard/table-row/table-row.component'
     QuestionComponent,
     GraderComponent,
     NewAssignmentDialogComponent,
-    ValueFacetComponent,
-    FormulaGraphComponent,
-    FormulaContainsFacetComponent,
-    FormulaListComponent,
-    ValueRangeFacetComponent,
-    ValueLengthFacetComponent,
+    ValueCreateComponent,
+    FormulaContainsCreateComponent,
+    FormulaListCreateComponent,
+    ValueRangeCreateComponent,
+    ValueLengthCreateComponent,
     HeaderComponent,
-    FormulaRegexFacetComponent,
+    FormulaRegexCreateComponent,
     DropzoneDirective,
     ExportAssignmentDialogComponent,
     EditAssignmentDialogComponent,
@@ -82,6 +88,15 @@ import { TableRowComponent } from './views/wizard/table-row/table-row.component'
     ResetComponent,
     ConfirmationDialogComponent,
     TableRowComponent,
+    FormulaContainsReviewComponent,
+    FormulaContainsReviewComponent,
+    FormulaListReviewComponent,
+    FormulaRegexReviewComponent,
+    ValueLengthReviewComponent,
+    ValueRangeReviewComponent,
+    ValueReviewComponent,
+    InfoDialogComponent,
+    ExportDialogComponent,
   ],
   imports: [
     BrowserModule,

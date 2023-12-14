@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Export Submissions</h1>
+<div mat-dialog-content>
+  <p>Columns to Export</p>
+  <mat-form-field class="d-block" appearance="fill">
+    <mat-select [(ngModel)]="selectedCols" multiple>
+      <mat-option *ngFor="let item of data.cols | keyvalue" [value]="item.key">{{item.value}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="container">
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="selectedCols">Ok</button>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+</div>

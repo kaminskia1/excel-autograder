@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormulaContainsFacetComponent } from './formula-contains-facet.component';
+import { FormulaContainsCreateComponent } from './formula-contains-create.component';
 
 describe('FormulaContainsFacetComponent', () => {
-  let component: FormulaContainsFacetComponent;
-  let fixture: ComponentFixture<FormulaContainsFacetComponent>;
+  let component: FormulaContainsCreateComponent;
+  let fixture: ComponentFixture<FormulaContainsCreateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FormulaContainsFacetComponent],
+      declarations: [FormulaContainsCreateComponent],
     });
-    fixture = TestBed.createComponent(FormulaContainsFacetComponent);
+    fixture = TestBed.createComponent(FormulaContainsCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

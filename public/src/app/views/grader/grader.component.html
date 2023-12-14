@@ -11,7 +11,7 @@
       <div class="d-flex">
         <h1 class="d-inline-block">{{masterAssignment.name}}</h1>
         <div class="spacer"></div>
-        <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" (click)="edit()">
+        <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" (click)="openEditDialog()">
           <mat-icon>edit</mat-icon>
         </button>
       </div>
@@ -23,8 +23,6 @@
               <mat-panel-title>
                 Metadata
               </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
               <mat-list-item *ngIf="activeSubmission.workbook.creator"><b>Creator:</b> {{ activeSubmission.workbook.creator }}</mat-list-item>
@@ -52,8 +50,6 @@
               <mat-panel-title>
                 No Attributes added
               </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
           <mat-expansion-panel *ngFor="let facet of question.getFacets()">
@@ -101,8 +97,8 @@
           <h2>Submissions</h2>
           <div class="spacer"></div>
           <div class="actions" class="float-end" *ngIf="submissions.length">
-            <button mat-button color="primary">Review</button>
-            <button mat-button color="primary" class="ms-2">Export</button>
+            <button mat-button color="primary" (click)="openReview()">Review</button>
+            <button mat-button color="primary" class="ms-2" (click)="openExportConfirmDialog()">Export</button>
           </div>
         </div>
         <div class="p-4" *ngIf="!submissions.length">

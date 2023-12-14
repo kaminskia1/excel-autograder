@@ -3,17 +3,17 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject, takeUntil } from 'rxjs';
-import { FacetComponent } from '../../facet.component';
-import { FormulaListFacet } from './formula-list.facet';
-import { FORMULAS } from '../../facet';
-import {QuestionFlag} from "../../../misc";
+import { FacetComponent } from '../../../facet.component';
+import { FormulaListFacet } from '../formula-list.facet';
+import { FORMULAS } from '../../../facet';
+import { QuestionFlag } from '../../../../misc';
 
 @Component({
   selector: 'app-formula-list.facet',
-  templateUrl: './formula-list.component.html',
-  styleUrls: ['./formula-list.component.scss'],
+  templateUrl: './formula-list-create.component.html',
+  styleUrls: ['./formula-list-create.component.scss'],
 })
-export class FormulaListComponent extends FacetComponent implements OnInit, OnDestroy {
+export class FormulaListCreateComponent extends FacetComponent implements OnInit, OnDestroy {
   @Input() override facet!: FormulaListFacet;
 
   formulas: Array<string> = FORMULAS.slice();

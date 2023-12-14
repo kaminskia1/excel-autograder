@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormulaRegexFacetComponent } from './formula-regex.facet.component';
+import { FormulaRegexCreateComponent } from './formula-regex-create.component';
 
 describe('FormulaRegexFacetComponent', () => {
-  let component: FormulaRegexFacetComponent;
-  let fixture: ComponentFixture<FormulaRegexFacetComponent>;
+  let component: FormulaRegexCreateComponent;
+  let fixture: ComponentFixture<FormulaRegexCreateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FormulaRegexFacetComponent],
+      declarations: [FormulaRegexCreateComponent],
     });
-    fixture = TestBed.createComponent(FormulaRegexFacetComponent);
+    fixture = TestBed.createComponent(FormulaRegexCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

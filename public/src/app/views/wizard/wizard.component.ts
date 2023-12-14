@@ -13,9 +13,6 @@ import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { QuestionService } from '../../models/question/question.service';
 import { Facet } from '../../models/question/facet/facet';
-import {
-  FormulaGraphComponent,
-} from '../../models/question/facet/types/formula-graph/formula-graph.component';
 import { Question } from '../../models/question/question';
 import { HeaderComponent } from '../../models/question/facet/header/header/header.component';
 import { FacetLibrary, FacetType } from '../../models/question/facet/types/lib';
@@ -92,7 +89,7 @@ export class WizardComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
-        title: 'Confirm Delete',
+        title: 'Confirm Delete?',
         message: 'Any data on this question will be lost',
       },
     });
@@ -161,6 +158,4 @@ export class WizardComponent implements AfterViewInit {
   }
 
   protected readonly FacetType = FacetType;
-
-  protected readonly FunctionChainFacetComponent = FormulaGraphComponent;
 }

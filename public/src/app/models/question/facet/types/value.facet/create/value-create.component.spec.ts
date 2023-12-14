@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValueFacetComponent } from './value.facet.component';
+import { ValueCreateComponent } from './value-create.component';
 
 describe('ValueFacetComponent', () => {
-  let component: ValueFacetComponent;
-  let fixture: ComponentFixture<ValueFacetComponent>;
+  let component: ValueCreateComponent;
+  let fixture: ComponentFixture<ValueCreateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ValueFacetComponent],
+      declarations: [ValueCreateComponent],
     });
-    fixture = TestBed.createComponent(ValueFacetComponent);
+    fixture = TestBed.createComponent(ValueCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

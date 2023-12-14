@@ -3,6 +3,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import * as _ from 'underscore';
+import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { QuestionService } from '../../models/question/question.service';
@@ -14,6 +16,27 @@ import { Facet } from '../../models/question/facet/facet';
 import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { ExportDialogComponent } from './export/export-dialog.component';
+import { InfoDialogComponent } from '../../components/info-dialog/info-dialog.component';
+
+const ExportSubmissionColumns: { [key: string]: string } = {
+  fileName: 'File Name',
+  points: 'Points',
+  maxPoints: 'Max Points',
+  score: 'Score',
+  creator: 'Creator',
+  company: 'Company',
+  lastModifiedBy: 'Last Modified By',
+  lastModified: 'Last Modified',
+  created: 'Created',
+  lastPrinted: 'Last Printed',
+  manager: 'Manager',
+  title: 'Title',
+  subject: 'Subject',
+  description: 'Description',
+  keywords: 'Keywords',
+  category: 'Category',
+};
 
 type Submission = {
   file: File,
@@ -21,6 +44,7 @@ type Submission = {
   score: number,
   maxScore: number,
   responses: Map<Facet, number>
+  reviewed?: boolean
 }
 
 @Component({
@@ -40,6 +64,8 @@ export class GraderComponent implements OnInit {
   submissionTable = new MatTableDataSource<Submission>(this.submissions);
 
   displayedColumns: string[] = ['name', 'size', 'score', 'action'];
+
+  reviewed = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -109,7 +135,7 @@ export class GraderComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
-        title: 'Confirm Delete',
+        title: 'Confirm Delete?',
         message: 'This submission will be lost.',
       },
     });
@@ -154,7 +180,7 @@ export class GraderComponent implements OnInit {
     );
   }
 
-  edit() {
+  openEditDialog() {
     if (!this.masterAssignment) return;
     if (!this.submissions.length) {
       this.router.navigate(['wizard', this.masterAssignment.uuid]);
@@ -163,13 +189,95 @@ export class GraderComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
-        title: 'Confirm Navigate',
+        title: 'Confirm Navigate?',
         message: 'Any uploaded submissions will be lost.',
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result && this.masterAssignment) {
         this.router.navigate(['wizard', this.masterAssignment.uuid]);
+      }
+    });
+  }
+
+  openExportConfirmDialog() {
+    if (!this.masterAssignment || !this.submissions.length) return;
+
+    if (this.reviewed) {
+      this.openExportDialog();
+      return;
+    }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Export?',
+        message: 'Submissions have not been reviewed.',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) this.openExportDialog();
+    });
+  }
+
+  openReview() {
+    if (!this.masterAssignment || !this.submissions.length) return;
+    const dialogRef = this.dialog.open(InfoDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Work in Progress',
+        message: 'This feature is still under development.',
+        action: 'Close',
+      },
+    });
+  }
+
+  openExportDialog() {
+    const dialogRef = this.dialog.open(ExportDialogComponent, {
+      width: '350px',
+      data: {
+        cols: ExportSubmissionColumns,
+      },
+    });
+    dialogRef.afterClosed().subscribe((cols: Array<string>) => {
+      if (cols.length && this.masterAssignment) {
+        const workbook = this.workbookFactory.createWorkbook();
+        workbook.title = `Submissions - ${this.masterAssignment.name}`;
+        const worksheet = workbook.addWorksheet('Submissions');
+        worksheet.addRow(cols.map((r) => ExportSubmissionColumns[r]));
+
+        const rows = this.submissions.map((sub) => (
+          Object.values(_.pick({
+            fileName: sub.file.name,
+            points: sub.score,
+            maxPoints: sub.maxScore,
+            score: sub.score / sub.maxScore,
+            creator: sub.workbook.creator,
+            company: sub.workbook.company,
+            lastModifiedBy: sub.workbook.lastModifiedBy,
+            lastModified: sub.workbook.modified,
+            created: sub.workbook.created,
+            lastPrinted: sub.workbook.lastPrinted,
+            manager: sub.workbook.manager,
+            title: sub.workbook.title,
+            subject: sub.workbook.subject,
+            description: sub.workbook.description,
+            keywords: sub.workbook.keywords,
+            category: sub.workbook.category,
+          }, ...cols))));
+        worksheet.addRows(rows);
+        worksheet.columns.forEach((column) => {
+          if (!column.values) return;
+          const lengths = column.values.map((v: CellValue) => {
+            if (v instanceof Date) {
+              return v.toLocaleDateString().length;
+            }
+            return (v ?? '').toString().length;
+          });
+          column.width = Math.max(Math.max(...lengths.filter(
+            (v) => typeof v === 'number',
+          )) + 2, (column.header ?? '').length + 6);
+        });
+        workbook.download();
       }
     });
   }

@@ -1,24 +1,21 @@
 import { ViewContainerRef } from '@angular/core';
-import { FormulaGraphFacet } from './formula-graph/formula-graph.facet';
 import { FormulaContainsFacet } from './formula-contains.facet/formula-contain.facet';
 import { FormulaListFacet } from './formula-list.facet/formula-list.facet';
 import { ValueFacet } from './value.facet/value.facet';
 import { ValueRangeFacet } from './value-range.facet/value-range.facet';
 import { Facet } from '../facet';
 import {
-  FormulaContainsFacetComponent,
-} from './formula-contains.facet/formula-contains-facet.component';
-import { FormulaListComponent } from './formula-list.facet/formula-list.component';
-import { ValueFacetComponent } from './value.facet/value.facet.component';
-import { ValueRangeFacetComponent } from './value-range.facet/value-range.facet.component';
-import { FormulaGraphComponent } from './formula-graph/formula-graph.component';
+  FormulaContainsCreateComponent,
+} from './formula-contains.facet/create/formula-contains-create.component';
+import { FormulaListCreateComponent } from './formula-list.facet/create/formula-list-create.component';
+import { ValueCreateComponent } from './value.facet/create/value-create.component';
+import { ValueRangeCreateComponent } from './value-range.facet/create/value-range-create.component';
 import { FormulaRegexFacet } from './formula-regex.facet/formula-regex.facet';
-import { FormulaRegexFacetComponent } from './formula-regex.facet/formula-regex.facet.component';
-import {ValueLengthFacet} from "./value-length.facet/value-length.facet";
-import {ValueLengthFacetComponent} from "./value-length.facet/value-length.facet.component";
+import { FormulaRegexCreateComponent } from './formula-regex.facet/create/formula-regex-create.component';
+import { ValueLengthFacet } from './value-length.facet/value-length.facet';
+import { ValueLengthCreateComponent } from './value-length.facet/create/value-length-create.component';
 
 export enum FacetType {
-  FormulaGraphFacet = 'FormulaGraphFacet',
   FormulaContainsFacet = 'FormulaContainsFacet',
   FormulaRegexFacet = 'FormulaRegexFacet',
   FormulaListFacet = 'FormulaListFacet',
@@ -29,7 +26,6 @@ export enum FacetType {
 
 export class FacetLibrary {
   static types = {
-    FormulaGraphFacet,
     FormulaContainsFacet,
     FormulaRegexFacet,
     FormulaListFacet,
@@ -40,20 +36,18 @@ export class FacetLibrary {
 
   static getFacetComponent(facet: Facet, container: ViewContainerRef) {
     switch (facet.type) {
-      case FacetType.FormulaGraphFacet:
-        return container.createComponent(FormulaGraphComponent);
       case FacetType.FormulaContainsFacet:
-        return container.createComponent(FormulaContainsFacetComponent);
+        return container.createComponent(FormulaContainsCreateComponent);
       case FacetType.FormulaRegexFacet:
-        return container.createComponent(FormulaRegexFacetComponent);
+        return container.createComponent(FormulaRegexCreateComponent);
       case FacetType.FormulaListFacet:
-        return container.createComponent(FormulaListComponent);
+        return container.createComponent(FormulaListCreateComponent);
       case FacetType.ValueFacet:
-        return container.createComponent(ValueFacetComponent);
+        return container.createComponent(ValueCreateComponent);
       case FacetType.ValueRangeFacet:
-        return container.createComponent(ValueRangeFacetComponent);
+        return container.createComponent(ValueRangeCreateComponent);
       case FacetType.ValueLengthFacet:
-        return container.createComponent(ValueLengthFacetComponent);
+        return container.createComponent(ValueLengthCreateComponent);
       default:
         throw new Error(`Unknown facet type: ${facet.type}`);
     }

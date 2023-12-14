@@ -107,6 +107,21 @@ export class FancyWorkbook extends Workbook {
     return this.renderedCellEmitter.observed;
   }
 
+  download() {
+    this.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const blobUrl = URL.createObjectURL(blob);
+      const aElement = document.createElement('a');
+      aElement.href = blobUrl;
+      aElement.download = `${this.title ?? 'Workbook'}.xlsx`;
+      aElement.style.display = 'none';
+      document.body.appendChild(aElement);
+      aElement.click();
+      URL.revokeObjectURL(blobUrl);
+      aElement.remove();
+    });
+  }
+
   /**
    * Gets a `Range` from an address range (i.e. `A1:B2`)
    * @param tlbr

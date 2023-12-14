@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormulaListComponent } from './formula-list.component';
+import { FormulaListCreateComponent } from './formula-list-create.component';
 
 describe('FunctionListFacetComponent', () => {
-  let component: FormulaListComponent;
-  let fixture: ComponentFixture<FormulaListComponent>;
+  let component: FormulaListCreateComponent;
+  let fixture: ComponentFixture<FormulaListCreateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FormulaListComponent],
+      declarations: [FormulaListCreateComponent],
     });
-    fixture = TestBed.createComponent(FormulaListComponent);
+    fixture = TestBed.createComponent(FormulaListCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       data: {
-        title: 'Confirm Delete',
+        title: 'Confirm Delete?',
         message: 'This assignment will be permanently removed.',
       },
     });

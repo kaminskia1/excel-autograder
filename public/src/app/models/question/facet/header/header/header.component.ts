@@ -33,7 +33,7 @@ export class HeaderComponent {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
-        title: 'Confirm Delete',
+        title: 'Confirm Delete?',
         message: 'Any data on this attribute will be lost.',
       },
     });
