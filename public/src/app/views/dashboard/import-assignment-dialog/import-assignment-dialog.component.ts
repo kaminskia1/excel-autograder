@@ -30,7 +30,7 @@ export class ImportAssignmentDialogComponent {
     private questionFactory: QuestionFactory,
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
-    this.newAssignment = this.assignmentFactory.createAssignment({} as IAssignmentPartial);
+    this.newAssignment = this.assignmentFactory.create({} as IAssignmentPartial);
     this.importAssignmentForm = this.formBuilder.group({
       data: ['', Validators.required],
     });
@@ -60,7 +60,7 @@ export class ImportAssignmentDialogComponent {
       this.newAssignment.name = ea.name;
       this.newAssignment.encrypted = false;
       this.newAssignment.questions = ea.questions.map(
-        (q) => this.questionFactory.createQuestion(q),
+        (q) => this.questionFactory.create(q),
       );
     } catch (e) {
       this.snackBar.open('Error parsing assignment data!', 'Close', { duration: 1500 });

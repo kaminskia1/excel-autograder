@@ -69,7 +69,7 @@ export class Assignment implements IAssignment {
     this.file = assignment.file;
     this.encrypted = assignment.encrypted;
     this.questions = assignment.questions?.map(
-      (question) => this.questionFactory.createQuestion(question),
+      (question) => this.questionFactory.create(question),
     ) ?? [];
   }
 
@@ -130,6 +130,13 @@ export class Assignment implements IAssignment {
     this.questions = questions;
   }
 
+  addQuestion() {
+    const question: Question = this.questionFactory.create({
+      facets: [],
+    });
+    this.questions.push(question);
+  }
+
   getFile(): Observable<Blob> {
     if (this.cache.file) return of(this.cache.file);
     const obs = (this.assignmentService.get(`files/${this.file.split('/').pop()}`, { responseType: 'blob' } as Partial<HttpHeaders>) as Observable<Blob>).pipe(shareReplay(1));
@@ -156,5 +163,9 @@ export class Assignment implements IAssignment {
 
   isQuestionsValid(): boolean {
     return this.getQuestions().length > 0;
+  }
+
+  getUuid(): string {
+    return this.uuid;
   }
 }

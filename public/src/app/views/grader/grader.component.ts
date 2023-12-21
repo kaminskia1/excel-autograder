@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'underscore';
 import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { AssignmentService } from '../../models/assignment/assignment.service';
-import { QuestionService } from '../../models/question/question.service';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { Assignment } from '../../models/assignment/assignment';
 import { WorkbookFactory } from '../../models/workbook/workbook.factory';
@@ -18,34 +16,8 @@ import {
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
 import { ExportDialogComponent } from './export/export-dialog.component';
 import { InfoDialogComponent } from '../../components/info-dialog/info-dialog.component';
-
-const ExportSubmissionColumns: { [key: string]: string } = {
-  fileName: 'File Name',
-  points: 'Points',
-  maxPoints: 'Max Points',
-  score: 'Score',
-  creator: 'Creator',
-  company: 'Company',
-  lastModifiedBy: 'Last Modified By',
-  lastModified: 'Last Modified',
-  created: 'Created',
-  lastPrinted: 'Last Printed',
-  manager: 'Manager',
-  title: 'Title',
-  subject: 'Subject',
-  description: 'Description',
-  keywords: 'Keywords',
-  category: 'Category',
-};
-
-type Submission = {
-  file: File,
-  workbook: FancyWorkbook,
-  score: number,
-  maxScore: number,
-  responses: Map<Facet, number>
-  reviewed?: boolean
-}
+import { ExportSubmissionColumns, Submission } from '../../models/submission/submission';
+import {SubmissionService} from "../../models/submission/submission.service";
 
 @Component({
   selector: 'app-grader',
@@ -57,6 +29,7 @@ export class GraderComponent implements OnInit {
 
   masterWorkbook: FancyWorkbook | null = null;
 
+  // Pointer to submission service cache
   submissions: Submission[] = [];
 
   activeSubmission: Submission | null = null;
@@ -73,9 +46,8 @@ export class GraderComponent implements OnInit {
     public workbookService: WorkbookService,
     public workbookFactory: WorkbookFactory,
     public assignmentService: AssignmentService,
-    public questionService: QuestionService,
     public assignmentFactory: AssignmentFactory,
-    private snackBar: MatSnackBar,
+    public submissionService: SubmissionService,
     public dialog: MatDialog,
   ) { }
 
@@ -93,9 +65,9 @@ export class GraderComponent implements OnInit {
 
   registerAssignment(id: string) {
     this.assignmentService.retrieve(id).subscribe((iAssignment) => {
-      const assignment = this.assignmentFactory.createAssignment(iAssignment);
+      const assignment = this.assignmentFactory.create(iAssignment);
       this.masterAssignment = assignment;
-      this.questionService.loadQuestions(assignment);
+      this.submissions = this.submissionService.retrieve(assignment);
       this.activateWorkbook(assignment);
     });
   }
@@ -103,7 +75,7 @@ export class GraderComponent implements OnInit {
   activateWorkbook(assignment: Assignment) {
     assignment.getFile().subscribe((file) => {
       this.workbookService.loadWorkbook(file);
-      this.workbookFactory.loadWorkbook(file).then((workbook: FancyWorkbook) => {
+      this.workbookFactory.load(file).then((workbook: FancyWorkbook) => {
         this.masterWorkbook = workbook;
       });
     });
@@ -115,14 +87,14 @@ export class GraderComponent implements OnInit {
     const files = Array.from(fileList);
 
     files.forEach((file) => {
-      this.workbookFactory.loadWorkbook(file).then((workbook: FancyWorkbook) => {
-        const submission: Submission = {
+      this.workbookFactory.load(file).then((workbook: FancyWorkbook) => {
+        const submission = new Submission({
           file,
           workbook,
           score: this.getScore(workbook),
           maxScore: this.getMaxScore(),
           responses: this.getResponses(workbook),
-        };
+        });
         this.submissions.push(submission);
         this.submissionTable.data = this.submissions.sort(
           (a, b) => a.file.name.localeCompare(b.file.name),
@@ -202,7 +174,6 @@ export class GraderComponent implements OnInit {
 
   openExportConfirmDialog() {
     if (!this.masterAssignment || !this.submissions.length) return;
-
     if (this.reviewed) {
       this.openExportDialog();
       return;
@@ -240,7 +211,7 @@ export class GraderComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((cols: Array<string>) => {
       if (cols.length && this.masterAssignment) {
-        const workbook = this.workbookFactory.createWorkbook();
+        const workbook = this.workbookFactory.create();
         workbook.title = `Submissions - ${this.masterAssignment.name}`;
         const worksheet = workbook.addWorksheet('Submissions');
         worksheet.addRow(cols.map((r) => ExportSubmissionColumns[r]));

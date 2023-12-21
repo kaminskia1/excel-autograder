@@ -12,7 +12,7 @@ export class AssignmentFactory {
     private assignmentService: AssignmentService,
   ) { }
 
-  createAssignment(assignment: IAssignmentPartial): Assignment {
+  create(assignment: IAssignmentPartial): Assignment {
     if (assignment instanceof Assignment) return assignment;
     return new Assignment(assignment, this.questionFactory, this.assignmentService);
   }

@@ -8,7 +8,7 @@ import {
   Worksheet,
   Range,
   Row,
-  Column, FillPattern,
+  Column,
 } from 'exceljs';
 import { EventEmitter } from '@angular/core';
 import { ICellAddress } from '../question/misc';
@@ -18,7 +18,7 @@ import { RenderedCell, RenderedTable } from './rendered-cell';
 const colCache = require('exceljs/lib/utils/col-cache');
 
 export class FancyWorkbook extends Workbook {
-  activeSheet: Worksheet|undefined = undefined;
+  activeSheet: Worksheet | undefined = undefined;
 
   renderedCellEmitter: EventEmitter<RenderedCell | undefined
   > = new EventEmitter<RenderedCell | undefined>();
@@ -39,8 +39,9 @@ export class FancyWorkbook extends Workbook {
     if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
     if (this.activeSheet === sheet) return;
     this.activeSheet = sheet;
-    this.addColumns(3);
-    this.addRows(5);
+    // @TODO: fix this or remove it
+    this.addColumns(5);
+    this.addRows(8);
     this.genRenderedTable();
   }
 

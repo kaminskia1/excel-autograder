@@ -23,7 +23,7 @@ export class NewAssignmentDialogComponent {
     public assignmentFactory: AssignmentFactory,
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
-    this.newAssignment = this.assignmentFactory.createAssignment({} as IAssignmentPartial);
+    this.newAssignment = this.assignmentFactory.create({} as IAssignmentPartial);
     this.newAssignmentForm = this.formBuilder.group({
       name: ['', Validators.required],
       file: [null, Validators.required],

@@ -5,11 +5,11 @@ import { FancyWorkbook } from './workbook';
   providedIn: 'root',
 })
 export class WorkbookFactory {
-  createWorkbook(): FancyWorkbook {
+  create(): FancyWorkbook {
     return new FancyWorkbook();
   }
 
-  loadWorkbook(file: Blob): Promise<FancyWorkbook> {
+  load(file: Blob): Promise<FancyWorkbook> {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = (e) => {

@@ -16,7 +16,7 @@ export class WorkbookService {
   constructor(public workbookFactory: WorkbookFactory) { }
 
   loadWorkbook(file: Blob) {
-    this.workbookFactory.loadWorkbook(file).then((workbook) => {
+    this.workbookFactory.load(file).then((workbook) => {
       this.activeWorkbook = workbook;
       this.activeWorkbook.setActiveSheet(this.getSheets()[0]);
     });

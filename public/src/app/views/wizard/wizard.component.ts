@@ -11,7 +11,6 @@ import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { WorkbookService } from '../../models/workbook/workbook.service';
-import { QuestionService } from '../../models/question/question.service';
 import { Facet } from '../../models/question/facet/facet';
 import { Question } from '../../models/question/question';
 import { HeaderComponent } from '../../models/question/facet/header/header/header.component';
@@ -37,11 +36,12 @@ export class WizardComponent implements AfterViewInit {
 
   activeQuestion: Question | null = null;
 
+  questionListShown = false;
+
   constructor(
     private route: ActivatedRoute,
     public workbookService: WorkbookService,
     public assignmentService: AssignmentService,
-    public questionService: QuestionService,
     public assignmentFactory: AssignmentFactory,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
@@ -61,23 +61,22 @@ export class WizardComponent implements AfterViewInit {
 
   registerAssignment(id: string) {
     this.assignmentService.retrieve(id).subscribe((iAssignment) => {
-      const assignment = this.assignmentFactory.createAssignment(iAssignment);
+      const assignment = this.assignmentFactory.create(iAssignment);
       this.activeAssignment = assignment;
-      this.questionService.loadQuestions(assignment);
       this.activateWorkbook(assignment);
     });
   }
 
   activateWorkbook(assignment: Assignment) {
     assignment.getFile().subscribe((file) => {
+      if (!this.activeAssignment) return;
       this.workbookService.loadWorkbook(file);
-      this.setActiveQuestion(this.questionService.getQuestions()[0]);
+      this.setActiveQuestion(this.activeAssignment.getQuestions()[0]);
     });
   }
 
   saveQuestions() {
     if (!this.activeAssignment) return;
-    this.activeAssignment.questions = this.questionService.getQuestions();
     this.activeAssignment.save().subscribe({
       error: () => {
         this.snackBar.open('Failed to save!', 'Close', { duration: 1500 });
@@ -86,6 +85,7 @@ export class WizardComponent implements AfterViewInit {
   }
 
   deleteActiveQuestion() {
+    if (this.activeQuestion?.facets.length) this.deleteActiveQuestion2();
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
@@ -94,38 +94,44 @@ export class WizardComponent implements AfterViewInit {
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (!this.activeQuestion) return;
-        const question = this.activeQuestion;
-        if (this.questionService.getQuestions().length === 1) this.setActiveQuestion(null);
-        let newIdx = this.questionService.getQuestions().indexOf(question) - 1;
-        if (newIdx < 0) newIdx = 0;
-        this.questionService.removeQuestion(question);
-        this.setActiveQuestion(this.questionService.getQuestions()[newIdx]);
-        this.saveQuestions();
-      }
+      if (result) this.deleteActiveQuestion2();
     });
   }
 
+  deleteActiveQuestion2() {
+    if (!this.activeQuestion || !this.activeAssignment) return;
+    if (this.activeAssignment.getQuestions().length === 1) this.setActiveQuestion(null);
+    const question = this.activeQuestion;
+    let newIdx = this.activeAssignment.getQuestions().indexOf(question) - 1;
+    if (newIdx < 0) newIdx = 0;
+    const index = this.activeAssignment.getQuestions().indexOf(question);
+    if (index > -1) {
+      this.activeAssignment.getQuestions().splice(index, 1);
+    }
+    this.setActiveQuestion(this.activeAssignment.getQuestions()[newIdx]);
+    this.saveQuestions();
+  }
+
   addQuestion() {
-    this.questionService.addQuestion();
+    if (!this.activeAssignment) return;
+    this.activeAssignment.addQuestion();
     this.setActiveQuestion(
-      this.questionService.getQuestions()[this.questionService.getQuestions().length - 1],
+      this.activeAssignment.getQuestions()[this.activeAssignment.getQuestions().length - 1],
     );
     this.saveQuestions();
   }
 
   prevQuestion() {
-    if (!this.activeQuestion) return;
-    const questions = this.questionService.getQuestions();
+    if (!this.activeQuestion || !this.activeAssignment) return;
+    const questions = this.activeAssignment.getQuestions();
     const idx = questions.indexOf(this.activeQuestion);
     if (idx === 0) return;
     this.setActiveQuestion(questions[idx - 1]);
   }
 
   nextQuestion() {
-    if (!this.activeQuestion) return;
-    const questions = this.questionService.getQuestions();
+    if (!this.activeQuestion || !this.activeAssignment) return;
+    const questions = this.activeAssignment.getQuestions();
     const idx = questions.indexOf(this.activeQuestion);
     if (idx === questions.length - 1) return;
     this.setActiveQuestion(questions[idx + 1]);
@@ -138,6 +144,7 @@ export class WizardComponent implements AfterViewInit {
     }
     this.activeQuestion = question;
     if (!question) return;
+    this.questionListShown = false;
     question.facets.forEach((facet) => {
       this.addFacetComponent(facet);
     });

@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.assignmentService.list().subscribe((assignments) => {
       this.assignments = assignments.map(
-        (assignment) => this.assignmentFactory.createAssignment(assignment),
+        (assignment) => this.assignmentFactory.create(assignment),
       );
       this.dataSource.data = this.assignments;
     });
@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
       if (assignment) {
         assignment.save().subscribe({
           next: (iLiveAssignment: IAssignment) => {
-            const liveAssignment = this.assignmentFactory.createAssignment(iLiveAssignment);
+            const liveAssignment = this.assignmentFactory.create(iLiveAssignment);
             this.snackBar.open('Assignment created!', 'Close', { duration: 1500 });
             this.assignments.push(liveAssignment);
             this.dataSource.data = this.assignments;
@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
       if (assignment) {
         assignment.save().subscribe({
           next: (iLiveAssignment: IAssignment) => {
-            const liveAssignment = this.assignmentFactory.createAssignment(iLiveAssignment);
+            const liveAssignment = this.assignmentFactory.create(iLiveAssignment);
             this.snackBar.open('Assignment imported!', 'Close', { duration: 1500 });
             this.assignments.push(liveAssignment);
             this.dataSource.data = this.assignments;

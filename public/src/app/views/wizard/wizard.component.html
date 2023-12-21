@@ -10,22 +10,35 @@
       <button class="ms-2 me-2" mat-button [routerLink]="'/grader/' + activeAssignment.uuid">Run</button>
     </mat-toolbar>
     <div class="question">
-      <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!questionService.getQuestions().length">No problems found. Begin by adding one!</div>
+      <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!activeAssignment.getQuestions().length">No problems found. Begin by adding one!</div>
       <div class="p-1">
-        <mat-toolbar class="bg-transparent" *ngIf="activeQuestion">
-          <h2>Problem {{questionService.getQuestions().indexOf(activeQuestion)+1}}</h2>
+        <mat-toolbar class="bg-transparent ps-2" *ngIf="activeQuestion">
+          <button mat-icon-button (click)="questionListShown = !questionListShown">
+             <mat-icon>list</mat-icon>
+           </button>
+          <h2 class="ms-2">Problem{{questionListShown ? "s" : " " + (activeAssignment.getQuestions().indexOf(activeQuestion)+1)}}</h2>
           <div class="spacer bg"></div>
-          <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) === 0" (click)="prevQuestion()"><</button>
-          <button mat-button [disabled]="questionService.getQuestions().indexOf(this.activeQuestion) >= questionService.getQuestions().length -1" (click)="nextQuestion()">></button>
-          <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" (click)="deleteActiveQuestion()">
+          <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) === 0" (click)="prevQuestion()"><</button>
+          <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) >= activeAssignment.getQuestions().length -1" (click)="nextQuestion()">></button>
+          <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" *ngIf="!questionListShown" (click)="deleteActiveQuestion()">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-toolbar>
-        <mat-divider class="ms-3 me-3 pb-2 pt-1" *ngIf="questionService.getQuestions().length"></mat-divider>
-        <div class="ps-3 pe-3">
-          <div class="facet w-100 align-text-center mt-2" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
-          <ng-container #facetContainer></ng-container>
-        </div>
+
+
+
+          <mat-divider class="ms-3 me-3 pb-2 pt-1" *ngIf="activeAssignment.getQuestions().length"></mat-divider>
+          <div class="ps-3 pe-3">
+            <div class="question-list" *ngIf="questionListShown">
+              <div class="question-list-item" *ngFor="let question of activeAssignment.getQuestions()" [ngClass]="activeQuestion === question ? 'question-list-item-active' : ''" (click)="setActiveQuestion(question)">
+                <div class="question-list-item-title">Problem {{ activeAssignment.getQuestions().indexOf(question)+1 }}</div>
+              </div>
+            </div>
+            <span [ngStyle]="{'display': questionListShown ? 'none' : 'inherit'}">
+              <div class="facet w-100 align-text-center mt-2" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
+              <ng-container #facetContainer></ng-container>
+            </span>
+          </div>
       </div>
     </div>
   </mat-drawer>
