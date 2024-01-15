@@ -39,9 +39,7 @@ export class FancyWorkbook extends Workbook {
     if (this.getSheets().indexOf(sheet) === -1) throw new Error('Sheet not found in workbook');
     if (this.activeSheet === sheet) return;
     this.activeSheet = sheet;
-    // @TODO: fix this or remove it
-    this.addColumns(5);
-    this.addRows(8);
+    this.addRows(5);
     this.genRenderedTable();
   }
 
@@ -66,11 +64,6 @@ export class FancyWorkbook extends Workbook {
   getColumn(indexOrKey: number | string): Column | undefined {
     if (!this.activeSheet) return undefined;
     return this.activeSheet.getColumn(indexOrKey);
-  }
-
-  addColumns(n = 1) {
-    if (!this.activeSheet) return;
-    for (let i = 0; i < n; i += 1) this.activeSheet.columns = this.activeSheet.columns.concat([{}]);
   }
 
   addRows(n = 1) {

@@ -55,10 +55,6 @@ export class WorkbookService {
     return this.activeWorkbook?.getRenderedCellEmitter();
   }
 
-  addColumns() {
-    this.activeWorkbook?.addColumns();
-  }
-
   addRows() {
     this.activeWorkbook?.addRows();
   }

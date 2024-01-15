@@ -16,8 +16,12 @@ import {
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
 import { ExportDialogComponent } from './export/export-dialog.component';
 import { InfoDialogComponent } from '../../components/info-dialog/info-dialog.component';
-import { ExportSubmissionColumns, Submission } from '../../models/submission/submission';
-import {SubmissionService} from "../../models/submission/submission.service";
+import {
+  ExportSubmissionColumns, ExportValue,
+  SubmissionResponse,
+  Submission,
+} from '../../models/submission/submission';
+import { SubmissionService } from '../../models/submission/submission.service';
 
 @Component({
   selector: 'app-grader',
@@ -37,8 +41,6 @@ export class GraderComponent implements OnInit {
   submissionTable = new MatTableDataSource<Submission>(this.submissions);
 
   displayedColumns: string[] = ['name', 'size', 'score', 'action'];
-
-  reviewed = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -125,7 +127,7 @@ export class GraderComponent implements OnInit {
       .reduce((acc, que) => acc + que.evaluateScore(workbook), 0);
   }
 
-  getResponses(workbook: FancyWorkbook): Map<Facet, number> {
+  getResponses(workbook: FancyWorkbook): Map<Facet, SubmissionResponse> {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()
       .reduce((acc, que) => {
@@ -139,10 +141,6 @@ export class GraderComponent implements OnInit {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()
       .reduce((acc: number, que) => acc + que.getMaxScore(), 0);
-  }
-
-  setActiveSubmission(submission: Submission) {
-    this.activeSubmission = submission;
   }
 
   areAllFacetsValid(): boolean {
@@ -174,7 +172,7 @@ export class GraderComponent implements OnInit {
 
   openExportConfirmDialog() {
     if (!this.masterAssignment || !this.submissions.length) return;
-    if (this.reviewed) {
+    if (this.submissions.every((sub) => sub.isReviewed())) {
       this.openExportDialog();
       return;
     }
@@ -202,11 +200,11 @@ export class GraderComponent implements OnInit {
     });
   }
 
-  openExportDialog() {
+  openExportDialog(): void {
     const dialogRef = this.dialog.open(ExportDialogComponent, {
-      width: '350px',
+      width: '500px',
       data: {
-        cols: ExportSubmissionColumns,
+        cols: this.getExportSubmissionColumns(),
       },
     });
     dialogRef.afterClosed().subscribe((cols: Array<string>) => {
@@ -214,9 +212,8 @@ export class GraderComponent implements OnInit {
         const workbook = this.workbookFactory.create();
         workbook.title = `Submissions - ${this.masterAssignment.name}`;
         const worksheet = workbook.addWorksheet('Submissions');
-        worksheet.addRow(cols.map((r) => ExportSubmissionColumns[r]));
-
-        const rows = this.submissions.map((sub) => (
+        worksheet.addRow(cols.map((r) => this.getExportSubmissionColumns().get(r)?.val));
+        const rows = this.submissions.map((sub: Submission) => (
           Object.values(_.pick({
             fileName: sub.file.name,
             points: sub.score,
@@ -234,6 +231,13 @@ export class GraderComponent implements OnInit {
             description: sub.workbook.description,
             keywords: sub.workbook.keywords,
             category: sub.workbook.category,
+            // Copilot is amazing
+            ...Array.from(sub.responses.entries()).map(([key, val]) => ({
+              [key.uuid]: val.value,
+            })).reduce((acc, cur) => {
+              Object.assign(acc, cur);
+              return acc;
+            }, {}),
           }, ...cols))));
         worksheet.addRows(rows);
         worksheet.columns.forEach((column) => {
@@ -244,6 +248,7 @@ export class GraderComponent implements OnInit {
             }
             return (v ?? '').toString().length;
           });
+          // eslint-disable-next-line no-param-reassign
           column.width = Math.max(Math.max(...lengths.filter(
             (v) => typeof v === 'number',
           )) + 2, (column.header ?? '').length + 6);
@@ -251,5 +256,18 @@ export class GraderComponent implements OnInit {
         workbook.download();
       }
     });
+  }
+
+  getExportSubmissionColumns(): Map<string, ExportValue> {
+    if (!this.masterAssignment) return new Map();
+    const copy = new Map(ExportSubmissionColumns);
+    for (let i = 0; i < this.masterAssignment.getQuestions().length; i += 1) {
+      const que = this.masterAssignment.getQuestions()[i];
+      for (let j = 0; j < que.getFacets().length; j += 1) {
+        const fac = que.getFacets()[j];
+        copy.set(fac.uuid, { val: `Problem ${i + 1} - ${fac.getName()} (#${j + 1})`, fac });
+      }
+    }
+    return copy;
   }
 }

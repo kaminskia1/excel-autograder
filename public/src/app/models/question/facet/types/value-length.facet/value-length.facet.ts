@@ -16,7 +16,7 @@ export interface IValueLengthFacet extends IValueLengthFacetPartial, IFacet {
 
 export class ValueLengthFacet extends Facet implements IValueLengthFacet,
   IModel<IValueLengthFacetPartial> {
-  readonly type: FacetType.ValueFacet = FacetType.ValueFacet;
+  readonly type: FacetType.ValueLengthFacet = FacetType.ValueLengthFacet;
 
   minLength?: number;
 

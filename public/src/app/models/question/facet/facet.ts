@@ -26,6 +26,8 @@ export interface IFacet extends IFacetPartial, IModel<IFacetPartial> {
 export abstract class Facet implements IFacet {
   abstract readonly type: FacetType;
 
+  readonly uuid: string = Math.random().toString(36).substring(2, 15);
+
   points = 1;
 
   targetCell: ICellAddress;
@@ -49,6 +51,12 @@ export abstract class Facet implements IFacet {
   abstract getInfo(): Array<string>
 
   abstract isValid(): boolean
+
+  getTargetCellValue(): string | undefined {
+    const cell = this.getTargetCell();
+    if (!cell) return undefined;
+    return FancyWorkbook.getCellSafeValue(cell).value;
+  }
 
   getMaxScore(): number {
     return this.points;

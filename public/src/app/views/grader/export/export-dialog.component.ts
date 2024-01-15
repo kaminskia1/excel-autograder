@@ -1,8 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Facet } from '../../../models/question/facet/facet';
+import {CellErrorValue, CellHyperlinkValue} from "exceljs";
+import {ExportValue} from "../../../models/submission/submission";
 
 interface ExportDialogData {
-  cols: Array<{ [key: string]: string }>;
+  cols: Array<{ [key: string]: { val: string, fac?: Facet}}>;
 }
 
 @Component({
@@ -17,4 +20,10 @@ export class ExportDialogComponent {
     public dialogRef: MatDialogRef<ExportDialogData>,
     @Inject(MAT_DIALOG_DATA) public data: ExportDialogData,
   ) {}
+
+  format(val: unknown) {
+    const isExportValue = (c: unknown): c is ExportValue => typeof c === 'object' && c !== null && 'val' in c;
+    if (isExportValue(val)) return val.val;
+    return val;
+  }
 }

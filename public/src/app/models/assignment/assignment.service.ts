@@ -17,6 +17,7 @@ export class AssignmentService extends ApiService {
    * @returns Observable<Array<IAssignment>>
    */
   public list(): Observable<Array<IAssignment>> {
+    // @TODO: restructure this into a promise to return Assignment[]
     return this.get('assignments/') as Observable<Array<IAssignment>>;
   }
 

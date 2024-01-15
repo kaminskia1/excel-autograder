@@ -56,8 +56,8 @@
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)">
-                  <mat-icon *ngIf="activeSubmission.responses.get(facet) !== 0" class="align-middle green me-1">check</mat-icon>
-                  <mat-icon *ngIf="activeSubmission.responses.get(facet) === 0" class="align-middle red me-1">close</mat-icon>
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score !== 0" class="align-middle green me-1">check</mat-icon>
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score === 0" class="align-middle red me-1">close</mat-icon>
                 </span>
                 {{facet.getName()}}
               </mat-panel-title>
@@ -125,7 +125,7 @@
             <th mat-header-cell *matHeaderCellDef> <div class="float-end pe-5"> Actions </div> </th>
             <td mat-cell *matCellDef="let submission">
               <div class="float-end">
-                <button mat-icon-button matTooltip="Preview" matTooltipPosition="above" (click)="setActiveSubmission(submission)">
+                <button mat-icon-button matTooltip="Preview" matTooltipPosition="above" (click)="activeSubmission = submission">
                   <mat-icon class="green">play_arrow</mat-icon>
                 </button>
                 <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" color="accent" (click)="removeSubmission(submission)">

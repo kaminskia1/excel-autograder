@@ -34,7 +34,11 @@ export class Question implements IQuestion {
 
   evaluateResponses(workbook: FancyWorkbook): Map<Facet, number> {
     return this.facets.reduce((acc, facet) => {
-      acc.set(facet, facet.evaluateScore(workbook));
+      acc.set(facet, {
+        score: facet.evaluateScore(workbook),
+        maxScore: facet.getMaxScore(),
+        value: facet.getTargetCellValue(),
+      });
       return acc;
     }, new Map());
   }
