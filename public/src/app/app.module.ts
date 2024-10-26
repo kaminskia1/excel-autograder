@@ -19,7 +19,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatListModule } from '@angular/material/list';
@@ -27,7 +26,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRippleModule } from '@angular/material/core';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { MatCardModule } from '@angular/material/card';
-import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { AppRoutingModule } from './app-routing.module';
@@ -120,13 +118,11 @@ import { ExportDialogComponent } from './views/grader/export/export-dialog.compo
     MatCheckboxModule,
     MatTooltipModule,
     MatSnackBarModule,
-    NgxMatFileInputModule,
     MatFormFieldModule,
     MatExpansionModule,
     MatRippleModule,
     NgxFilesizeModule,
     MatCardModule,
-    MatLegacyChipsModule,
     MatAutocompleteModule,
     NgxMatSelectSearchModule,
     ClipboardModule,

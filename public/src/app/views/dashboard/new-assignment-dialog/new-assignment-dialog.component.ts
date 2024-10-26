@@ -42,6 +42,13 @@ export class NewAssignmentDialogComponent {
     });
   }
 
+  filePicked(event: Event) {
+   // @ts-ignore
+    const file = (event.target as HTMLInputElement).files[0];
+   // @ts-ignore
+    this.newAssignmentForm.patchValue({ file: file});
+  }
+
   create() {
     if (this.newAssignmentForm.invalid) return;
 
@@ -59,4 +66,6 @@ export class NewAssignmentDialogComponent {
     this.data.emit(this.newAssignment);
     this.dialogRef.close();
   }
+
+  protected readonly console = console;
 }
