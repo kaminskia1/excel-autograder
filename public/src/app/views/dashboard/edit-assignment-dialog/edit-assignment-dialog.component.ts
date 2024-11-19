@@ -37,6 +37,13 @@ export class EditAssignmentDialogComponent {
     });
   }
 
+  filePicked(event: Event) {
+   // @ts-ignore
+    const file = (event.target as HTMLInputElement).files[0];
+   // @ts-ignore
+    this.assignmentForm.patchValue({ file: file});
+  }
+
   update() {
     if (this.assignmentForm.invalid) return;
 

@@ -77,10 +77,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "excel-autograder-frontend:build:production"
+              "buildTarget": "excel-autograder-frontend:build:production"
             },
             "development": {
-              "browserTarget": "excel-autograder-frontend:build:development"
+              "buildTarget": "excel-autograder-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -88,7 +88,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "excel-autograder-frontend:build"
+            "buildTarget": "excel-autograder-frontend:build"
           }
         },
         "test": {
