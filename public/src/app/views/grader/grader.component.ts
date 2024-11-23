@@ -187,6 +187,13 @@ export class GraderComponent implements OnInit {
     });
   }
 
+  prettyProvidedValue(val: string | undefined) {
+    if (val == undefined) {
+      return '<span>Provided Value: <span class="red">None</span></span>'
+    }
+    return `<span>Provided Value: ${val}</span>`
+  }
+
   openExportDialog(): void {
     const dialogRef = this.dialog.open(ExportDialogComponent, {
       width: '500px',
