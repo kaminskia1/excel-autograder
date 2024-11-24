@@ -27,8 +27,8 @@
             <mat-list>
               <mat-list-item *ngIf="activeSubmission.workbook.creator"><b>Creator:</b> {{ activeSubmission.workbook.creator }}</mat-list-item>
               <mat-list-item *ngIf="activeSubmission.workbook.company"><b>Company:</b> {{ activeSubmission.workbook.company }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.lastModifiedBy"><b>Last Modified By:</b> {{ activeSubmission.workbook.lastModifiedBy}}</mat-list-item>
               <mat-list-item *ngIf="activeSubmission.workbook.modified"><b>Last Modified:</b> {{ activeSubmission.workbook.modified | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
+              <mat-list-item *ngIf="activeSubmission.workbook.lastModifiedBy"><b>Modified By:</b> {{ activeSubmission.workbook.lastModifiedBy}}</mat-list-item>
               <mat-list-item *ngIf="activeSubmission.workbook.created"><b>Created:</b> {{ activeSubmission.workbook.created | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
               <mat-list-item *ngIf="activeSubmission.workbook.lastPrinted"><b>Last Printed:</b> {{ activeSubmission.workbook.lastPrinted | date:'MMMM dd, yyyy. h:mm a'}}</mat-list-item>
 
@@ -67,8 +67,10 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <mat-list>
-              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item">
-              </mat-list-item>
+              <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)">
+                <mat-list-item [innerHTML]="prettyProvidedValue(activeSubmission.responses.get(facet)?.providedValue)"></mat-list-item>
+              </span>
+              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item"></mat-list-item>
             </mat-list>
           </mat-expansion-panel>
         </mat-accordion>

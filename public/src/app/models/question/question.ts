@@ -37,7 +37,8 @@ export class Question implements IQuestion {
       acc.set(facet, {
         score: facet.evaluateScore(workbook),
         maxScore: facet.getMaxScore(),
-        value: facet.getTargetCellValue(),
+        providedValue: facet.getProvidedValue(workbook),
+        expectedValue: facet.getTargetCellValue(),
       });
       return acc;
     }, new Map());
