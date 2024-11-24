@@ -54,7 +54,8 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
 
   evaluateScore(workbook: FancyWorkbook): number {
     if (!this.targetCell) throw new Error('Target cell not set');
-    if (!this.lowerBounds || !this.upperBounds) throw new Error('Boundaries not set');
+    console.log(this.lowerBounds)
+    if (typeof this.lowerBounds != "number" || typeof this.upperBounds != "number") throw new Error('Boundaries not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell) return 0;
     const value = +FancyWorkbook.getCellSafeValue(targetCell).value;

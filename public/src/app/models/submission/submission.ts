@@ -30,7 +30,8 @@ ExportSubmissionColumns.set('category', { val: 'Category' });
 export interface SubmissionResponse {
   score: number,
   maxScore: number,
-  value: string | undefined
+  providedValue: string | undefined
+  expectedValue: string | undefined
 }
 
 export interface ISubmissionPartial {

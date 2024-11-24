@@ -172,20 +172,7 @@ export class GraderComponent implements OnInit {
 
   openExportConfirmDialog() {
     if (!this.masterAssignment || !this.submissions.length) return;
-    if (this.submissions.every((sub) => sub.isReviewed())) {
-      this.openExportDialog();
-      return;
-    }
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
-      data: {
-        title: 'Confirm Export?',
-        message: 'Submissions have not been reviewed.',
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) this.openExportDialog();
-    });
+    this.openExportDialog();
   }
 
   openReview() {
@@ -198,6 +185,13 @@ export class GraderComponent implements OnInit {
         action: 'Close',
       },
     });
+  }
+
+  prettyProvidedValue(val: string | undefined) {
+    if (val == undefined) {
+      return '<span>Provided Value: <span class="red">None</span></span>'
+    }
+    return `<span>Provided Value: ${val}</span>`
   }
 
   openExportDialog(): void {
@@ -231,13 +225,21 @@ export class GraderComponent implements OnInit {
             description: sub.workbook.description,
             keywords: sub.workbook.keywords,
             category: sub.workbook.category,
-            // Copilot is amazing
+
             ...Array.from(sub.responses.entries()).map(([key, val]) => ({
-              [key.uuid]: val.value,
+              ["expected-" + key.uuid]: val.expectedValue,
             })).reduce((acc, cur) => {
               Object.assign(acc, cur);
               return acc;
             }, {}),
+
+            ...Array.from(sub.responses.entries()).map(([key, val]) => ({
+              ["provided-" + key.uuid]: val.providedValue,
+            })).reduce((acc, cur) => {
+              Object.assign(acc, cur);
+              return acc;
+            }, {}),
+
           }, ...cols))));
         worksheet.addRows(rows);
         worksheet.columns.forEach((column) => {
@@ -265,7 +267,8 @@ export class GraderComponent implements OnInit {
       const que = this.masterAssignment.getQuestions()[i];
       for (let j = 0; j < que.getFacets().length; j += 1) {
         const fac = que.getFacets()[j];
-        copy.set(fac.uuid, { val: `Problem ${i + 1} - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set("expected-"+ fac.uuid, { val: `Problem ${i + 1} Expected - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set("provided-"+ fac.uuid, { val: `Problem ${i + 1} Provided - ${fac.getName()} (#${j + 1})`, fac });
       }
     }
     return copy;

@@ -18,6 +18,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # copy files
 COPY . /app
 
+RUN npm install --legacy-peer-deps
+
 EXPOSE 4200 49153
 
 # start app

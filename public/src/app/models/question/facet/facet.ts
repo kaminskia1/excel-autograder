@@ -62,6 +62,13 @@ export abstract class Facet implements IFacet {
     return this.points;
   }
 
+  getProvidedValue(workbook: FancyWorkbook): string | undefined {
+    if (!this.targetCell) throw new Error('Target cell not set');
+    const targetCell = workbook.getCell(this.targetCell);
+    if (!targetCell) return undefined;
+    return FancyWorkbook.getCellSafeValue(targetCell).value;
+  }
+
   getTargetCell(): Cell | undefined {
     if (this.cache.targetCell) return this.cache.targetCell;
     if (this.targetCell) return this.workbookService.getCell(this.targetCell);
