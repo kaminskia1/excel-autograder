@@ -9,67 +9,61 @@
       <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
       <button class="ms-2 me-2" mat-button [routerLink]="'/grader/' + activeAssignment.uuid">Run</button>
     </mat-toolbar>
+    <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!activeAssignment.getQuestions().length">No problems found. Begin by adding one!</div>
+    <mat-toolbar class="ps-2 question-toolbar" *ngIf="activeQuestion">
+      <button mat-icon-button (click)="questionListShown = !questionListShown">
+         <mat-icon>list</mat-icon>
+       </button>
+      <h2 class="ms-2" *ngIf="questionListShown">Problems</h2>
+      <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()">
+        {{ getQuestionDisplayName(activeQuestion, activeAssignment.getQuestions().indexOf(activeQuestion)) }}
+        <mat-icon class="edit-icon">edit</mat-icon>
+      </h2>
+      <input
+        *ngIf="!questionListShown && editingQuestionName"
+        #questionNameInput
+        class="question-name-input ms-2"
+        [(ngModel)]="editingQuestionNameValue"
+        (blur)="saveQuestionName()"
+        (keyup.enter)="saveQuestionName()"
+        (keyup.escape)="cancelEditingQuestionName()"
+        placeholder="Problem {{ activeAssignment.getQuestions().indexOf(activeQuestion) + 1 }}"
+      />
+      <div class="spacer bg"></div>
+      <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) === 0" (click)="prevQuestion()"><</button>
+      <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) >= activeAssignment.getQuestions().length -1" (click)="nextQuestion()">></button>
+      <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" *ngIf="!questionListShown" (click)="deleteActiveQuestion()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-toolbar>
     <div class="question">
-      <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!activeAssignment.getQuestions().length">No problems found. Begin by adding one!</div>
-      <div class="p-1">
-        <mat-toolbar class="bg-transparent ps-2" *ngIf="activeQuestion">
-          <button mat-icon-button (click)="questionListShown = !questionListShown">
-             <mat-icon>list</mat-icon>
-           </button>
-          <h2 class="ms-2" *ngIf="questionListShown">Problems</h2>
-          <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()">
-            {{ getQuestionDisplayName(activeQuestion, activeAssignment.getQuestions().indexOf(activeQuestion)) }}
-            <mat-icon class="edit-icon">edit</mat-icon>
-          </h2>
-          <input
-            *ngIf="!questionListShown && editingQuestionName"
-            #questionNameInput
-            class="question-name-input ms-2"
-            [(ngModel)]="editingQuestionNameValue"
-            (blur)="saveQuestionName()"
-            (keyup.enter)="saveQuestionName()"
-            (keyup.escape)="cancelEditingQuestionName()"
-            placeholder="Problem {{ activeAssignment.getQuestions().indexOf(activeQuestion) + 1 }}"
-          />
-          <div class="spacer bg"></div>
-          <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) === 0" (click)="prevQuestion()"><</button>
-          <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) >= activeAssignment.getQuestions().length -1" (click)="nextQuestion()">></button>
-          <button mat-icon-button matTooltip="Delete" matTooltipPosition="above" *ngIf="!questionListShown" (click)="deleteActiveQuestion()">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-toolbar>
-
-
-
-          <mat-divider class="ms-3 me-3 pb-2 pt-1" *ngIf="activeAssignment.getQuestions().length"></mat-divider>
-          <div class="ps-3 pe-3">
-            <div class="question-list" *ngIf="questionListShown">
-              <div class="question-list-item" *ngFor="let question of activeAssignment.getQuestions(); let i = index" [ngClass]="activeQuestion === question ? 'question-list-item-active' : ''" (click)="setActiveQuestion(question)">
-                <div class="question-list-item-title">{{ getQuestionDisplayName(question, i) }}</div>
-              </div>
-            </div>
-            <span [ngStyle]="{'display': questionListShown ? 'none' : 'inherit'}">
-              <div class="facet w-100 align-text-center mt-2" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
-              <div
-                cdkDropList
-                class="facet-drop-list"
-                (cdkDropListDropped)="onFacetDrop($event)"
-                *ngIf="activeQuestion && activeQuestion.facets.length">
-                <div
-                  *ngFor="let facet of activeQuestion.facets; let i = index"
-                  cdkDrag
-                  class="facet-drag-item">
-                  <app-facet-item
-                    [question]="activeQuestion"
-                    [facet]="facet"
-                    [workbookService]="workbookService"
-                    (facetDeleted)="onFacetDeleted()"
-                    (valueChanged)="saveQuestions()">
-                  </app-facet-item>
-                </div>
-              </div>
-            </span>
+      <div class="ps-3 pe-3">
+        <div class="question-list" *ngIf="questionListShown">
+          <div class="question-list-item" *ngFor="let question of activeAssignment.getQuestions(); let i = index" [ngClass]="activeQuestion === question ? 'question-list-item-active' : ''" (click)="setActiveQuestion(question)">
+            <div class="question-list-item-title">{{ getQuestionDisplayName(question, i) }}</div>
           </div>
+        </div>
+        <span [ngStyle]="{'display': questionListShown ? 'none' : 'inherit'}">
+          <div class="facet w-100 align-text-center mt-2" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
+          <div
+            cdkDropList
+            class="facet-drop-list"
+            (cdkDropListDropped)="onFacetDrop($event)"
+            *ngIf="activeQuestion && activeQuestion.facets.length">
+            <div
+              *ngFor="let facet of activeQuestion.facets; let i = index"
+              cdkDrag
+              class="facet-drag-item">
+              <app-facet-item
+                [question]="activeQuestion"
+                [facet]="facet"
+                [workbookService]="workbookService"
+                (facetDeleted)="onFacetDeleted()"
+                (valueChanged)="saveQuestions()">
+              </app-facet-item>
+            </div>
+          </div>
+        </span>
       </div>
     </div>
   </mat-drawer>

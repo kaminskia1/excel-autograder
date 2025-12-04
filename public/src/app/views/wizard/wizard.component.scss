@@ -16,8 +16,13 @@
   flex: 0 0 auto;
 }
 
+.question-toolbar {
+  background: white !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .question {
-  height: calc(100% - 64px);
+  height: calc(100% - 128px);
   overflow: auto;
 }
 
