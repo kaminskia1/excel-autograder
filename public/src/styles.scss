@@ -46,3 +46,17 @@ body {
 .yellow {
   color: #FFEB3B;
 }
+
+// CDK Drag and Drop - smooth fade-in for drag preview
+.cdk-drag-preview {
+  animation: drag-preview-fade-in 200ms ease-out;
+}
+
+@keyframes drag-preview-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
