@@ -16,7 +16,21 @@
           <button mat-icon-button (click)="questionListShown = !questionListShown">
              <mat-icon>list</mat-icon>
            </button>
-          <h2 class="ms-2">Problem{{questionListShown ? "s" : " " + (activeAssignment.getQuestions().indexOf(activeQuestion)+1)}}</h2>
+          <h2 class="ms-2" *ngIf="questionListShown">Problems</h2>
+          <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()">
+            {{ getQuestionDisplayName(activeQuestion, activeAssignment.getQuestions().indexOf(activeQuestion)) }}
+            <mat-icon class="edit-icon">edit</mat-icon>
+          </h2>
+          <input
+            *ngIf="!questionListShown && editingQuestionName"
+            #questionNameInput
+            class="question-name-input ms-2"
+            [(ngModel)]="editingQuestionNameValue"
+            (blur)="saveQuestionName()"
+            (keyup.enter)="saveQuestionName()"
+            (keyup.escape)="cancelEditingQuestionName()"
+            placeholder="Problem {{ activeAssignment.getQuestions().indexOf(activeQuestion) + 1 }}"
+          />
           <div class="spacer bg"></div>
           <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) === 0" (click)="prevQuestion()"><</button>
           <button mat-button *ngIf="!questionListShown" [disabled]="activeAssignment.getQuestions().indexOf(activeQuestion) >= activeAssignment.getQuestions().length -1" (click)="nextQuestion()">></button>
@@ -30,8 +44,8 @@
           <mat-divider class="ms-3 me-3 pb-2 pt-1" *ngIf="activeAssignment.getQuestions().length"></mat-divider>
           <div class="ps-3 pe-3">
             <div class="question-list" *ngIf="questionListShown">
-              <div class="question-list-item" *ngFor="let question of activeAssignment.getQuestions()" [ngClass]="activeQuestion === question ? 'question-list-item-active' : ''" (click)="setActiveQuestion(question)">
-                <div class="question-list-item-title">Problem {{ activeAssignment.getQuestions().indexOf(question)+1 }}</div>
+              <div class="question-list-item" *ngFor="let question of activeAssignment.getQuestions(); let i = index" [ngClass]="activeQuestion === question ? 'question-list-item-active' : ''" (click)="setActiveQuestion(question)">
+                <div class="question-list-item-title">{{ getQuestionDisplayName(question, i) }}</div>
               </div>
             </div>
             <span [ngStyle]="{'display': questionListShown ? 'none' : 'inherit'}">

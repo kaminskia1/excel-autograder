@@ -265,10 +265,11 @@ export class GraderComponent implements OnInit {
     const copy = new Map(ExportSubmissionColumns);
     for (let i = 0; i < this.masterAssignment.getQuestions().length; i += 1) {
       const que = this.masterAssignment.getQuestions()[i];
+      const questionName = que.name || `Problem ${i + 1}`;
       for (let j = 0; j < que.getFacets().length; j += 1) {
         const fac = que.getFacets()[j];
-        copy.set("expected-"+ fac.uuid, { val: `Problem ${i + 1} Expected - ${fac.getName()} (#${j + 1})`, fac });
-        copy.set("provided-"+ fac.uuid, { val: `Problem ${i + 1} Provided - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set("expected-"+ fac.uuid, { val: `${questionName} Expected - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set("provided-"+ fac.uuid, { val: `${questionName} Provided - ${fac.getName()} (#${j + 1})`, fac });
       }
     }
     return copy;

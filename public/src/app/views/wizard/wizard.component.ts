@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -28,6 +29,8 @@ export class WizardComponent implements AfterViewInit {
   @ViewChild('facetContainer', { static: false, read: ViewContainerRef })
     facetContainer!: ViewContainerRef;
 
+  @ViewChild('questionNameInput') questionNameInput!: ElementRef<HTMLInputElement>;
+
   range = (start: number, end: number) => Array.from({
     length: (end - start),
   }, (v, k) => k + start);
@@ -37,6 +40,10 @@ export class WizardComponent implements AfterViewInit {
   activeQuestion: Question | null = null;
 
   questionListShown = false;
+
+  editingQuestionName = false;
+
+  editingQuestionNameValue = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -162,6 +169,32 @@ export class WizardComponent implements AfterViewInit {
     header.setInput('self', header);
     header.instance.facetDeleted.subscribe(() => { this.saveQuestions(); });
     this.saveQuestions();
+  }
+
+  getQuestionDisplayName(question: Question, index: number): string {
+    return question.name || `Problem ${index + 1}`;
+  }
+
+  startEditingQuestionName() {
+    if (!this.activeQuestion) return;
+    this.editingQuestionName = true;
+    this.editingQuestionNameValue = this.activeQuestion.name || '';
+    setTimeout(() => {
+      this.questionNameInput?.nativeElement?.focus();
+      this.questionNameInput?.nativeElement?.select();
+    });
+  }
+
+  saveQuestionName() {
+    if (!this.activeQuestion) return;
+    this.activeQuestion.name = this.editingQuestionNameValue.trim() || undefined;
+    this.editingQuestionName = false;
+    this.saveQuestions();
+  }
+
+  cancelEditingQuestionName() {
+    this.editingQuestionName = false;
+    this.editingQuestionNameValue = '';
   }
 
   protected readonly FacetType = FacetType;

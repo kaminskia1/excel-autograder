@@ -4,22 +4,28 @@ import { FacetFactory } from './facet/facet.factory';
 import { FancyWorkbook } from '../workbook/workbook';
 
 export interface IQuestionPartial {
+  name?: string
   facets: Array<IFacetPartial>
 }
 
 export interface IQuestion extends IQuestionPartial, IModel<IQuestionPartial> {
+  name?: string
   facets: Array<IFacet>
 }
 
 export class Question implements IQuestion {
+  name?: string;
+
   facets: Array<Facet> = [];
 
   constructor(question: IQuestionPartial, private facetFactory: FacetFactory) {
+    this.name = question.name;
     this.facets = question.facets.map((attr) => this.facetFactory.createFacet(attr));
   }
 
   getSerializable(): IQuestionPartial {
     return {
+      name: this.name,
       facets: this.facets.map((attr) => attr.getSerializable()),
     };
   }

@@ -48,3 +48,41 @@
 .cell-border-top {
   border-top: 1px solid #E1E1E1;
 }
+
+.question-name {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+
+    .edit-icon {
+      opacity: 1;
+    }
+  }
+
+  .edit-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.question-name-input {
+  font-size: 1.25rem;
+  font-weight: 500;
+  border: none;
+  border-bottom: 2px solid #3f51b5;
+  background: transparent;
+  outline: none;
+  padding: 4px 8px;
+  width: 200px;
+}
