@@ -27,7 +27,7 @@ export interface IAssignment extends IAssignmentPartial, IApiModel<IAssignmentPa
   setQuestions(questions: Array<IQuestion>): void;
   getFile(): Observable<Blob>;
   getCachedFile(): Blob|undefined;
-  setFile(file: Blob|undefined): void;
+  setFile(file: Blob | File | undefined): void;
   getKey(): string|undefined;
   setKey(key: string|undefined): void;
 }
@@ -107,7 +107,10 @@ export class Assignment implements IAssignment {
       return obs;
     }
     // new, @TODO: change file: Blob to file: File
-    if (this.cache.file) form.append('file', this.cache.file, this.cache.file.name);
+    if (this.cache.file) {
+      const fileName = this.cache.file instanceof File ? this.cache.file.name : 'file.xlsx';
+      form.append('file', this.cache.file, fileName);
+    }
     const obs: Observable<IAssignment> = (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(shareReplay(1));
     obs.subscribe(() => { });
     return obs;
@@ -148,9 +151,9 @@ export class Assignment implements IAssignment {
     return this.cache.file;
   }
 
-  setFile(file: Blob) {
+  setFile(file: Blob | File | undefined) {
     this.cache.file = file;
-    this.file = file.name;
+    this.file = file instanceof File ? file.name : file ? 'file.xlsx' : '';
   }
 
   getKey(): string|undefined {

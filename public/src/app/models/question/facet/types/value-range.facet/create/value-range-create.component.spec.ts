@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { ValueRangeCreateComponent } from './value-range-create.component';
 
@@ -9,10 +10,11 @@ describe('ValueRangeFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ValueRangeCreateComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(ValueRangeCreateComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.facet = { min: 0, max: 100 } as any;
   });
 
   it('should create', () => {

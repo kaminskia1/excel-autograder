@@ -1,59 +1,60 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_URL } from '../../../main';
+import { API_URL } from '../../config/api.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export abstract class ApiService {
-  protected static headers: Headers = new Headers();
-
+export class ApiService {
+  private static headers: Headers = new Headers();
   private static apiUrl = '';
 
-  protected constructor(public http: HttpClient) {
+  constructor(private http: HttpClient) {
     ApiService.apiUrl = API_URL;
   }
 
   private static buildHttpOptions(options: NonNullable<unknown>): NonNullable<unknown> {
     return {
       ...options,
-      headers: ('headers' in options && options.headers instanceof Object) ? { ...ApiService.headers, ...(options.headers) } : ApiService.headers,
+      headers: ('headers' in options && options.headers instanceof Object) 
+        ? { ...ApiService.headers, ...(options.headers) } 
+        : ApiService.headers,
     };
   }
 
-  public static registerHeader(key: string, value: string) {
+  public static registerHeader(key: string, value: string): void {
     ApiService.headers.set(key, value);
   }
 
-  public static deregisterHeader(key: string) {
+  public static deregisterHeader(key: string): void {
     ApiService.headers.delete(key);
   }
 
-  public get(path: string, options: Partial<HttpHeaders> = {}): Observable<NonNullable<unknown>> {
-    return this.http.get(`${ApiService.apiUrl}${path}`, ApiService.buildHttpOptions(options));
+  public get<T>(path: string, options: NonNullable<unknown> = {}): Observable<T> {
+    return this.http.get<T>(`${ApiService.apiUrl}${path}`, ApiService.buildHttpOptions(options));
   }
 
-  public post(
+  public post<T>(
     path: string,
     body: NonNullable<unknown> = {},
     options: NonNullable<unknown> = {},
-  ): Observable<NonNullable<unknown>> {
-    return this.http.post(`${ApiService.apiUrl}${path}`, body, ApiService.buildHttpOptions(options));
+  ): Observable<T> {
+    return this.http.post<T>(`${ApiService.apiUrl}${path}`, body, ApiService.buildHttpOptions(options));
   }
 
-  public put(
+  public put<T>(
     path: string,
     body: NonNullable<unknown> = {},
     options: NonNullable<unknown> = {},
-  ): Observable<NonNullable<unknown>> {
-    return this.http.put(`${ApiService.apiUrl}${path}`, body, ApiService.buildHttpOptions(options));
+  ): Observable<T> {
+    return this.http.put<T>(`${ApiService.apiUrl}${path}`, body, ApiService.buildHttpOptions(options));
   }
 
-  public delete(
+  public delete<T>(
     path: string,
     options: NonNullable<unknown> = {},
-  ): Observable<NonNullable<unknown>> {
-    return this.http.delete(`${ApiService.apiUrl}${path}`, ApiService.buildHttpOptions(options));
+  ): Observable<T> {
+    return this.http.delete<T>(`${ApiService.apiUrl}${path}`, ApiService.buildHttpOptions(options));
   }
 }

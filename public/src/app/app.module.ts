@@ -89,7 +89,6 @@ import { FacetItemComponent } from './components/facet-item/facet-item.component
     ConfirmationDialogComponent,
     TableRowComponent,
     FormulaContainsReviewComponent,
-    FormulaContainsReviewComponent,
     FormulaListReviewComponent,
     FormulaRegexReviewComponent,
     ValueLengthReviewComponent,
