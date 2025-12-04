@@ -134,7 +134,9 @@ export class Assignment implements IAssignment {
   }
 
   addQuestion() {
+    const questionNumber = this.questions.length + 1;
     const question: Question = this.questionFactory.create({
+      name: `Problem ${questionNumber}`,
       facets: [],
     });
     this.questions.push(question);
