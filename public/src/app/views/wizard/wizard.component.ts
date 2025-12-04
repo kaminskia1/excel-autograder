@@ -113,9 +113,10 @@ export class WizardComponent implements AfterViewInit {
     const questions = this.activeAssignment.getQuestions();
     const index = questions.indexOf(question);
 
-    if (index > -1) {
-      questions.splice(index, 1);
-    }
+    // If question not found in array, nothing to delete
+    if (index === -1) return;
+
+    questions.splice(index, 1);
 
     // Set new active question (or null if no questions remain)
     if (questions.length === 0) {
