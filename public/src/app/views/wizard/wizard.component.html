@@ -14,7 +14,7 @@
       <button mat-icon-button (click)="questionListShown = !questionListShown">
          <mat-icon>list</mat-icon>
        </button>
-      <h2 class="ms-2" *ngIf="questionListShown">Problems</h2>
+      <h2 class="ms-2 problems-title" *ngIf="questionListShown">Problems</h2>
       <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()">
         {{ getQuestionDisplayName(activeQuestion, activeAssignment.getQuestions().indexOf(activeQuestion)) }}
         <mat-icon class="edit-icon">edit</mat-icon>
