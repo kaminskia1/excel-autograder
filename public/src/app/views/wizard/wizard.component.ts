@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
@@ -48,6 +49,7 @@ export class WizardComponent implements AfterViewInit {
     public assignmentFactory: AssignmentFactory,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngAfterViewInit() {
@@ -155,10 +157,45 @@ export class WizardComponent implements AfterViewInit {
   }
 
   setActiveQuestion(question: Question | null) {
-    this.activeQuestion = question;
-    if (!question) return;
-    this.questionListShown = false;
+    if (!question) {
+      this.activeQuestion = null;
+      return;
+    }
+    
+    // Capture initial state to avoid race condition with user toggling the list
+    const wasShowingList = this.questionListShown;
+    
+    // If facet area is visible, fade out first then change question
+    // If facet area is hidden (list is shown), skip fade-out and just switch
+    if (!wasShowingList) {
+      // Facet area is visible - fade out, change, fade in
+      this.facetAreaFading = true;
+      setTimeout(() => {
+        this.activeQuestion = question;
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.facetAreaFading = false;
+          this.cdr.detectChanges();
+        }, 10);
+      }, 75);
+    } else {
+      // Facet area is hidden - just switch and fade in
+      this.activeQuestion = question;
+      this.facetAreaFading = true;
+      // Close the list if user hasn't toggled it
+      if (this.questionListShown) {
+        this.questionListShown = false;
+      }
+      this.cdr.detectChanges();
+      // Small delay to let DOM update before fading in
+      setTimeout(() => {
+        this.facetAreaFading = false;
+        this.cdr.detectChanges();
+      }, 10);
+    }
   }
+  
+  facetAreaFading = false;
 
   addFacetComponent(facet: Facet) {
     // Facet is added to question, Angular will render it via *ngFor
@@ -174,6 +211,15 @@ export class WizardComponent implements AfterViewInit {
 
     // Reorder the facets array
     moveItemInArray(this.activeQuestion.facets, event.previousIndex, event.currentIndex);
+
+    this.saveQuestions();
+  }
+
+  onQuestionDrop(event: CdkDragDrop<Question[]>) {
+    if (!this.activeAssignment || event.previousIndex === event.currentIndex) return;
+
+    // Reorder the questions array
+    moveItemInArray(this.activeAssignment.getQuestions(), event.previousIndex, event.currentIndex);
 
     this.saveQuestions();
   }
