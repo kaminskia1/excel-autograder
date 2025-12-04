@@ -29,7 +29,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
     this.targetCell = facet.targetCell;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Value Range';
   }
 
@@ -44,6 +44,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
   getSerializable(): IValueRangeFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       lowerBounds: this.lowerBounds,

@@ -2,7 +2,20 @@
   <div class="drag-handle" cdkDragHandle>
     <mat-icon>drag_indicator</mat-icon>
   </div>
-  <h2 class="facet-title">{{facet.getName()}}</h2>
+  <h2 class="facet-title facet-name-editable" *ngIf="!editingName" (click)="startEditingName()">
+    {{facet.getName()}}
+    <mat-icon class="edit-icon">edit</mat-icon>
+  </h2>
+  <input
+    *ngIf="editingName"
+    #facetNameInput
+    class="facet-name-input"
+    [(ngModel)]="editingNameValue"
+    (blur)="saveName()"
+    (keyup.enter)="saveName()"
+    (keyup.escape)="cancelEditingName()"
+    [placeholder]="facet.getDefaultName()"
+  />
   <div class="spacer"></div>
   <button mat-button matTooltip="Delete" matTooltipPosition="above" (click)="remove()">Delete</button>
 </div>

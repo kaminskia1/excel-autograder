@@ -9,6 +9,7 @@ export const FORMULAS = ['ABS', 'ACCRINT', 'ACCRINTM', 'ACOS', 'ACOSH', 'ACOT', 
 
 export interface IFacetPartial {
   type: FacetType
+  name?: string
   points: number
   targetCell: ICellAddress
   review: QuestionFlag
@@ -28,6 +29,8 @@ export abstract class Facet implements IFacet {
 
   readonly uuid: string = Math.random().toString(36).substring(2, 15);
 
+  name?: string;
+
   points = 1;
 
   targetCell: ICellAddress;
@@ -37,6 +40,7 @@ export abstract class Facet implements IFacet {
   private cache: { targetCell?: Cell } = {};
 
   protected constructor(facet: IFacetPartial, protected workbookService: WorkbookService) {
+    this.name = facet.name;
     this.points = +facet.points ?? 1;
     this.targetCell = facet.targetCell;
     this.review = facet.review;
@@ -46,7 +50,11 @@ export abstract class Facet implements IFacet {
 
   abstract getSerializable(): IFacetPartial
 
-  abstract getName(): string
+  abstract getDefaultName(): string
+
+  getName(): string {
+    return this.name || this.getDefaultName();
+  }
 
   abstract getInfo(): Array<string>
 

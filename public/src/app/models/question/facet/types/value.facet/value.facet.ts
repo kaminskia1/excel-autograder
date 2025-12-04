@@ -23,7 +23,7 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
     this.value = facet.value;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Value Equals';
   }
 
@@ -37,6 +37,7 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
   getSerializable(): IValueFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       value: this.value,

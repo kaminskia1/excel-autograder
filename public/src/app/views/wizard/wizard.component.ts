@@ -88,7 +88,12 @@ export class WizardComponent implements AfterViewInit {
   }
 
   deleteActiveQuestion() {
-    if (this.activeQuestion?.facets.length) this.deleteActiveQuestion2();
+    // If question has no facets, delete without confirmation
+    if (!this.activeQuestion?.facets.length) {
+      this.deleteActiveQuestion2();
+      return;
+    }
+    // Otherwise, show confirmation dialog
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
@@ -103,15 +108,23 @@ export class WizardComponent implements AfterViewInit {
 
   deleteActiveQuestion2() {
     if (!this.activeQuestion || !this.activeAssignment) return;
-    if (this.activeAssignment.getQuestions().length === 1) this.setActiveQuestion(null);
+
     const question = this.activeQuestion;
-    let newIdx = this.activeAssignment.getQuestions().indexOf(question) - 1;
-    if (newIdx < 0) newIdx = 0;
-    const index = this.activeAssignment.getQuestions().indexOf(question);
+    const questions = this.activeAssignment.getQuestions();
+    const index = questions.indexOf(question);
+
     if (index > -1) {
-      this.activeAssignment.getQuestions().splice(index, 1);
+      questions.splice(index, 1);
     }
-    this.setActiveQuestion(this.activeAssignment.getQuestions()[newIdx]);
+
+    // Set new active question (or null if no questions remain)
+    if (questions.length === 0) {
+      this.setActiveQuestion(null);
+    } else {
+      const newIdx = Math.min(index, questions.length - 1);
+      this.setActiveQuestion(questions[newIdx]);
+    }
+
     this.saveQuestions();
   }
 

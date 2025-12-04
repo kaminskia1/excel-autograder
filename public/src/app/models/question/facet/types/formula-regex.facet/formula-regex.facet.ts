@@ -26,7 +26,7 @@ export class FormulaRegexFacet extends Facet implements
     this.expression = facet.expression;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Formula Regex';
   }
 
@@ -40,6 +40,7 @@ export class FormulaRegexFacet extends Facet implements
   getSerializable(): IFormulaRegexFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       expression: this.expression,

@@ -25,7 +25,7 @@ export class FormulaContainsFacet extends Facet implements
     this.formula = facet.formula;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Formula Contains';
   }
 
@@ -38,6 +38,7 @@ export class FormulaContainsFacet extends Facet implements
   getSerializable(): IFormulaContainsFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       formula: this.formula,

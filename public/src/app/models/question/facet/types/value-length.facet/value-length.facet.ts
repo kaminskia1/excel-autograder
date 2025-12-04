@@ -28,7 +28,7 @@ export class ValueLengthFacet extends Facet implements IValueLengthFacet,
     this.maxLength = facet.maxLength;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Value Length';
   }
 
@@ -43,6 +43,7 @@ export class ValueLengthFacet extends Facet implements IValueLengthFacet,
   getSerializable(): IValueLengthFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       minLength: this.minLength,

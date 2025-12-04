@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
@@ -35,6 +36,12 @@ export class FacetItemComponent implements AfterViewInit {
   @ViewChild('facetContent', { read: ViewContainerRef, static: true })
     facetContent!: ViewContainerRef;
 
+  @ViewChild('facetNameInput') facetNameInput!: ElementRef<HTMLInputElement>;
+
+  editingName = false;
+
+  editingNameValue = '';
+
   constructor(private dialog: MatDialog) {}
 
   ngAfterViewInit() {
@@ -67,6 +74,26 @@ export class FacetItemComponent implements AfterViewInit {
         this.facetDeleted.emit();
       }
     });
+  }
+
+  startEditingName() {
+    this.editingName = true;
+    this.editingNameValue = this.facet.name || '';
+    setTimeout(() => {
+      this.facetNameInput?.nativeElement?.focus();
+      this.facetNameInput?.nativeElement?.select();
+    });
+  }
+
+  saveName() {
+    this.facet.name = this.editingNameValue.trim() || undefined;
+    this.editingName = false;
+    this.valueChanged.emit();
+  }
+
+  cancelEditingName() {
+    this.editingName = false;
+    this.editingNameValue = '';
   }
 }
 

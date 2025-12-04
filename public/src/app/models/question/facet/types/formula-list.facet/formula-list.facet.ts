@@ -39,7 +39,7 @@ export class FormulaListFacet extends Facet implements
     this.formulas = facet.formulas;
   }
 
-  getName(): string {
+  getDefaultName(): string {
     return 'Formula List';
   }
 
@@ -53,6 +53,7 @@ export class FormulaListFacet extends Facet implements
   getSerializable(): IFormulaListFacetPartial {
     return {
       type: this.type,
+      name: this.name,
       points: this.points,
       review: this.review,
       targetCell: this.targetCell,
