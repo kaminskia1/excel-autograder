@@ -161,7 +161,7 @@ class TestAssignmentCreateAPI:
         
         response = authenticated_client.post(url, data, format='multipart')
         
-        assert response.status_code == status.HTTP_200_OK
+        assert response.status_code == status.HTTP_201_CREATED
         assert Assignment.objects.filter(name='New Assignment').exists()
     
     def test_create_assignment_unauthenticated(self, api_client):
