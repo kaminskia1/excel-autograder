@@ -1,4 +1,4 @@
-.facet-header {
+.facet-item-header {
   align-items: center;
 }
 
@@ -7,14 +7,14 @@
   align-items: center;
   justify-content: center;
   width: 24px;
-  height: 48px;
+  height: 36px;
   margin-right: 8px;
   cursor: grab;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.3);
   transition: color 0.2s;
 
   &:hover {
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.6);
   }
 
   &:active {
@@ -30,5 +30,6 @@
 
 .facet-title {
   margin: 0;
-  line-height: 48px;
+  line-height: 36px;
 }
+

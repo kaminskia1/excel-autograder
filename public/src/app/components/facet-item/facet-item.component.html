@@ -1,8 +1,10 @@
-<div class="d-flex pt-2 facet-header">
-  <div class="drag-handle" cdkDragHandle matTooltip="Drag to reorder" matTooltipPosition="above">
+<div class="facet-item-header d-flex pt-2">
+  <div class="drag-handle" cdkDragHandle>
     <mat-icon>drag_indicator</mat-icon>
   </div>
   <h2 class="facet-title">{{facet.getName()}}</h2>
   <div class="spacer"></div>
   <button mat-button matTooltip="Delete" matTooltipPosition="above" (click)="remove()">Delete</button>
 </div>
+<ng-container #facetContent></ng-container>
+

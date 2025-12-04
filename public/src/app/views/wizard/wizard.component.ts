@@ -3,8 +3,8 @@ import {
   Component,
   ElementRef,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,8 +14,7 @@ import { AssignmentFactory } from '../../models/assignment/assignment.factory';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { Facet } from '../../models/question/facet/facet';
 import { Question } from '../../models/question/question';
-import { HeaderComponent } from '../../models/question/facet/header/header/header.component';
-import { FacetLibrary, FacetType } from '../../models/question/facet/types/lib';
+import { FacetType } from '../../models/question/facet/types/lib';
 import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
@@ -26,9 +25,6 @@ import {
   styleUrls: ['./wizard.component.scss'],
 })
 export class WizardComponent implements AfterViewInit {
-  @ViewChild('facetContainer', { static: false, read: ViewContainerRef })
-    facetContainer!: ViewContainerRef;
-
   @ViewChild('questionNameInput') questionNameInput!: ElementRef<HTMLInputElement>;
 
   range = (start: number, end: number) => Array.from({
@@ -145,29 +141,26 @@ export class WizardComponent implements AfterViewInit {
   }
 
   setActiveQuestion(question: Question | null) {
-    if (!this.facetContainer) return;
-    while (this.facetContainer.get(0)) {
-      this.facetContainer.remove(0);
-    }
     this.activeQuestion = question;
     if (!question) return;
     this.questionListShown = false;
-    question.facets.forEach((facet) => {
-      this.addFacetComponent(facet);
-    });
   }
 
   addFacetComponent(facet: Facet) {
-    const header = this.facetContainer.createComponent(HeaderComponent);
-    const com = FacetLibrary.getFacetComponent(facet, this.facetContainer);
-    com.setInput('facet', facet);
-    com.instance.valueChange.subscribe(() => { this.saveQuestions(); });
-    com.setInput('workbookService', this.workbookService);
-    header.setInput('question', this.activeQuestion);
-    header.setInput('facet', facet);
-    header.setInput('component', com);
-    header.setInput('self', header);
-    header.instance.facetDeleted.subscribe(() => { this.saveQuestions(); });
+    // Facet is added to question, Angular will render it via *ngFor
+    this.saveQuestions();
+  }
+
+  onFacetDeleted() {
+    this.saveQuestions();
+  }
+
+  onFacetDrop(event: CdkDragDrop<Facet[]>) {
+    if (!this.activeQuestion || event.previousIndex === event.currentIndex) return;
+
+    // Reorder the facets array
+    moveItemInArray(this.activeQuestion.facets, event.previousIndex, event.currentIndex);
+
     this.saveQuestions();
   }
 

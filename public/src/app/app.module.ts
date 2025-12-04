@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -60,6 +61,7 @@ import { ValueRangeReviewComponent } from './models/question/facet/types/value-r
 import { ValueReviewComponent } from './models/question/facet/types/value.facet/review/value-review.component';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 import { ExportDialogComponent } from './views/grader/export/export-dialog.component';
+import { FacetItemComponent } from './components/facet-item/facet-item.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +97,7 @@ import { ExportDialogComponent } from './views/grader/export/export-dialog.compo
     ValueReviewComponent,
     InfoDialogComponent,
     ExportDialogComponent,
+    FacetItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -126,6 +129,7 @@ import { ExportDialogComponent } from './views/grader/export/export-dialog.compo
     MatAutocompleteModule,
     NgxMatSelectSearchModule,
     ClipboardModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
