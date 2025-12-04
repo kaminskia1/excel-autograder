@@ -33,7 +33,7 @@ export class FacetItemComponent implements AfterViewInit {
 
   @Output() valueChanged = new EventEmitter<void>();
 
-  @ViewChild('facetContent', { read: ViewContainerRef, static: true })
+  @ViewChild('facetContent', { read: ViewContainerRef })
     facetContent!: ViewContainerRef;
 
   @ViewChild('facetNameInput') facetNameInput!: ElementRef<HTMLInputElement>;
