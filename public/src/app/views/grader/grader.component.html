@@ -18,27 +18,63 @@
       <div class="pb-4" *ngIf="activeSubmission">
         <h2>{{ activeSubmission.file.name }}</h2>
         <mat-accordion [multi]="true">
-          <mat-expansion-panel>
+          <mat-expansion-panel class="metadata-panel">
             <mat-expansion-panel-header>
               <mat-panel-title>
+                <mat-icon class="panel-icon">info</mat-icon>
                 Metadata
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-list>
-              <mat-list-item *ngIf="activeSubmission.workbook.creator"><b>Creator:</b> {{ activeSubmission.workbook.creator }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.company"><b>Company:</b> {{ activeSubmission.workbook.company }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.modified"><b>Last Modified:</b> {{ activeSubmission.workbook.modified | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.lastModifiedBy"><b>Modified By:</b> {{ activeSubmission.workbook.lastModifiedBy}}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.created"><b>Created:</b> {{ activeSubmission.workbook.created | date:'MMMM dd, yyyy. h:mm a' }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.lastPrinted"><b>Last Printed:</b> {{ activeSubmission.workbook.lastPrinted | date:'MMMM dd, yyyy. h:mm a'}}</mat-list-item>
-
-              <mat-list-item *ngIf="activeSubmission.workbook.manager"><b>Manager:</b> {{ activeSubmission.workbook.manager }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.title"><b>Title:</b> {{ activeSubmission.workbook.title }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.subject"><b>Subject:</b> {{ activeSubmission.workbook.subject }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.description"><b>Description:</b> {{ activeSubmission.workbook.description }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.keywords"><b>Keywords:</b> {{ activeSubmission.workbook.keywords }}</mat-list-item>
-              <mat-list-item *ngIf="activeSubmission.workbook.category"><b>Category:</b> {{ activeSubmission.workbook.category }}</mat-list-item>
-            </mat-list>
+            <div class="metadata-content">
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.creator">
+                <span class="metadata-label">Creator</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.creator }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.company">
+                <span class="metadata-label">Company</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.company }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.modified">
+                <span class="metadata-label">Last Modified</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.modified | date:'MMM dd, yyyy h:mm a' }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.lastModifiedBy">
+                <span class="metadata-label">Modified By</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.lastModifiedBy }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.created">
+                <span class="metadata-label">Created</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.created | date:'MMM dd, yyyy h:mm a' }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.lastPrinted">
+                <span class="metadata-label">Last Printed</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.lastPrinted | date:'MMM dd, yyyy h:mm a' }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.manager">
+                <span class="metadata-label">Manager</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.manager }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.title">
+                <span class="metadata-label">Title</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.title }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.subject">
+                <span class="metadata-label">Subject</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.subject }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.description">
+                <span class="metadata-label">Description</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.description }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.keywords">
+                <span class="metadata-label">Keywords</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.keywords }}</span>
+              </div>
+              <div class="metadata-row" *ngIf="activeSubmission.workbook.category">
+                <span class="metadata-label">Category</span>
+                <span class="metadata-value">{{ activeSubmission.workbook.category }}</span>
+              </div>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>
@@ -52,26 +88,43 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
-          <mat-expansion-panel *ngFor="let facet of question.getFacets()">
+          <mat-expansion-panel *ngFor="let facet of question.getFacets()" class="facet-panel">
             <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)">
-                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score !== 0" class="align-middle green me-1">check</mat-icon>
-                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score === 0" class="align-middle red me-1">close</mat-icon>
+              <mat-panel-title class="facet-panel-title">
+                <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)" class="result-icon">
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score !== 0" class="green">check_circle</mat-icon>
+                  <mat-icon *ngIf="activeSubmission.responses.get(facet)?.score === 0" class="red">cancel</mat-icon>
                 </span>
-                {{facet.getName()}}
+                <span class="facet-name">{{facet.getName()}}</span>
               </mat-panel-title>
-              <mat-panel-description>
-                <span *ngIf="!facet.isValid()" class="red">Invalid</span>
-                <span *ngIf="facet.isValid()">Points: {{facet.points}}</span>
+              <mat-panel-description class="facet-panel-description">
+                <span *ngIf="!facet.isValid()" class="invalid-badge">
+                  <mat-icon class="warning-icon">warning</mat-icon>
+                  Invalid
+                </span>
+                <span *ngIf="facet.isValid()" class="points-badge">{{facet.points}} pts</span>
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <mat-list>
-              <span *ngIf="activeSubmission && activeSubmission.responses.has(facet)">
-                <mat-list-item [innerHTML]="prettyProvidedValue(activeSubmission.responses.get(facet)?.providedValue)"></mat-list-item>
-              </span>
-              <mat-list-item *ngFor="let item of facet.getInfo()" [innerHTML]="item"></mat-list-item>
-            </mat-list>
+            
+            <div class="facet-content">
+              <!-- Submission Result -->
+              <div *ngIf="activeSubmission && activeSubmission.responses.has(facet)" class="submission-result">
+                <div class="result-row" [class.success]="activeSubmission.responses.get(facet)?.score !== 0" [class.failure]="activeSubmission.responses.get(facet)?.score === 0">
+                  <span class="result-label">Provided Value:</span>
+                  <span class="result-value">{{ activeSubmission.responses.get(facet)?.providedValue ?? 'None' }}</span>
+                </div>
+              </div>
+              
+              <!-- Facet Configuration -->
+              <div class="facet-info">
+                <div class="info-row" *ngFor="let item of facet.getInfo()">
+                  <span class="info-label">{{ parseFacetInfo(item).label }}</span>
+                  <span class="info-value" [class.not-set]="!parseFacetInfo(item).isSet">
+                    {{ parseFacetInfo(item).value }}
+                  </span>
+                </div>
+              </div>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>

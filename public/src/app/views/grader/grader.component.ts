@@ -23,6 +23,12 @@ import {
 } from '../../models/submission/submission';
 import { SubmissionService } from '../../models/submission/submission.service';
 
+interface ParsedFacetInfo {
+  label: string;
+  value: string;
+  isSet: boolean;
+}
+
 @Component({
   selector: 'app-grader',
   templateUrl: './grader.component.html',
@@ -157,6 +163,32 @@ export class GraderComponent implements OnInit {
     );
   }
 
+  /**
+   * Parse a facet info string into structured data.
+   * Input format: "Label: value" or "Label:&nbsp;<span class="red">Not set</span>"
+   */
+  parseFacetInfo(info: string): ParsedFacetInfo {
+    const colonIndex = info.indexOf(':');
+    if (colonIndex === -1) {
+      return { label: info, value: '', isSet: true };
+    }
+    
+    const label = info.substring(0, colonIndex).trim();
+    let value = info.substring(colonIndex + 1).trim();
+    
+    // Check if value contains "Not set" span
+    const isNotSet = value.includes('Not set');
+    
+    if (isNotSet) {
+      value = 'Not set';
+    } else {
+      // Remove &nbsp; if present
+      value = value.replace(/&nbsp;/g, '').trim();
+    }
+    
+    return { label, value, isSet: !isNotSet };
+  }
+
   openEditDialog() {
     if (!this.masterAssignment) return;
     if (!this.submissions.length) {
@@ -192,13 +224,6 @@ export class GraderComponent implements OnInit {
         action: 'Close',
       },
     });
-  }
-
-  prettyProvidedValue(val: string | undefined) {
-    if (val == undefined) {
-      return '<span>Provided Value: <span class="red">None</span></span>'
-    }
-    return `<span>Provided Value: ${val}</span>`
   }
 
   openExportDialog(): void {

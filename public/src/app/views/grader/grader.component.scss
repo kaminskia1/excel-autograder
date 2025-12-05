@@ -32,3 +32,181 @@ input[type="file"]{
 .red {
   color: #F44336;
 }
+
+// Facet expansion panels
+.facet-panel {
+  margin-bottom: 8px;
+  
+  .facet-panel-title {
+    display: flex;
+    align-items: center;
+    
+    .result-icon {
+      display: flex;
+      align-items: center;
+      margin-right: 8px;
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    .facet-name {
+      font-weight: 500;
+    }
+  }
+  
+  .facet-panel-description {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    
+    .invalid-badge {
+      display: flex;
+      align-items: center;
+      color: #f57c00;
+      font-size: 13px;
+      
+      .warning-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+    
+    .points-badge {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}
+
+.facet-content {
+  padding: 8px 0;
+  
+  .submission-result {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    
+    .result-row {
+      display: flex;
+      align-items: center;
+      
+      &.success {
+        .result-value {
+          color: #4caf50;
+        }
+      }
+      
+      &.failure {
+        .result-value {
+          color: #f44336;
+        }
+      }
+      
+      .result-label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        margin-right: 8px;
+        min-width: 110px;
+      }
+      
+      .result-value {
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .facet-info {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    
+    .info-row {
+      display: flex;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      font-size: 14px;
+      align-items: center;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:nth-child(odd) {
+        background: #fafafa;
+      }
+      
+      .info-label {
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        min-width: 130px;
+        flex-shrink: 0;
+      }
+      
+      .info-value {
+        color: rgba(0, 0, 0, 0.87);
+        font-family: 'Roboto Mono', monospace;
+        font-size: 13px;
+        
+        &.not-set {
+          color: #f44336;
+          font-family: inherit;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}
+
+// Metadata panel
+.metadata-panel {
+  margin-bottom: 16px;
+  
+  .panel-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.metadata-content {
+  .metadata-row {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .metadata-label {
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.6);
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+    
+    .metadata-value {
+      color: rgba(0, 0, 0, 0.87);
+    }
+  }
+}
+
+// Green color utility (matches global)
+.green {
+  color: #4caf50;
+}

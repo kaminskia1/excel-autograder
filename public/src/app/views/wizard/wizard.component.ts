@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -25,7 +26,7 @@ import {
   templateUrl: './wizard.component.html',
   styleUrls: ['./wizard.component.scss'],
 })
-export class WizardComponent implements AfterViewInit {
+export class WizardComponent implements AfterViewInit, OnDestroy {
   @ViewChild('questionNameInput') questionNameInput!: ElementRef<HTMLInputElement>;
 
   range = (start: number, end: number) => Array.from({
@@ -62,6 +63,18 @@ export class WizardComponent implements AfterViewInit {
         }
       },
     );
+  }
+
+  ngOnDestroy() {
+    // Clean up pending timeouts to prevent memory leaks and errors on destroyed component
+    if (this.fadeOutTimeout) {
+      clearTimeout(this.fadeOutTimeout);
+      this.fadeOutTimeout = null;
+    }
+    if (this.fadeInTimeout) {
+      clearTimeout(this.fadeInTimeout);
+      this.fadeInTimeout = null;
+    }
   }
 
   registerAssignment(id: string) {
