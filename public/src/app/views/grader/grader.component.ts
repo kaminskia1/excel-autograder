@@ -84,7 +84,7 @@ export class GraderComponent implements OnInit {
       error: (err) => {
         const message = err.status === 404 
           ? 'Assignment not found' 
-          : 'You do not have permission to access this assignment';
+          : 'This assignment does not exist or you do not have permission to access it.';
         this.snackBar.open(message, 'Close', { duration: 5000 });
         this.router.navigate(['/']);
       },

@@ -1,8 +1,11 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
+    metadata = models.JSONField(default=dict, blank=True)
+
     def __str__(self):
         return self.username
 
