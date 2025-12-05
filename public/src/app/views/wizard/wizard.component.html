@@ -9,7 +9,19 @@
       <button class="ms-2 me-2" mat-button (click)="addQuestion()">Add</button>
       <button class="ms-2 me-2" mat-button [routerLink]="'/grader/' + activeAssignment.uuid">Run</button>
     </mat-toolbar>
-    <div class="ps-3 pe-3 facet w-100 align-text-center mt-3" *ngIf="!activeAssignment.getQuestions().length">No problems found. Begin by adding one!</div>
+    <div class="empty-state empty-state-problems" *ngIf="!activeAssignment.getQuestions().length">
+      <div class="empty-state-icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <h3 class="empty-state-title">No problems yet</h3>
+      <p class="empty-state-description">
+        Add problems to define what cells should be graded in student submissions.
+      </p>
+      <button mat-flat-button color="primary" class="empty-state-action" (click)="addQuestion()">
+        <mat-icon>add</mat-icon>
+        Add First Problem
+      </button>
+    </div>
     <mat-toolbar class="ps-2 question-toolbar" *ngIf="activeQuestion">
       <button mat-icon-button (click)="questionListShown = !questionListShown">
          <mat-icon>list</mat-icon>
@@ -60,7 +72,19 @@
           </div>
         </div>
         <div class="facet-area" [class.hidden]="questionListShown" [class.fading]="facetAreaFading">
-          <div class="facet w-100 align-text-center mt-2" *ngIf="activeQuestion && !activeQuestion.facets.length">Begin by clicking on a cell!</div>
+          <div class="empty-state" *ngIf="activeQuestion && !activeQuestion.facets.length">
+            <div class="empty-state-icon">
+              <mat-icon>touch_app</mat-icon>
+            </div>
+            <h3 class="empty-state-title">No grading rules yet</h3>
+            <p class="empty-state-description">
+              Click on any cell in the spreadsheet to create a grading rule for that cell's value or formula.
+            </p>
+            <div class="empty-state-hint">
+              <mat-icon>arrow_forward</mat-icon>
+              <span>Select a cell to get started</span>
+            </div>
+          </div>
           <div
             cdkDropList
             class="facet-drop-list"

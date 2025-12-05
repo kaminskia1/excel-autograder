@@ -33,6 +33,8 @@ export class DashboardComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Assignment>(this.assignments);
 
+  isLoading = true;
+
   constructor(
     public dialog: MatDialog,
     public assignmentService: AssignmentService,
@@ -47,6 +49,7 @@ export class DashboardComponent implements OnInit {
         (assignment) => this.assignmentFactory.create(assignment),
       );
       this.dataSource.data = this.assignments;
+      this.isLoading = false;
     });
   }
 

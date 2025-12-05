@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntil } from 'rxjs/operators';
 import * as _ from 'underscore';
 import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
@@ -23,6 +24,7 @@ import {
   Submission,
 } from '../../models/submission/submission';
 import { SubmissionService } from '../../models/submission/submission.service';
+import { DestroyService } from '../../core/services';
 
 interface ParsedFacetInfo {
   label: string;
@@ -34,6 +36,7 @@ interface ParsedFacetInfo {
   selector: 'app-grader',
   templateUrl: './grader.component.html',
   styleUrls: ['./grader.component.scss'],
+  providers: [DestroyService],
 })
 export class GraderComponent implements OnInit {
   masterAssignment: Assignment | null = null;
@@ -59,18 +62,19 @@ export class GraderComponent implements OnInit {
     public submissionService: SubmissionService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private destroy$: DestroyService,
   ) { }
 
   ngOnInit(): void {
     // Resolve assignment id => Resolve assignment obj => Resolve workbook file => Enable workbook
-    this.route.paramMap.subscribe(
-      (params: ParamMap) => {
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params: ParamMap) => {
         const id = params.get('id');
         if (id) {
           this.registerAssignment(id);
         }
-      },
-    );
+      });
   }
 
   registerAssignment(id: string) {
@@ -132,6 +136,10 @@ export class GraderComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        // Clear active submission if it's the one being removed
+        if (this.activeSubmission === submission) {
+          this.activeSubmission = null;
+        }
         this.submissions = this.submissions.filter((f) => f !== submission);
         this.submissionTable.data = this.submissions;
       }

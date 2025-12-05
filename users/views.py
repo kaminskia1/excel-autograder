@@ -53,3 +53,36 @@ class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+
+
+class UserMe(APIView):
+    """Get current user info or update metadata"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Return current user info"""
+        user = request.user
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            'uuid': str(user.pk),
+            'username': user.username,
+            'email': user.email,
+            'token': token.key,
+        })
+
+    def patch(self, request):
+        """Update user metadata"""
+        user = request.user
+        if 'metadata' in request.data:
+            user.metadata = request.data['metadata']
+            user.save()
+        return Response({
+            'uuid': str(user.pk),
+            'username': user.username,
+            'email': user.email,
+            'metadata': user.metadata,
+        })
+
+    def post(self, request):
+        """Alias for patch - update user metadata"""
+        return self.patch(request)

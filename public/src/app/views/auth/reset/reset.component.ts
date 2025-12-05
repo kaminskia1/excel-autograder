@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserCredentialsNew, UserCredentialsReset } from '../../../models/user/user';
+import { UserCredentialsReset } from '../../../models/user/user';
 import { UserService } from '../../../models/user/user.service';
+
+interface ResetForm {
+  username: FormControl<string>;
+}
 
 @Component({
   selector: 'app-reset',
@@ -10,25 +14,27 @@ import { UserService } from '../../../models/user/user.service';
   styleUrls: ['./reset.component.scss'],
 })
 export class ResetComponent {
-  resetForm;
+  resetForm: FormGroup<ResetForm>;
 
   submitted = false;
 
   constructor(
-    private formBuilder: FormBuilder,
     private userService: UserService,
     private snackBar: MatSnackBar,
   ) {
-    this.resetForm = formBuilder.group({
-      username: ['', Validators.required],
+    this.resetForm = new FormGroup<ResetForm>({
+      username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     });
   }
 
-  onSubmit(formData: Partial<UserCredentialsReset>): void {
+  onSubmit(): void {
     if (this.resetForm.invalid) {
       this.snackBar.open('Error resetting password!', 'Close', { duration: 1500 });
     } else {
-      this.userService.reset(formData as UserCredentialsNew).subscribe(() => {
+      const formData: UserCredentialsReset = {
+        username: this.resetForm.controls.username.value,
+      };
+      this.userService.reset(formData).subscribe(() => {
         this.resetForm.controls.username.setValue('');
         this.submitted = true;
       });

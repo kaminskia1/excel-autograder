@@ -1,11 +1,20 @@
 import { Component, EventEmitter, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   Assignment,
   IAssignment, IAssignmentPartial,
 } from '../../../models/assignment/assignment';
 import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
+import { Question } from '../../../models/question/question';
+
+interface NewAssignmentForm {
+  name: FormControl<string>;
+  file: FormControl<File | null>;
+  encrypted: FormControl<boolean>;
+  key: FormControl<string>;
+  questions: FormControl<Question[]>;
+}
 
 @Component({
   selector: 'app-new-assignment-dialog',
@@ -13,47 +22,46 @@ import { AssignmentFactory } from '../../../models/assignment/assignment.factory
   styleUrls: ['./new-assignment-dialog.component.scss'],
 })
 export class NewAssignmentDialogComponent {
-  newAssignmentForm;
+  newAssignmentForm: FormGroup<NewAssignmentForm>;
   newAssignment: Assignment;
 
   constructor(
-    private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<NewAssignmentDialogComponent>,
     public assignmentFactory: AssignmentFactory,
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
     this.newAssignment = this.assignmentFactory.create({} as IAssignmentPartial);
-    this.newAssignmentForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      file: [null as File | null, Validators.required],
-      encrypted: [false],
-      key: [''],
-      questions: [[]],
+    this.newAssignmentForm = new FormGroup<NewAssignmentForm>({
+      name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      file: new FormControl<File | null>(null, { validators: [Validators.required] }),
+      encrypted: new FormControl(false, { nonNullable: true }),
+      key: new FormControl('', { nonNullable: true }),
+      questions: new FormControl<Question[]>([], { nonNullable: true }),
     });
 
-    this.newAssignmentForm.get('encrypted')?.valueChanges.subscribe((value) => {
+    this.newAssignmentForm.controls.encrypted.valueChanges.subscribe((value) => {
       if (value) {
-        this.newAssignmentForm.get('key')?.setValidators([Validators.required]);
+        this.newAssignmentForm.controls.key.setValidators([Validators.required]);
       } else {
-        this.newAssignmentForm.get('key')?.clearValidators();
+        this.newAssignmentForm.controls.key.clearValidators();
       }
-      this.newAssignmentForm.get('key')?.updateValueAndValidity();
+      this.newAssignmentForm.controls.key.updateValueAndValidity();
     });
   }
 
   create() {
     if (this.newAssignmentForm.invalid) return;
 
-    const { name } = this.newAssignmentForm.value;
+    const name = this.newAssignmentForm.controls.name.value;
     if (name) this.newAssignment.name = name;
 
-    const { file } = this.newAssignmentForm.value;
+    const file = this.newAssignmentForm.controls.file.value;
     if (file) this.newAssignment.setFile(file);
 
-    const { encrypted } = this.newAssignmentForm.value;
-    if (encrypted != null) this.newAssignment.encrypted = encrypted;
+    const encrypted = this.newAssignmentForm.controls.encrypted.value;
+    this.newAssignment.encrypted = encrypted;
 
-    const { key } = this.newAssignmentForm.value;
+    const key = this.newAssignmentForm.controls.key.value;
     if (key) this.newAssignment.setKey(key);
     
     // Create a default problem

@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { Component, EventEmitter, Inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
@@ -12,18 +12,21 @@ import {
 } from '../../../models/assignment/assignment';
 import { QuestionFactory } from '../../../models/question/question.factory';
 
+interface ImportAssignmentForm {
+  data: FormControl<string>;
+}
+
 @Component({
   selector: 'app-import-assignment-dialog',
   templateUrl: './import-assignment-dialog.component.html',
   styleUrls: ['./import-assignment-dialog.component.scss'],
 })
 export class ImportAssignmentDialogComponent {
-  importAssignmentForm;
+  importAssignmentForm: FormGroup<ImportAssignmentForm>;
 
   newAssignment: Assignment;
 
   constructor(
-    private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<ImportAssignmentDialogComponent>,
     public assignmentFactory: AssignmentFactory,
     private snackBar: MatSnackBar,
@@ -31,8 +34,8 @@ export class ImportAssignmentDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
     this.newAssignment = this.assignmentFactory.create({} as IAssignmentPartial);
-    this.importAssignmentForm = this.formBuilder.group({
-      data: ['', Validators.required],
+    this.importAssignmentForm = new FormGroup<ImportAssignmentForm>({
+      data: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     });
   }
 
@@ -49,7 +52,7 @@ export class ImportAssignmentDialogComponent {
     };
 
     if (this.importAssignmentForm.invalid) return;
-    const { data } = this.importAssignmentForm.value;
+    const data = this.importAssignmentForm.controls.data.value;
     if (!data) return;
     let ea: EncodedAssignment | null = null;
     try {

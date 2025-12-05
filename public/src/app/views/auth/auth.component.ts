@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { UserService } from '../../models/user/user.service';
@@ -11,6 +11,12 @@ enum PAGE {
   RESET = 'Reset'
 }
 
+interface LoginForm {
+  username: FormControl<string>;
+  password: FormControl<string>;
+  rememberMe: FormControl<boolean>;
+}
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -19,29 +25,32 @@ enum PAGE {
 export class AuthComponent {
   page: PAGE = PAGE.LOGIN;
 
-  logInForm;
+  logInForm: FormGroup<LoginForm>;
 
   failedLogin = false;
 
   constructor(
-    private formBuilder: FormBuilder,
     private userService: UserService,
     private snackBar: MatSnackBar,
     private router: Router,
   ) {
-    this.logInForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      rememberMe: [false],
+    this.logInForm = new FormGroup<LoginForm>({
+      username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      rememberMe: new FormControl(false, { nonNullable: true }),
     });
   }
 
-  onSubmit(formData: Partial<UserCredentials>): void {
+  onSubmit(): void {
     if (this.logInForm.invalid) {
       this.failedLogin = true;
       this.snackBar.open('Error signing in!', 'Close', { duration: 1500 });
     } else {
-      this.userService.login(formData as UserCredentials).subscribe({
+      const credentials: UserCredentials = {
+        username: this.logInForm.controls.username.value,
+        password: this.logInForm.controls.password.value,
+      };
+      this.userService.login(credentials).subscribe({
         error: () => {
           this.failedLogin = true;
           this.logInForm.controls.password.setValue('');

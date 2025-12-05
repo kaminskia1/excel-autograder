@@ -1,4 +1,4 @@
-<form *ngIf="resetForm && !submitted" [formGroup]="resetForm" (ngSubmit)="onSubmit(resetForm.value)">
+<form *ngIf="resetForm && !submitted" [formGroup]="resetForm" (ngSubmit)="onSubmit()">
   <mat-form-field class="d-block" appearance="fill">
     <mat-label>Username</mat-label>
     <input matInput formControlName="username">

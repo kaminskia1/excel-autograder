@@ -1,0 +1,81 @@
+// Container styling for empty state
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px);
+}
+
+// Empty state styles
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 48px 24px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+  border-radius: 50%;
+  margin-bottom: 28px;
+  animation: float 3s ease-in-out infinite;
+
+  .mat-icon {
+    font-size: 44px;
+    width: 44px;
+    height: 44px;
+    color: #3f51b5;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.empty-state-title {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.empty-state-description {
+  margin: 0 0 32px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 360px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.empty-state-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+

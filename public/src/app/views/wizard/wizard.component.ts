@@ -10,6 +10,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs/operators';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
@@ -20,11 +21,13 @@ import { FacetType } from '../../models/question/facet/types/lib';
 import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { DestroyService } from '../../core/services';
 
 @Component({
   selector: 'app-wizard',
   templateUrl: './wizard.component.html',
   styleUrls: ['./wizard.component.scss'],
+  providers: [DestroyService],
 })
 export class WizardComponent implements AfterViewInit, OnDestroy {
   @ViewChild('questionNameInput') questionNameInput!: ElementRef<HTMLInputElement>;
@@ -52,18 +55,19 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private destroy$: DestroyService,
   ) { }
 
   ngAfterViewInit() {
     // Resolve assignment id => Resolve assignment obj => Resolve workbook file => Enable workbook
-    this.route.paramMap.subscribe(
-      (params: ParamMap) => {
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params: ParamMap) => {
         const id = params.get('id');
         if (id) {
           this.registerAssignment(id);
         }
-      },
-    );
+      });
   }
 
   ngOnDestroy() {

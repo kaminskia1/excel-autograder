@@ -7,7 +7,7 @@
       </mat-card-header>
       <mat-card-content>
         <mat-divider class="mt-2 mb-3"></mat-divider>
-        <form *ngIf="page === PAGE.LOGIN" [formGroup]="logInForm" (ngSubmit)="onSubmit(logInForm.value)">
+        <form *ngIf="page === PAGE.LOGIN" [formGroup]="logInForm" (ngSubmit)="onSubmit()">
           <mat-form-field class="d-block" appearance="fill">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username">
