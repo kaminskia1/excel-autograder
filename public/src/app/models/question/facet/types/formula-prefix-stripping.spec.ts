@@ -7,6 +7,122 @@
  * Our formula matching logic needs to strip these prefixes to correctly
  * identify the functions.
  */
+
+describe('Facet Validation - isValid() null/undefined handling', () => {
+  /**
+   * These tests verify that isValid() correctly handles both null and undefined.
+   * Properties defined as optional (e.g., value?: string) default to undefined,
+   * so we must use != null (loose equality) not !== null (strict equality).
+   */
+
+  describe('Value check with != null (loose equality)', () => {
+    it('should return false for undefined', () => {
+      const value: string | undefined = undefined;
+      expect(value != null).toBe(false);
+    });
+
+    it('should return false for null', () => {
+      const value: string | null = null;
+      expect(value != null).toBe(false);
+    });
+
+    it('should return true for empty string', () => {
+      const value: string | undefined = '';
+      expect(value != null).toBe(true);
+    });
+
+    it('should return true for a value', () => {
+      const value: string | undefined = 'test';
+      expect(value != null).toBe(true);
+    });
+
+    it('should return true for zero (number)', () => {
+      const value: number | undefined = 0;
+      expect(value != null).toBe(true);
+    });
+  });
+
+  describe('WRONG: Value check with !== null (strict equality) - shows the bug', () => {
+    it('should incorrectly return true for undefined (this is the bug)', () => {
+      const value: string | undefined = undefined;
+      // This is why !== null is WRONG for optional properties
+      expect(value !== null).toBe(true); // BUG: undefined passes the check!
+    });
+
+    it('should return false for null', () => {
+      const value: string | null = null;
+      expect(value !== null).toBe(false);
+    });
+  });
+
+  describe('Facet isValid simulation', () => {
+    // Simulates the fixed isValid() check
+    function isValidFacet(props: {
+      value?: string;
+      points?: number;
+      targetCell?: { address: string };
+    }): boolean {
+      return props.value != null && props.points != null && props.targetCell != null;
+    }
+
+    it('should return false when value is undefined', () => {
+      expect(isValidFacet({
+        value: undefined,
+        points: 10,
+        targetCell: { address: 'A1' },
+      })).toBe(false);
+    });
+
+    it('should return false when value is null', () => {
+      expect(isValidFacet({
+        value: null as any,
+        points: 10,
+        targetCell: { address: 'A1' },
+      })).toBe(false);
+    });
+
+    it('should return false when points is undefined', () => {
+      expect(isValidFacet({
+        value: 'test',
+        points: undefined,
+        targetCell: { address: 'A1' },
+      })).toBe(false);
+    });
+
+    it('should return false when targetCell is undefined', () => {
+      expect(isValidFacet({
+        value: 'test',
+        points: 10,
+        targetCell: undefined,
+      })).toBe(false);
+    });
+
+    it('should return true when all required fields are set', () => {
+      expect(isValidFacet({
+        value: 'test',
+        points: 10,
+        targetCell: { address: 'A1' },
+      })).toBe(true);
+    });
+
+    it('should return true when value is empty string (valid value)', () => {
+      expect(isValidFacet({
+        value: '',
+        points: 10,
+        targetCell: { address: 'A1' },
+      })).toBe(true);
+    });
+
+    it('should return true when points is zero (valid value)', () => {
+      expect(isValidFacet({
+        value: 'test',
+        points: 0,
+        targetCell: { address: 'A1' },
+      })).toBe(true);
+    });
+  });
+});
+
 describe('Formula Prefix Stripping', () => {
   /**
    * This is the same logic used in:

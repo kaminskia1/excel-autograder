@@ -17,7 +17,22 @@
     [placeholder]="facet.getDefaultName()"
   />
   <div class="spacer"></div>
-  <button mat-button matTooltip="Delete" matTooltipPosition="above" (click)="remove()">Delete</button>
+  <mat-icon 
+    *ngIf="!facet.isValid()" 
+    class="validation-warning-icon" 
+    matTooltip="This attribute is missing required configuration" 
+    matTooltipPosition="above">
+    warning
+  </mat-icon>
+  <button mat-icon-button [matMenuTriggerFor]="facetMenu" class="facet-menu-button">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #facetMenu="matMenu">
+    <button mat-menu-item (click)="remove()">
+      <mat-icon>delete</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
 </div>
 <div class="facet-content-wrapper">
   <ng-container #facetContent></ng-container>

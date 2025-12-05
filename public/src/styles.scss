@@ -42,9 +42,14 @@ body {
 .red {
   color: #F44336;
 }
-
+.orange {
+  color: #f57c00;
+}
 .yellow {
   color: #FFEB3B;
+}
+.gray {
+  color: #9e9e9e;
 }
 
 // CDK Drag and Drop - smooth fade-in for drag preview
@@ -59,5 +64,12 @@ body {
   to {
     opacity: 1;
   }
+}
+
+// Dialog actions - consistent padding and alignment
+[mat-dialog-actions] {
+  padding: 16px 24px !important;
+  margin: 0 !important;
+  gap: 8px;
 }
 

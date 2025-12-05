@@ -1,0 +1,31 @@
+<div 
+  class="file-input-container" 
+  [class.drag-over]="isDragOver"
+  [class.has-file]="value"
+  (click)="openFilePicker()">
+  
+  <input
+    #fileInput
+    type="file"
+    [accept]="accept"
+    [disabled]="disabled"
+    (change)="onFileSelected($event)"
+    hidden
+  />
+  
+  <div class="file-input-content">
+    <mat-icon class="file-icon">{{ value ? 'insert_drive_file' : 'upload_file' }}</mat-icon>
+    <span class="file-text" *ngIf="value">{{ value.name }}</span>
+    <span class="file-text placeholder" *ngIf="!value">{{ placeholder || 'Choose or drop a file' }}</span>
+  </div>
+  
+  <button
+    *ngIf="value && !disabled"
+    mat-icon-button
+    type="button"
+    class="clear-button"
+    (click)="clearFile($event)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>

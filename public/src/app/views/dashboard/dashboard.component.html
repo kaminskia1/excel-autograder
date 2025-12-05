@@ -16,16 +16,28 @@
       </th>
       <td mat-cell *matCellDef="let assignment">
         <div class="float-end">
-          <div class="d-inline-block" [matTooltip]="assignment.questions.length === 1 ? '1 Question' : assignment.questions.length + ' Questions'" matTooltipPosition="above">
-            <button mat-icon-button disabled *ngIf="assignment.questions.length">
-              <mat-icon>check_circle_outline</mat-icon>
+          <!-- Has no facets - show warning -->
+          <div class="d-inline-block"
+            *ngIf="assignment.questions.length && !hasAnyFacets(assignment)"
+            matTooltip="No attributes configured" 
+            matTooltipPosition="above">
+            <button mat-icon-button disabled>
+              <mat-icon class="orange">warning</mat-icon>
+            </button>
+          </div>
+          <!-- Has invalid facets - show warning -->
+          <div class="d-inline-block"
+            *ngIf="assignment.questions.length && hasAnyFacets(assignment) && !areAllFacetsValid(assignment)"
+            [matTooltip]="countInvalidFacets(assignment) === 1 ? '1 Invalid Attribute' : countInvalidFacets(assignment) + ' Invalid Attributes'" 
+            matTooltipPosition="above">
+            <button mat-icon-button disabled>
+              <mat-icon class="orange">warning</mat-icon>
             </button>
           </div>
           <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" [routerLink]="'/wizard/' + assignment.uuid">
             <mat-icon>edit</mat-icon>
           </button>
-          <!-- @TODO: Also check that atleast 1 facet exists -->
-          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" *ngIf="assignment.questions.length" [disabled]="!assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
+          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" *ngIf="assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
             <mat-icon class="green">play_arrow</mat-icon>
           </button>
           <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">

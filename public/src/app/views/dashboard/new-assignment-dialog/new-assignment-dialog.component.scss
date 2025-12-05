@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+h1[mat-dialog-title] {
+  margin-bottom: 16px;
+}
+
+mat-form-field {
+  margin-bottom: 8px;
+  
+  // File input specific styles
+  &:has(app-file-input) {
+    // Remove blue border on focus
+    &.mat-focused ::ng-deep .mdc-notched-outline__leading,
+    &.mat-focused ::ng-deep .mdc-notched-outline__notch,
+    &.mat-focused ::ng-deep .mdc-notched-outline__trailing {
+      border-color: rgba(0, 0, 0, 0.38) !important;
+      border-width: 1px !important;
+    }
+    
+    // Add blue border when dragging file over or hovering on input area
+    &:has(app-file-input.drag-over) ::ng-deep .mdc-notched-outline__leading,
+    &:has(app-file-input.drag-over) ::ng-deep .mdc-notched-outline__notch,
+    &:has(app-file-input.drag-over) ::ng-deep .mdc-notched-outline__trailing,
+    &:has(app-file-input:hover) ::ng-deep .mdc-notched-outline__leading,
+    &:has(app-file-input:hover) ::ng-deep .mdc-notched-outline__notch,
+    &:has(app-file-input:hover) ::ng-deep .mdc-notched-outline__trailing {
+      border-color: #3f51b5 !important;
+    }
+    
+    // Turn label blue when dragging file over or hovering on input area
+    &:has(app-file-input.drag-over) ::ng-deep .mdc-floating-label,
+    &:has(app-file-input:hover) ::ng-deep .mdc-floating-label {
+      color: #3f51b5 !important;
+    }
+  }
+}
+

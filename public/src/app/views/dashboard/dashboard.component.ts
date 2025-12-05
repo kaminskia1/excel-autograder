@@ -68,14 +68,14 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.dialog.open(NewAssignmentDialogComponent, {
-      width: '300px',
+      width: '350px',
       data: newAssignmentEmitter,
     });
   }
 
   deleteItem(assignment: Assignment) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '400px',
+      width: '350px',
       data: {
         title: 'Confirm Delete?',
         message: 'This assignment will be permanently removed.',
@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit {
         };
         const encode = (str: string):string => Buffer.from(str, 'binary').toString('base64');
         this.dialog.open(ExportAssignmentDialogComponent, {
-          width: '300px',
+          width: '350px',
           data: encode(JSON.stringify(xp)),
         });
       });
@@ -156,7 +156,7 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.dialog.open(ImportAssignmentDialogComponent, {
-      width: '300px',
+      width: '350px',
       data: importAssignmentEmitter,
     });
   }
@@ -177,8 +177,42 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.dialog.open(EditAssignmentDialogComponent, {
-      width: '300px',
+      width: '350px',
       data: assignment,
     });
+  }
+
+  /**
+   * Check if all facets in an assignment are valid.
+   * Returns true if the assignment has questions with facets and all facets are valid.
+   * Returns false if any facet is invalid.
+   */
+  areAllFacetsValid(assignment: Assignment): boolean {
+    const questions = assignment.getQuestions();
+    if (!questions.length) return false;
+    
+    // Check if there's at least one facet across all questions
+    const hasFacets = questions.some(q => q.getFacets().length > 0);
+    if (!hasFacets) return false;
+    
+    // Check if all facets are valid
+    return questions.every(q => 
+      q.getFacets().every(f => f.isValid())
+    );
+  }
+
+  /**
+   * Check if an assignment has any facets at all.
+   */
+  hasAnyFacets(assignment: Assignment): boolean {
+    return assignment.getQuestions().some(q => q.getFacets().length > 0);
+  }
+
+  /**
+   * Count the number of invalid facets in an assignment.
+   */
+  countInvalidFacets(assignment: Assignment): number {
+    return assignment.getQuestions().reduce((count, q) => 
+      count + q.getFacets().filter(f => !f.isValid()).length, 0);
   }
 }

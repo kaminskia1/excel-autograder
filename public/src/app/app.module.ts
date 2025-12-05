@@ -62,6 +62,7 @@ import { ValueReviewComponent } from './models/question/facet/types/value.facet/
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 import { ExportDialogComponent } from './views/grader/export/export-dialog.component';
 import { FacetItemComponent } from './components/facet-item/facet-item.component';
+import { FileInputComponent } from './components/file-input/file-input.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { FacetItemComponent } from './components/facet-item/facet-item.component
     InfoDialogComponent,
     ExportDialogComponent,
     FacetItemComponent,
+    FileInputComponent,
   ],
   imports: [
     BrowserModule,

@@ -77,15 +77,16 @@
       </div>
     </div>
     <div class="col-7 ps-2">
-      <div class="mat-elevation-z2 mt-5" *ngIf="!areAllFacetsValid()">
+      <div class="mat-elevation-z2 mt-5" *ngIf="!hasAnyFacets() || !areAllFacetsValid()">
         <div class="p-4">
           <h3 class="red">Errors</h3>
           <ul>
-            <li>Not all attributes are valid. Please correct them before adding submissions.</li>
+            <li *ngIf="!hasAnyFacets()">No attributes configured. Please add attributes before grading submissions.</li>
+            <li *ngIf="hasAnyFacets() && !areAllFacetsValid()">Not all attributes are valid. Please correct them before adding submissions.</li>
           </ul>
         </div>
       </div>
-      <div class="dropzone mat-elevation-z2" *ngIf="areAllFacetsValid()" appDropzone (filesChange)="addSubmission($event)">
+      <div class="dropzone mat-elevation-z2" *ngIf="hasAnyFacets() && areAllFacetsValid()" appDropzone (filesChange)="addSubmission($event)">
         <div class="wrapper">
           <input type="file" accept=".xlsx" id="files" (change)="addSubmission($event.target)" multiple>
           <div class="d-flex align-items-center justify-content-center">
@@ -94,7 +95,7 @@
           </div>
         </div>
       </div>
-      <div class="mat-elevation-z2 mt-4" *ngIf="areAllFacetsValid()">
+      <div class="mat-elevation-z2 mt-4" *ngIf="hasAnyFacets() && areAllFacetsValid()">
         <div class="d-flex pt-4 ps-4 pe-4 pb-2">
           <h2>Submissions</h2>
           <div class="spacer"></div>

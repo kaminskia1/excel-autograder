@@ -14,7 +14,6 @@ import { AssignmentFactory } from '../../../models/assignment/assignment.factory
 })
 export class NewAssignmentDialogComponent {
   newAssignmentForm;
-
   newAssignment: Assignment;
 
   constructor(
@@ -26,7 +25,7 @@ export class NewAssignmentDialogComponent {
     this.newAssignment = this.assignmentFactory.create({} as IAssignmentPartial);
     this.newAssignmentForm = this.formBuilder.group({
       name: ['', Validators.required],
-      file: [null, Validators.required],
+      file: [null as File | null, Validators.required],
       encrypted: [false],
       key: [''],
       questions: [[]],
@@ -40,13 +39,6 @@ export class NewAssignmentDialogComponent {
       }
       this.newAssignmentForm.get('key')?.updateValueAndValidity();
     });
-  }
-
-  filePicked(event: Event) {
-   // @ts-ignore
-    const file = (event.target as HTMLInputElement).files[0];
-   // @ts-ignore
-    this.newAssignmentForm.patchValue({ file: file});
   }
 
   create() {
@@ -63,9 +55,11 @@ export class NewAssignmentDialogComponent {
 
     const { key } = this.newAssignmentForm.value;
     if (key) this.newAssignment.setKey(key);
+    
+    // Create a default problem
+    this.newAssignment.addQuestion();
+    
     this.data.emit(this.newAssignment);
     this.dialogRef.close();
   }
-
-  protected readonly console = console;
 }

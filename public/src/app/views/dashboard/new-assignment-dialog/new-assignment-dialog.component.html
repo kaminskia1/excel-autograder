@@ -1,15 +1,28 @@
-
 <h1 mat-dialog-title>New Assignment</h1>
 <form [formGroup]="newAssignmentForm" (ngSubmit)="create()">
   <div mat-dialog-content>
-    <p>Name</p>
-      <input formControlName="name">
-    <p>File</p>
-      <input type="file" #file (change)="filePicked($event)"/>
-    <p *ngIf="newAssignmentForm.value.encrypted">File Password</p>
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Assignment name">
+    </mat-form-field>
+    
+    <mat-form-field class="w-100" appearance="outline">
+      <mat-label>Answer Key File</mat-label>
+      <app-file-input 
+        formControlName="file" 
+        accept=".xlsx,.xls"
+        placeholder="Click or drop Excel file here">
+      </app-file-input>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline" *ngIf="newAssignmentForm.value.encrypted">
+      <mat-label>File Password</mat-label>
+      <input matInput formControlName="key" type="password" placeholder="Enter password">
+    </mat-form-field>
   </div>
-  <div mat-dialog-actions class="container">
-    <button mat-button color="primary" type="submit" cdkFocusInitial>Ok</button>
-    <button mat-button (click)="dialogRef.close()">Cancel</button>
+  
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="dialogRef.close()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="!newAssignmentForm.valid" cdkFocusInitial>Create</button>
   </div>
 </form>

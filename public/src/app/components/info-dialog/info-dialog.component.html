@@ -2,6 +2,6 @@
 <div mat-dialog-content>
   {{data.message}}
 </div>
-<div mat-dialog-actions class="container">
-  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" (click)="dialogRef.close()">{{ data.action ? data.action : 'Close'}}</button>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" (click)="dialogRef.close()">{{ data.action ? data.action : 'Close'}}</button>
 </div>

@@ -20,7 +20,7 @@ export class EditAssignmentDialogComponent {
   ) {
     this.assignmentForm = this.formBuilder.group({
       name: [data.name, Validators.required],
-      file: [null],
+      file: [null as File | null],
       encrypted: [false],
       key: [''],
       questions: [[]],
@@ -35,13 +35,6 @@ export class EditAssignmentDialogComponent {
       }
       this.assignmentForm.get('key')?.updateValueAndValidity();
     });
-  }
-
-  filePicked(event: Event) {
-   // @ts-ignore
-    const file = (event.target as HTMLInputElement).files[0];
-   // @ts-ignore
-    this.assignmentForm.patchValue({ file: file});
   }
 
   update() {

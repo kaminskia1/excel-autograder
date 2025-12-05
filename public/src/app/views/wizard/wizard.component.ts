@@ -156,9 +156,26 @@ export class WizardComponent implements AfterViewInit {
     this.setActiveQuestion(questions[idx + 1]);
   }
 
+  // Timeout IDs for animation - stored to allow cancellation on rapid clicks
+  private fadeOutTimeout: ReturnType<typeof setTimeout> | null = null;
+  private fadeInTimeout: ReturnType<typeof setTimeout> | null = null;
+  
+  facetAreaFading = false;
+
   setActiveQuestion(question: Question | null) {
+    // Clear any pending animation timeouts to prevent race conditions
+    if (this.fadeOutTimeout) {
+      clearTimeout(this.fadeOutTimeout);
+      this.fadeOutTimeout = null;
+    }
+    if (this.fadeInTimeout) {
+      clearTimeout(this.fadeInTimeout);
+      this.fadeInTimeout = null;
+    }
+    
     if (!question) {
       this.activeQuestion = null;
+      this.facetAreaFading = false;
       return;
     }
     
@@ -170,32 +187,29 @@ export class WizardComponent implements AfterViewInit {
     if (!wasShowingList) {
       // Facet area is visible - fade out, change, fade in
       this.facetAreaFading = true;
-      setTimeout(() => {
+      this.fadeOutTimeout = setTimeout(() => {
         this.activeQuestion = question;
         this.cdr.detectChanges();
-        setTimeout(() => {
+        this.fadeInTimeout = setTimeout(() => {
           this.facetAreaFading = false;
           this.cdr.detectChanges();
         }, 10);
       }, 75);
     } else {
-      // Facet area is hidden - just switch and fade in
+      // Facet area is hidden (list is shown) - close list, switch question, fade in
       this.activeQuestion = question;
+      // Close the list first so facet area becomes visible (display changes from none to block)
+      this.questionListShown = false;
+      // Now set fading state so facet area starts at opacity 0
       this.facetAreaFading = true;
-      // Close the list if user hasn't toggled it
-      if (this.questionListShown) {
-        this.questionListShown = false;
-      }
       this.cdr.detectChanges();
       // Small delay to let DOM update before fading in
-      setTimeout(() => {
+      this.fadeInTimeout = setTimeout(() => {
         this.facetAreaFading = false;
         this.cdr.detectChanges();
       }, 10);
     }
   }
-  
-  facetAreaFading = false;
 
   addFacetComponent(facet: Facet) {
     // Facet is added to question, Angular will render it via *ngFor

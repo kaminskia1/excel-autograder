@@ -150,6 +150,13 @@ export class GraderComponent implements OnInit {
     );
   }
 
+  hasAnyFacets(): boolean {
+    if (!this.masterAssignment) return false;
+    return this.masterAssignment.getQuestions().some(
+      (que) => que.getFacets().length > 0,
+    );
+  }
+
   openEditDialog() {
     if (!this.masterAssignment) return;
     if (!this.submissions.length) {
