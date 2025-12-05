@@ -32,8 +32,8 @@ export class FormulaRegexFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
-      `Expression: ${this.expression ?? 'Not set'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
+      `Expression:${this.expression ? ' ' + this.expression : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 
@@ -66,12 +66,11 @@ export class FormulaRegexFacet extends Facet implements
 
   isValid(): boolean {
     if (!this.expression) return false;
-    let expression;
     try {
-      expression = new RegExp(this.expression);
+      new RegExp(this.expression);
     } catch {
       return false;
     }
-    return expression !== null && this.points != null && this.targetCell !== null;
+    return this.points != null && this.targetCell != null;
   }
 }

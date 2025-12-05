@@ -35,9 +35,9 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
 
   getInfo(): Array<string> {
     return [
-      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
-      `Lower Bounds: ${this.lowerBounds ?? 'Not set'}`,
-      `Upper Bounds: ${this.upperBounds ?? 'Not set'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
+      `Lower Bounds:${this.lowerBounds != null ? ' ' + this.lowerBounds : '&nbsp;<span class="red">Not set</span>'}`,
+      `Upper Bounds:${this.upperBounds != null ? ' ' + this.upperBounds : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 
@@ -65,7 +65,7 @@ export class ValueRangeFacet extends Facet implements IValueRangeFacet,
   }
 
   isValid(): boolean {
-    return this.lowerBounds !== null && this.upperBounds !== null
-      && this.points != null && this.targetCell !== null;
+    return this.lowerBounds != null && this.upperBounds != null
+      && this.points != null && this.targetCell != null;
   }
 }

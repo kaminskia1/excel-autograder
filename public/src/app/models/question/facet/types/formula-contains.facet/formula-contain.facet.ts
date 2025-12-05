@@ -31,8 +31,9 @@ export class FormulaContainsFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
-      `Formula: ${this.formula ?? 'Not set'}`];
+      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
+      `Formula:${this.formula ? ' ' + this.formula : '&nbsp;<span class="red">Not set</span>'}`,
+    ];
   }
 
   getSerializable(): IFormulaContainsFacetPartial {
@@ -58,6 +59,6 @@ export class FormulaContainsFacet extends Facet implements
   }
 
   isValid(): boolean {
-    return this.formula !== null && this.points != null && this.targetCell !== null;
+    return this.formula != null && this.points != null && this.targetCell != null;
   }
 }

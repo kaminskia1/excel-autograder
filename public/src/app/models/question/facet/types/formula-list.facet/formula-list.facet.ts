@@ -45,8 +45,8 @@ export class FormulaListFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell: ${this.targetCell.address.toString() ?? 'Not set'}`,
-      `Formulas: ${this.formulas?.toString() ?? 'Not set'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
+      `Formulas:${this.formulas?.length ? ' ' + this.formulas.toString() : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 
