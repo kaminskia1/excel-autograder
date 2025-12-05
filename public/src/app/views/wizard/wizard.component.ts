@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignmentService } from '../../models/assignment/assignment.service';
@@ -45,6 +45,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     public workbookService: WorkbookService,
     public assignmentService: AssignmentService,
     public assignmentFactory: AssignmentFactory,
@@ -78,10 +79,19 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
   }
 
   registerAssignment(id: string) {
-    this.assignmentService.retrieve(id).subscribe((iAssignment) => {
-      const assignment = this.assignmentFactory.create(iAssignment);
-      this.activeAssignment = assignment;
-      this.activateWorkbook(assignment);
+    this.assignmentService.retrieve(id).subscribe({
+      next: (iAssignment) => {
+        const assignment = this.assignmentFactory.create(iAssignment);
+        this.activeAssignment = assignment;
+        this.activateWorkbook(assignment);
+      },
+      error: (err) => {
+        const message = err.status === 404 
+          ? 'Assignment not found' 
+          : 'You do not have permission to access this assignment';
+        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.router.navigate(['/']);
+      },
     });
   }
 

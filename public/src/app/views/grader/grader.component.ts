@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'underscore';
 import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
@@ -57,6 +58,7 @@ export class GraderComponent implements OnInit {
     public assignmentFactory: AssignmentFactory,
     public submissionService: SubmissionService,
     public dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -72,11 +74,20 @@ export class GraderComponent implements OnInit {
   }
 
   registerAssignment(id: string) {
-    this.assignmentService.retrieve(id).subscribe((iAssignment) => {
-      const assignment = this.assignmentFactory.create(iAssignment);
-      this.masterAssignment = assignment;
-      this.submissions = this.submissionService.retrieve(assignment);
-      this.activateWorkbook(assignment);
+    this.assignmentService.retrieve(id).subscribe({
+      next: (iAssignment) => {
+        const assignment = this.assignmentFactory.create(iAssignment);
+        this.masterAssignment = assignment;
+        this.submissions = this.submissionService.retrieve(assignment);
+        this.activateWorkbook(assignment);
+      },
+      error: (err) => {
+        const message = err.status === 404 
+          ? 'Assignment not found' 
+          : 'You do not have permission to access this assignment';
+        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.router.navigate(['/']);
+      },
     });
   }
 

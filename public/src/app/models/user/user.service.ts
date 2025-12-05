@@ -20,15 +20,18 @@ export class UserService {
   ) {
     const user = localStorage.getItem('user');
     if (user) {
-      this.registerUser(JSON.parse(user));
+      // Restore user from localStorage without navigating (preserves current URL on refresh)
+      this.registerUser(JSON.parse(user), false);
     }
   }
 
-  private registerUser(user: User): void {
+  private registerUser(user: User, navigate: boolean = true): void {
     localStorage.setItem('user', JSON.stringify(user));
     ApiService.registerHeader('Authorization', `Token ${user.token}`);
     this.currentUser.next(user);
-    this.router.navigate(['/']);
+    if (navigate) {
+      this.router.navigate(['/']);
+    }
   }
 
   private deregisterUser(): void {
