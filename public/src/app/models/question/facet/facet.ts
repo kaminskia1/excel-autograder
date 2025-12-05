@@ -1,7 +1,7 @@
 import { Cell } from 'exceljs';
 import { IModel } from '../../model';
 import { WorkbookService } from '../../workbook/workbook.service';
-import { FacetType } from './types/lib';
+import { FacetType } from './types/facet-type.enum';
 import { ICellAddress, QuestionFlag } from '../misc';
 import { FancyWorkbook } from '../../workbook/workbook';
 

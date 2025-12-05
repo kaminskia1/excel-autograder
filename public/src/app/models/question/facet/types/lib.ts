@@ -14,15 +14,10 @@ import { FormulaRegexFacet } from './formula-regex.facet/formula-regex.facet';
 import { FormulaRegexCreateComponent } from './formula-regex.facet/create/formula-regex-create.component';
 import { ValueLengthFacet } from './value-length.facet/value-length.facet';
 import { ValueLengthCreateComponent } from './value-length.facet/create/value-length-create.component';
+import { FacetType } from './facet-type.enum';
 
-export enum FacetType {
-  FormulaContainsFacet = 'FormulaContainsFacet',
-  FormulaRegexFacet = 'FormulaRegexFacet',
-  FormulaListFacet = 'FormulaListFacet',
-  ValueFacet = 'ValueFacet',
-  ValueRangeFacet = 'ValueRangeFacet',
-  ValueLengthFacet = 'ValueLengthFacet',
-}
+// Re-export FacetType for backwards compatibility
+export { FacetType } from './facet-type.enum';
 
 export class FacetLibrary {
   static types = {

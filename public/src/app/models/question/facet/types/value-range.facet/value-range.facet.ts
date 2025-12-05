@@ -4,7 +4,7 @@ import {
 import { IModel } from '../../../../model';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import { FacetType } from '../lib';
+import { FacetType } from '../facet-type.enum';
 
 export interface IValueRangeFacetPartial extends IFacetPartial {
   lowerBounds?: number

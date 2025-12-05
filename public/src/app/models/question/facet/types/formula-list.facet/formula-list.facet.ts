@@ -4,7 +4,7 @@ import {
 } from '../../facet';
 import { IModel } from '../../../../model';
 import { WorkbookService } from '../../../../workbook/workbook.service';
-import { FacetType } from '../lib';
+import { FacetType } from '../facet-type.enum';
 import { FancyWorkbook } from '../../../../workbook/workbook';
 
 export interface IFormulaListFacetPartial extends IFacetPartial {
