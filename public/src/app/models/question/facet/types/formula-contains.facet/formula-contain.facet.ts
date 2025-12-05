@@ -51,8 +51,10 @@ export class FormulaContainsFacet extends Facet implements
     if (!this.formula) throw new Error('Formula cell not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell || !targetCell.formula) return 0;
+    // Strip Excel's internal function prefixes (used for newer functions like STDEV.S, CONCAT, IFS, etc.)
+    const cellFormula = targetCell.formula.replace(/_xlfn\./g, '').replace(/_xlws\./g, '');
     const cleaned = this.formula.replace(/"([^"]*")/g, '');
-    return targetCell.formula.includes(cleaned) ? this.points : 0;
+    return cellFormula.includes(cleaned) ? this.points : 0;
   }
 
   isValid(): boolean {

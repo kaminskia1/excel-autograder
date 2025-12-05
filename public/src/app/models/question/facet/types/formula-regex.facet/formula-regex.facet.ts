@@ -53,13 +53,15 @@ export class FormulaRegexFacet extends Facet implements
     if (!this.expression) throw new Error('Expression not set');
     const targetCell = workbook.getCell(this.targetCell);
     if (!targetCell || !targetCell.formula) return 0;
+    // Strip Excel's internal function prefixes (used for newer functions like STDEV.S, CONCAT, IFS, etc.)
+    const cellFormula = targetCell.formula.replace(/_xlfn\./g, '').replace(/_xlws\./g, '');
     let expression;
     try {
       expression = new RegExp(this.expression);
     } catch (e) {
       throw new Error('Error parsing regex');
     }
-    return expression.test(targetCell.formula) ? this.points : 0;
+    return expression.test(cellFormula) ? this.points : 0;
   }
 
   isValid(): boolean {

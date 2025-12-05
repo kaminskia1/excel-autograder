@@ -79,8 +79,10 @@ export class FormulaListFacet extends Facet implements
   }
 
   private recurse(workbook: FancyWorkbook, currentCell: Cell) {
-    const { formula } = currentCell;
+    let { formula } = currentCell;
     if (!formula) return;
+    // Strip Excel's internal function prefixes (used for newer functions like STDEV.S, CONCAT, IFS, etc.)
+    formula = formula.replace(/_xlfn\./g, '').replace(/_xlws\./g, '');
     // @TODO: Check for any other characters that may also need to be included
     const fns = formula.match(/[A-Z.]+\(/g);
     if (fns) {
