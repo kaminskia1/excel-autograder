@@ -190,13 +190,13 @@ export class DashboardComponent implements OnInit {
   areAllFacetsValid(assignment: Assignment): boolean {
     const questions = assignment.getQuestions();
     if (!questions.length) return false;
-    
+
     // Check if there's at least one facet across all questions
     const hasFacets = questions.some(q => q.getFacets().length > 0);
     if (!hasFacets) return false;
-    
+
     // Check if all facets are valid
-    return questions.every(q => 
+    return questions.every(q =>
       q.getFacets().every(f => f.isValid())
     );
   }
@@ -212,7 +212,7 @@ export class DashboardComponent implements OnInit {
    * Count the number of invalid facets in an assignment.
    */
   countInvalidFacets(assignment: Assignment): number {
-    return assignment.getQuestions().reduce((count, q) => 
+    return assignment.getQuestions().reduce((count, q) =>
       count + q.getFacets().filter(f => !f.isValid()).length, 0);
   }
 }

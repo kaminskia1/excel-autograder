@@ -82,8 +82,8 @@ export class GraderComponent implements OnInit {
         this.activateWorkbook(assignment);
       },
       error: (err) => {
-        const message = err.status === 404 
-          ? 'Assignment not found' 
+        const message = err.status === 404
+          ? 'Assignment not found'
           : 'This assignment does not exist or you do not have permission to access it.';
         this.snackBar.open(message, 'Close', { duration: 5000 });
         this.router.navigate(['/']);
@@ -126,8 +126,8 @@ export class GraderComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: {
-        title: 'Confirm Delete?',
-        message: 'This submission will be lost.',
+        title: 'Clear Submission?',
+        message: 'This submission will be removed.',
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -200,20 +200,20 @@ export class GraderComponent implements OnInit {
     if (colonIndex === -1) {
       return { label: info, value: '', isSet: true };
     }
-    
+
     const label = info.substring(0, colonIndex).trim();
     let value = info.substring(colonIndex + 1).trim();
-    
+
     // Check if value contains "Not set" span
     const isNotSet = value.includes('Not set');
-    
+
     if (isNotSet) {
       value = 'Not set';
     } else {
       // Remove &nbsp; if present
       value = value.replace(/&nbsp;/g, '').trim();
     }
-    
+
     return { label, value, isSet: !isNotSet };
   }
 
