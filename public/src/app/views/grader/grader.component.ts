@@ -138,6 +138,23 @@ export class GraderComponent implements OnInit {
     });
   }
 
+  clearSubmissions() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Clear All Submissions?',
+        message: `${this.submissions.length} submission${this.submissions.length === 1 ? '' : 's'} will be removed.`,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.submissions.length = 0;
+        this.submissionTable.data = this.submissions;
+        this.activeSubmission = null;
+      }
+    });
+  }
+
   getScore(workbook: FancyWorkbook): number {
     if (!this.masterAssignment) throw Error('No master assignment selected!');
     return this.masterAssignment.getQuestions()

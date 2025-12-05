@@ -155,6 +155,7 @@
           <div class="actions" class="float-end" *ngIf="submissions.length">
             <button mat-button color="primary" (click)="openReview()">Review</button>
             <button mat-button color="primary" class="ms-2" (click)="openExportConfirmDialog()">Export</button>
+            <button mat-button color="warn" class="ms-2" (click)="clearSubmissions()">Clear</button>
           </div>
         </div>
         <div class="p-4" *ngIf="!submissions.length">

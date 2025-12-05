@@ -88,7 +88,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
       error: (err) => {
         const message = err.status === 404 
           ? 'Assignment not found' 
-          : 'YouThis assignment does not exist or you do not have permission to access it.';
+          : 'This assignment does not exist or you do not have permission to access it.';
         this.snackBar.open(message, 'Close', { duration: 5000 });
         this.router.navigate(['/']);
       },
