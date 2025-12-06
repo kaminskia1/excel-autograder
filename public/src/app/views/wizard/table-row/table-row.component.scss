@@ -5,27 +5,33 @@
 }
 
 .action:hover {
-  background: rgba(0, 0, 0, .025);
+  background: var(--cell-hover-bg, rgba(0, 0, 0, .025));
 }
 
 .background {
   overflow: hidden;
-  border-bottom: 1px solid #E1E1E1;
-  border-right: 1px solid #E1E1E1;
+  border-bottom: 1px solid var(--excel-cell-border, #E1E1E1);
+  border-right: 1px solid var(--excel-cell-border, #E1E1E1);
 }
 
 .foreground {
   text-overflow: ellipsis;
   overflow: hidden;
-
 }
 
 .ro {
   margin-top: -1px;
 }
 
-
 .cell-active-hover:hover {
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
-  z-index:100;
+  box-shadow: 0 0 5px 0 var(--cell-active-shadow, rgba(0, 0, 0, 0.3));
+  z-index: 100;
+}
+
+// Cell highlight styles (when hovering over Target Cell input)
+.cell-active {
+  position: relative;
+  border-radius: 2px;
+  background: var(--cell-highlight-bg) !important;
+  border-color: var(--cell-highlight-border) !important;
 }

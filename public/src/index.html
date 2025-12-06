@@ -9,6 +9,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- FOUC Prevention: Apply theme before page renders -->
+  <script>
+    (function() {
+      var theme = localStorage.getItem('app_theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (theme === 'dark' || (theme === 'system' && prefersDark) || (!theme && prefersDark)) {
+        document.documentElement.style.colorScheme = 'dark';
+        document.documentElement.classList.add('dark-theme-pending');
+      }
+    })();
+  </script>
+  <style>
+    /* Hide body until Angular loads to prevent FOUC */
+    html.dark-theme-pending body {
+      background-color: #121212;
+      color: rgba(255, 255, 255, 0.87);
+    }
+  </style>
 </head>
 <body class="mat-typography">
   <app-root></app-root>

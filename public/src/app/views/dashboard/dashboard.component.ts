@@ -29,7 +29,7 @@ import {
 export class DashboardComponent implements OnInit {
   assignments: Array<Assignment> = [];
 
-  displayedColumns = ['name', 'updated_at', 'action'];
+  displayedColumns = ['name', 'status', 'updated_at', 'action'];
 
   dataSource = new MatTableDataSource<Assignment>(this.assignments);
 
@@ -217,5 +217,75 @@ export class DashboardComponent implements OnInit {
   countInvalidFacets(assignment: Assignment): number {
     return assignment.getQuestions().reduce((count, q) =>
       count + q.getFacets().filter(f => !f.isValid()).length, 0);
+  }
+
+  /**
+   * Get the status class for styling based on assignment state.
+   */
+  getStatusClass(assignment: Assignment): string {
+    if (!assignment.getQuestions().length) {
+      return 'status-setup';
+    }
+    if (!this.hasAnyFacets(assignment)) {
+      return 'status-setup';
+    }
+    if (!this.areAllFacetsValid(assignment)) {
+      return 'status-warning';
+    }
+    return 'status-ready';
+  }
+
+  /**
+   * Get the status icon based on assignment state.
+   */
+  getStatusIcon(assignment: Assignment): string {
+    if (!assignment.getQuestions().length) {
+      return 'construction';
+    }
+    if (!this.hasAnyFacets(assignment)) {
+      return 'construction';
+    }
+    if (!this.areAllFacetsValid(assignment)) {
+      return 'warning';
+    }
+    return 'check_circle';
+  }
+
+  /**
+   * Get human-readable status text based on assignment state.
+   */
+  getStatusText(assignment: Assignment): string {
+    if (!assignment.getQuestions().length) {
+      return 'Needs Setup';
+    }
+    if (!this.hasAnyFacets(assignment)) {
+      return 'Needs Rules';
+    }
+    if (!this.areAllFacetsValid(assignment)) {
+      const count = this.countInvalidFacets(assignment);
+      return count === 1 ? '1 Issue' : `${count} Issues`;
+    }
+    return 'Ready';
+  }
+
+  /**
+   * Get tooltip text for status badge (only for warning state).
+   */
+  getStatusTooltip(assignment: Assignment): string {
+    if (!this.areAllFacetsValid(assignment) && this.hasAnyFacets(assignment)) {
+      const invalidFacets: string[] = [];
+      assignment.getQuestions().forEach((q) => {
+        q.getFacets().forEach((f) => {
+          if (!f.isValid()) {
+            const cellAddress = f.targetCell?.address || 'No cell';
+            invalidFacets.push(`${q.name}: ${cellAddress} - ${f.getName()}`);
+          }
+        });
+      });
+      return invalidFacets.length > 3
+        ? `${invalidFacets.slice(0, 3).join('\n')}\n...and ${invalidFacets.length - 3} more`
+        : invalidFacets.join('\n');
+    }
+    return '';
   }
 }

@@ -9,32 +9,31 @@ import {
 export class DropzoneDirective {
   @Output() private filesChange : EventEmitter<FileList> = new EventEmitter();
 
-  @HostBinding('style.border') private border = 'none';
-
-  @HostBinding('style.background') private background = 'white';
+  @HostBinding('class.dropzone-idle') idleState = true;
+  @HostBinding('class.dropzone-active') activeState = false;
 
   @HostListener('dragover', ['$event'])
   public onDragOver(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.border = '2px solid rgba(0,0,0,.06)';
-    this.background = 'rgba(0,0,0,.04)';
+    this.idleState = false;
+    this.activeState = true;
   }
 
   @HostListener('dragleave', ['$event'])
   public onDragLeave(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.border = 'none';
-    this.background = 'white';
+    this.idleState = true;
+    this.activeState = false;
   }
 
   @HostListener('drop', ['$event'])
   public onDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.border = 'none';
-    this.background = 'white';
+    this.idleState = true;
+    this.activeState = false;
     if (!event.dataTransfer) return;
     const { files } = event.dataTransfer;
     this.filesChange.emit(files);

@@ -5,10 +5,48 @@
   <div *ngIf="this.userService.getUser()">
     <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon *ngIf="this.userService.getUser()">account_circle</mat-icon></button>
   </div>
-  <mat-menu #menu="matMenu">
-    <button disabled mat-menu-item>{{this.userService.getUser()?.username}}</button>
-    <a mat-menu-item routerLink="/">Dashboard</a>
-    <button mat-menu-item (click)="this.userService.logout()">Log Out</button>
+  <mat-menu #menu="matMenu" class="user-menu" panelClass="user-menu-panel">
+    <div class="user-header" (click)="$event.stopPropagation()">
+      <div class="user-avatar">
+        {{ getUserInitial() }}
+      </div>
+      <div class="user-info">
+        <span class="user-name">{{ this.userService.getUser()?.username }}</span>
+        <span class="user-label">Signed in</span>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <a mat-menu-item routerLink="/">
+      <mat-icon>dashboard</mat-icon>
+      <span>Dashboard</span>
+    </a>
+    <button mat-menu-item [matMenuTriggerFor]="themeMenu">
+      <mat-icon>{{ themeService.isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      <span>Theme</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="this.userService.logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Log Out</span>
+    </button>
+  </mat-menu>
+  
+  <mat-menu #themeMenu="matMenu">
+    <button mat-menu-item (click)="setThemePreference('light')">
+      <mat-icon>light_mode</mat-icon>
+      <span>Light</span>
+      <mat-icon class="check-icon" *ngIf="themeService.getPreference() === 'light'">check</mat-icon>
+    </button>
+    <button mat-menu-item (click)="setThemePreference('dark')">
+      <mat-icon>dark_mode</mat-icon>
+      <span>Dark</span>
+      <mat-icon class="check-icon" *ngIf="themeService.getPreference() === 'dark'">check</mat-icon>
+    </button>
+    <button mat-menu-item (click)="setThemePreference('system')">
+      <mat-icon>settings_suggest</mat-icon>
+      <span>System</span>
+      <mat-icon class="check-icon" *ngIf="themeService.getPreference() === 'system'">check</mat-icon>
+    </button>
   </mat-menu>
 </mat-toolbar>
 <router-outlet></router-outlet>

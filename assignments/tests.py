@@ -270,3 +270,70 @@ class TestAssignmentDeleteAPI:
         
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert Assignment.objects.filter(uuid=other_assignment.uuid).exists()
+
+
+# =============================================================================
+# File Access Security Tests (IDOR Prevention)
+# =============================================================================
+
+@pytest.mark.unit
+@pytest.mark.django_db
+class TestFileAccessSecurity:
+    """Tests for file access security (IDOR prevention)."""
+    
+    def test_access_own_file_authenticated(self, authenticated_client, assignment):
+        """Test that authenticated users can access their own files."""
+        # Get the filename from the assignment
+        filename = assignment.file.name.split('/')[-1]
+        url = f'/api/v1/files/{filename}'
+        
+        response = authenticated_client.get(url)
+        
+        # Should succeed (200) or return the file
+        # Note: might be 404 if file doesn't exist on disk in test, but NOT 403
+        assert response.status_code != status.HTTP_403_FORBIDDEN
+    
+    def test_access_other_user_file_forbidden(self, authenticated_client, assignment_factory):
+        """Test that authenticated users CANNOT access other users' files (IDOR prevention)."""
+        # Create an assignment owned by a DIFFERENT user
+        other_assignment = assignment_factory()  # Creates with a new user
+        
+        # Try to access the other user's file
+        filename = other_assignment.file.name.split('/')[-1]
+        url = f'/api/v1/files/{filename}'
+        
+        response = authenticated_client.get(url)
+        
+        # Should be forbidden - this is the IDOR fix
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+    
+    def test_access_file_unauthenticated(self, api_client, assignment_factory):
+        """Test that unauthenticated users cannot access any files."""
+        assignment = assignment_factory()
+        filename = assignment.file.name.split('/')[-1]
+        url = f'/api/v1/files/{filename}'
+        
+        response = api_client.get(url)
+        
+        # Should be forbidden for unauthenticated users
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+    
+    def test_access_nonexistent_file(self, authenticated_client):
+        """Test accessing a file that doesn't exist in any assignment."""
+        url = '/api/v1/files/nonexistent_file_12345.xlsx'
+        
+        response = authenticated_client.get(url)
+        
+        # Should be forbidden (no matching assignment) not 404
+        # This prevents enumeration attacks
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+    
+    def test_path_traversal_blocked(self, authenticated_client, assignment):
+        """Test that path traversal attempts are blocked."""
+        # Try to access files outside media directory
+        url = '/api/v1/files/../../../etc/passwd'
+        
+        response = authenticated_client.get(url)
+        
+        # Should be forbidden (no matching assignment for this path)
+        assert response.status_code == status.HTTP_403_FORBIDDEN

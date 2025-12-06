@@ -6,7 +6,7 @@ import {
   IUser, User, UserCredentials, UserCredentialsNew, UserCredentialsReset,
 } from './user';
 import { UserFactory } from './user.factory';
-import { CookieService } from '../../core/services';
+import { CookieService, ThemeService } from '../../core/services';
 
 // Cookie name for storing auth token
 const AUTH_TOKEN_COOKIE = 'auth_token';
@@ -25,6 +25,7 @@ export class UserService {
     private userFactory: UserFactory,
     private router: Router,
     private cookieService: CookieService,
+    private themeService: ThemeService,
   ) {
     const token = this.cookieService.get(AUTH_TOKEN_COOKIE);
     if (token) {
@@ -46,6 +47,8 @@ export class UserService {
       next: (userData) => {
         const user = this.userFactory.createUser({ ...userData, token });
         this.currentUser.next(user);
+        // Initialize theme from user metadata
+        this.themeService.initializeFromMetadata(user.metadata);
         this.sessionRestored.next(true);
       },
       error: () => {
@@ -72,6 +75,8 @@ export class UserService {
     this.cookieService.set(AUTH_TOKEN_COOKIE, user.token, 7); // 7 days
     ApiService.registerHeader('Authorization', `Token ${user.token}`);
     this.currentUser.next(user);
+    // Initialize theme from user metadata
+    this.themeService.initializeFromMetadata(user.metadata);
     if (navigate) {
       this.router.navigate(['/']);
     }

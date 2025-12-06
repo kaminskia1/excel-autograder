@@ -1,3 +1,4 @@
+import safeRegex from 'safe-regex';
 import {
   Facet, IFacet, IFacetPartial,
 } from '../../facet';
@@ -57,6 +58,10 @@ export class FormulaRegexFacet extends Facet implements
     const cellFormula = targetCell.formula.replace(/_xlfn\./g, '').replace(/_xlws\./g, '');
     let expression;
     try {
+      // Check for potentially unsafe regex patterns that could cause ReDoS
+      if (!safeRegex(this.expression)) {
+        throw new Error('Regex pattern is potentially unsafe and may cause performance issues');
+      }
       expression = new RegExp(this.expression);
     } catch (e) {
       throw new Error('Error parsing regex');
@@ -71,6 +76,18 @@ export class FormulaRegexFacet extends Facet implements
     } catch {
       return false;
     }
+    // Check for potentially unsafe regex patterns that could cause ReDoS
+    if (!safeRegex(this.expression)) {
+      return false;
+    }
     return this.points != null && this.targetCell != null;
+  }
+
+  /**
+   * Check if the regex pattern is safe from ReDoS attacks.
+   */
+  isSafePattern(): boolean {
+    if (!this.expression) return true;  // No pattern = safe
+    return safeRegex(this.expression);
   }
 }

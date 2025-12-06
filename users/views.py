@@ -35,7 +35,8 @@ class UserLogin(ObtainAuthToken):
             'token': token.key,
             'id': user.pk,
             'username': user.username,
-            'email': user.email
+            'email': user.email,
+            'metadata': user.metadata,
         })
 
 
@@ -68,6 +69,7 @@ class UserMe(APIView):
             'username': user.username,
             'email': user.email,
             'token': token.key,
+            'metadata': user.metadata,
         })
 
     def patch(self, request):

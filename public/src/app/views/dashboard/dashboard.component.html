@@ -1,6 +1,4 @@
 <div class="container mt-4" [class.empty-container]="!isLoading && !assignments.length">
-  <h1 *ngIf="assignments.length">Assignments</h1>
-  
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!isLoading && !assignments.length">
     <div class="empty-state-icon">
@@ -22,59 +20,110 @@
     </div>
   </div>
 
+  <!-- Page Header (only show when there are assignments) -->
+  <div class="page-header" *ngIf="assignments.length">
+    <h1>Assignments</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="openImportDialog()">
+        <mat-icon>upload</mat-icon>
+        Import
+      </button>
+      <button mat-flat-button color="primary" (click)="openNewDialog()">
+        <mat-icon>add</mat-icon>
+        Create
+      </button>
+    </div>
+  </div>
+
   <!-- Table (only show when there are assignments) -->
-  <table mat-table #table [dataSource]="dataSource" class="mat-elevation-z2" *ngIf="assignments.length">
+  <table mat-table #table [dataSource]="dataSource" class="assignments-table" *ngIf="assignments.length">
+    <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-    <ng-container matColumnDef="updated_at">
-      <th mat-header-cell *matHeaderCellDef> Last Modified </th>
-      <td mat-cell *matCellDef="let element">{{element.updated_at | date: 'dd/MM/yyyy'}}</td>
-    </ng-container>
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>
-        <button mat-button color="primary" class="float-end" (click)="openNewDialog()">Create</button>
-        <button mat-button color="primary" class="float-end me-2" (click)="openImportDialog()">Import</button>
-      </th>
+      <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let assignment">
-        <div class="float-end">
-          <!-- Has no facets - show warning -->
-          <div class="d-inline-block"
-            *ngIf="assignment.questions.length && !hasAnyFacets(assignment)"
-            matTooltip="No attributes configured" 
-            matTooltipPosition="above">
-            <button mat-icon-button disabled>
-              <mat-icon class="orange">warning</mat-icon>
-            </button>
-          </div>
-          <!-- Has invalid facets - show warning -->
-          <div class="d-inline-block"
-            *ngIf="assignment.questions.length && hasAnyFacets(assignment) && !areAllFacetsValid(assignment)"
-            [matTooltip]="countInvalidFacets(assignment) === 1 ? '1 Invalid Attribute' : countInvalidFacets(assignment) + ' Invalid Attributes'" 
-            matTooltipPosition="above">
-            <button mat-icon-button disabled>
-              <mat-icon class="orange">warning</mat-icon>
-            </button>
-          </div>
-          <button mat-icon-button color="primary" matTooltip="Edit" matTooltipPosition="above" [routerLink]="'/wizard/' + assignment.uuid">
+        <div class="assignment-name">
+          <a [routerLink]="'/wizard/' + assignment.uuid">{{assignment.name}}</a>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let assignment">
+        <span class="status-badge" 
+              [ngClass]="getStatusClass(assignment)"
+              [matTooltip]="getStatusTooltip(assignment)"
+              [matTooltipDisabled]="!getStatusTooltip(assignment)"
+              matTooltipPosition="above">
+          <mat-icon class="status-icon">{{getStatusIcon(assignment)}}</mat-icon>
+          {{getStatusText(assignment)}}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Last Modified Column -->
+    <ng-container matColumnDef="updated_at">
+      <th mat-header-cell *matHeaderCellDef>Last Modified</th>
+      <td mat-cell *matCellDef="let assignment">
+        <span class="date-text">{{assignment.updated_at | date: 'MMM d, yyyy'}}</span>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let assignment">
+        <div class="row-actions">
+          <!-- Show grade button when fully ready (has questions, facets, and all valid) -->
+          <button mat-icon-button 
+                  class="grade-btn"
+                  *ngIf="assignment.questions.length && hasAnyFacets(assignment) && areAllFacetsValid(assignment)"
+                  [routerLink]="'/grader/' + assignment.uuid"
+                  matTooltip="Grade submissions"
+                  matTooltipPosition="above">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+          <!-- Show edit button when needs setup or has issues -->
+          <button mat-icon-button 
+                  class="edit-btn"
+                  *ngIf="!assignment.questions.length || !hasAnyFacets(assignment) || !areAllFacetsValid(assignment)"
+                  [routerLink]="'/wizard/' + assignment.uuid"
+                  [matTooltip]="!areAllFacetsValid(assignment) && hasAnyFacets(assignment) ? 'Fix issues' : 'Set up grading rules'"
+                  matTooltipPosition="above">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button matTooltip="Run" matTooltipPosition="above" *ngIf="assignment.questions.length" [routerLink]="'/grader/' + assignment.uuid">
-            <mat-icon class="green">play_arrow</mat-icon>
-          </button>
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
-            <mat-icon>list</mat-icon>
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="more-btn">
+            <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item class="d-block w-100" (click)="openDownloadDialog(assignment)">Download</button>
-            <button mat-menu-item class="d-block w-100" (click)="openEditDialog(assignment)">Edit</button>
-            <button mat-menu-item class="d-block w-100" (click)="openExportDialog(assignment)">Export</button>
-            <button mat-menu-item color="accent" class="d-block w-100 alert" (click)="deleteItem(assignment)">Delete</button>
+            <button mat-menu-item [routerLink]="'/wizard/' + assignment.uuid"
+                    *ngIf="assignment.questions.length && hasAnyFacets(assignment)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit Rules</span>
+            </button>
+            <button mat-menu-item (click)="openEditDialog(assignment)">
+              <mat-icon>drive_file_rename_outline</mat-icon>
+              <span>Rename</span>
+            </button>
+            <button mat-menu-item (click)="openDownloadDialog(assignment)">
+              <mat-icon>download</mat-icon>
+              <span>Download Template</span>
+            </button>
+            <button mat-menu-item (click)="openExportDialog(assignment)">
+              <mat-icon>ios_share</mat-icon>
+              <span>Export Config</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item class="delete-action" (click)="deleteItem(assignment)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
           </mat-menu>
         </div>
       </td>
     </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>

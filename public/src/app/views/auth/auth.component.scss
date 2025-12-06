@@ -1,6 +1,32 @@
+:host {
+  display: block;
+  height: 100%;
+  background-color: var(--bg-primary);
+}
+
+mat-drawer-container {
+  background-color: var(--bg-primary) !important;
+}
+
+// Secondary button styling (Register button)
+button[color="secondary"] {
+  background-color: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  
+  &:hover {
+    background-color: var(--bg-hover) !important;
+  }
+}
+
 .custom-login-text {
-  background: rgba(0,0,0,0);
+  background: transparent;
   border: none;
-  color: #3f51b5;
+  color: var(--color-primary);
   font-weight: 600;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 }

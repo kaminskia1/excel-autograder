@@ -10,6 +10,15 @@
 
 .sidebar {
   min-width: 400px;
+  background-color: var(--bg-secondary) !important;
+}
+
+mat-drawer-container {
+  background-color: var(--bg-primary) !important;
+}
+
+mat-drawer-content {
+  background-color: var(--bg-primary) !important;
 }
 
 .column {
@@ -17,8 +26,8 @@
 }
 
 .question-toolbar {
-  background: white !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--surface-card) !important;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .question {
@@ -27,7 +36,7 @@
 }
 
 .sheet-active {
-  background: rgba(0,0,0,.075);
+  background: var(--bg-active);
 }
 
 .excel-row {
@@ -45,13 +54,14 @@
   width: 30px;
   height: 30px;
   text-align: center;
-  border-bottom: 1px solid #E1E1E1;
-  border-right: 1px solid #E1E1E1;
-  border-left: 1px solid #E1E1E1;
-  background-color: whitesmoke;
+  border-bottom: 1px solid var(--excel-cell-border);
+  border-right: 1px solid var(--excel-cell-border);
+  border-left: 1px solid var(--excel-cell-border);
+  background-color: var(--excel-header-bg);
+  color: var(--text-primary);
 }
 .cell-border-top {
-  border-top: 1px solid #E1E1E1;
+  border-top: 1px solid var(--excel-cell-border);
 }
 
 .problems-title {
@@ -68,7 +78,7 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: var(--bg-hover);
 
     .edit-icon {
       opacity: 1;
@@ -81,7 +91,7 @@
     height: 16px;
     opacity: 0;
     transition: opacity 0.2s;
-    color: rgba(0, 0, 0, 0.54);
+    color: var(--text-secondary);
   }
 }
 
@@ -89,8 +99,9 @@
   font-size: 1.25rem;
   font-weight: 500;
   border: none;
-  border-bottom: 2px solid #3f51b5;
+  border-bottom: 2px solid var(--color-primary);
   background: transparent;
+  color: var(--text-primary);
   outline: none;
   padding: 4px 8px;
   width: 200px;
@@ -120,7 +131,7 @@
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--text-secondary);
 }
 
 .empty-state-icon {
@@ -129,7 +140,7 @@
   justify-content: center;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  background: linear-gradient(135deg, var(--color-info-light) 0%, var(--color-primary-lighter) 100%);
   border-radius: 50%;
   margin-bottom: 24px;
   animation: pulse-subtle 2s ease-in-out infinite;
@@ -138,7 +149,22 @@
     font-size: 40px;
     width: 40px;
     height: 40px;
-    color: #1976d2;
+    color: var(--color-info-dark);
+  }
+}
+
+:host-context(body.dark-theme) {
+  .empty-state-icon {
+    background: linear-gradient(135deg, rgba(66, 165, 245, 0.15) 0%, rgba(121, 134, 203, 0.2) 100%);
+    
+    .mat-icon {
+      color: var(--color-info);
+    }
+  }
+  
+  .empty-state-hint {
+    background: rgba(66, 165, 245, 0.1);
+    color: var(--color-info);
   }
 }
 
@@ -157,7 +183,7 @@
   margin: 0 0 12px 0;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--text-primary);
 }
 
 .empty-state-description {
@@ -165,7 +191,7 @@
   font-size: 14px;
   line-height: 1.5;
   max-width: 280px;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--text-secondary);
 }
 
 .empty-state-hint {
@@ -173,11 +199,11 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: #f5f5f5;
+  background: var(--surface-section);
   border-radius: 24px;
   font-size: 13px;
   font-weight: 500;
-  color: #1976d2;
+  color: var(--color-info-dark);
 
   .mat-icon {
     font-size: 18px;
@@ -218,22 +244,22 @@
 }
 
 .facet-drag-item {
-  background: white;
+  background: var(--surface-card);
   border-radius: 4px;
   margin-bottom: 8px;
   transform: translateZ(0);
 }
 
 .cdk-drag-preview {
-  background: white;
+  background: var(--surface-card);
   border-radius: 4px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--drag-preview-shadow);
   padding: 0 8px;
 }
 
 .cdk-drag-placeholder {
-  background: #e8e8e8;
-  border: 2px dashed #bbb;
+  background: var(--drag-placeholder-bg);
+  border: 2px dashed var(--drag-placeholder-border);
   border-radius: 4px;
   min-height: 60px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
@@ -259,14 +285,14 @@
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: #f8f9fa;
+  background: var(--surface-muted);
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s, box-shadow 0.2s;
   border: 1px solid transparent;
 
   &:hover {
-    background: #e9ecef;
+    background: var(--bg-hover);
     
     .question-drag-handle {
       opacity: 1;
@@ -274,12 +300,12 @@
   }
 
   &.question-list-item-active {
-    background: #e3f2fd;
-    border-color: #2196f3;
+    background: var(--bg-active);
+    border-color: var(--border-strong);
     
     .question-list-item-number {
-      background: #2196f3;
-      color: white;
+      background: var(--text-secondary);
+      color: var(--text-inverse);
     }
   }
 }
@@ -289,13 +315,13 @@
   align-items: center;
   justify-content: center;
   margin-right: 12px;
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--text-tertiary);
   cursor: grab;
   opacity: 0.5;
   transition: opacity 0.2s, color 0.2s;
 
   &:hover {
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--text-secondary);
   }
 
   &:active {
@@ -322,22 +348,22 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  background: rgba(0, 0, 0, 0.08);
+  background: var(--bg-active);
   border-radius: 50%;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--text-secondary);
   transition: background-color 0.2s, color 0.2s;
 }
 
 .question-list-item-title {
   font-size: 15px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--text-primary);
 }
 
 .question-list-item-chevron {
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--text-tertiary);
   font-size: 20px;
   width: 20px;
   height: 20px;
@@ -350,14 +376,14 @@
 
 .question-list-item.cdk-drag-preview {
   padding: 12px 16px;
-  background: white;
+  background: var(--surface-card);
   border-radius: 8px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--drag-preview-shadow);
 }
 
 .question-list-item.cdk-drag-placeholder {
-  background: #e3f2fd;
-  border: 2px dashed #2196f3;
+  background: var(--bg-hover);
+  border: 2px dashed var(--border-strong);
   border-radius: 8px;
   min-height: 52px;
 }

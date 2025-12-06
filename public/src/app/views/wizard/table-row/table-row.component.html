@@ -3,10 +3,6 @@
     <div class="cell cell-border background"></div>
     <div class="cell background" *ngFor="let rCell of row.values" [ngClass]="{'cell-active': rCell.isHighlighted}" [ngStyle]="{
       'background-color': rCell.fill,
-      'border-color': rCell.isHighlighted ? rCell.isHighlightedColor.border : '',
-      'color': rCell.isHighlighted ? rCell.isHighlightedColor.color : '',
-      'position': rCell.isHighlighted ? 'relative' : 'inherit',
-      'border-radius': rCell.isHighlighted ? '2px' : '',
       'height': rCell.height + 'px',
       'width': rCell.actionWidth + 'px',
     }"></div>
@@ -15,8 +11,6 @@
     <div class="cell align-text-center cell-border"></div>
     <span *ngFor="let rCell of row.values" [ngStyle]="{'height': row.height + 'px'}">
       <div class="cell foreground" *ngIf="rCell.displayWidth >= 0" [ngClass]="{'cell-active': rCell.isHighlighted}" [ngStyle]="{
-        'position': rCell.isHighlighted ? 'relative' : 'inherit',
-        'border-radius': rCell.isHighlighted ? '2px' : '',
         'height': rCell.height + 'px',
         'width': rCell.displayWidth + 'px',
         'text-align': rCell.align,
@@ -26,8 +20,7 @@
   <div class="d-flex" [ngStyle]="{'margin-top': '-' + row.height + 'px'}">
     <div class="cell cell-border" [ngStyle]="{'height': row.height + 'px',}">{{ index + 1 }}</div>
     <span *ngFor="let rCell of row.values">
-      <div class="cell action" [ngClass]="{'cell-active-hover': workbookService.isRenderedCellEmitterSubscribed()}" [ngStyle]="{
-        'background': rCell.isHighlighted ? rCell.isHighlightedColor.background : '',
+      <div class="cell action" [ngClass]="{'cell-active-hover': workbookService.isRenderedCellEmitterSubscribed(), 'cell-active': rCell.isHighlighted}" [ngStyle]="{
         'height': rCell.height + 'px',
         'width': rCell.actionWidth + 'px',
       }" [matTooltip]="getTooltip(rCell)" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(rCell)"

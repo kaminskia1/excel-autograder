@@ -2,14 +2,51 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, re_path, include, reverse_lazy
 from django.contrib import admin
+from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 from rest_framework.routers import DefaultRouter
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 
 from users.views import UserViewSet, UserLogin, UserLogout, UserCreate, UserMe
 from assignments.views import AssignmentViewSet
+from assignments.models import Assignment
+
 
 def protected_serve(request, path, document_root=None, show_indexes=False):
+    """
+    Serve media files only to authenticated users who own the associated assignment.
+    Prevents IDOR vulnerability by verifying file ownership.
+    """
+    # Authenticate the request using DRF's token or session authentication
+    user = None
+    
+    # Try token authentication first
+    token_auth = TokenAuthentication()
+    try:
+        auth_result = token_auth.authenticate(request)
+        if auth_result:
+            user, _ = auth_result
+    except AuthenticationFailed:
+        pass
+    
+    # Fall back to session authentication (check if user is already authenticated via Django session)
+    if not user and hasattr(request, 'user') and request.user.is_authenticated:
+        user = request.user
+    
+    # If no authenticated user, deny access
+    if not user:
+        return HttpResponseForbidden("Authentication required")
+    
+    # Extract filename from path and verify ownership
+    filename = path.split('/')[-1]
+    
+    # Check if user owns an assignment with this file
+    # The file field stores the filename, so we match against it
+    if not Assignment.objects.filter(owner=user, file=filename).exists():
+        return HttpResponseForbidden("Access denied")
+    
     return serve(request, path, document_root, show_indexes)
 
 
