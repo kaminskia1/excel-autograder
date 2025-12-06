@@ -17,6 +17,7 @@ table {
   cursor: default;
   background: linear-gradient(135deg, var(--color-primary-light, rgba(63, 81, 181, 0.08)) 0%, transparent 100%);
   border-bottom: none;
+  min-width: 230px;
 }
 
 .user-avatar {

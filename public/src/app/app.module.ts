@@ -16,6 +16,7 @@ import { AuthModule } from './views/auth/auth.module';
 import { DashboardModule } from './views/dashboard/dashboard.module';
 import { WizardModule } from './views/wizard/wizard.module';
 import { GraderModule } from './views/grader/grader.module';
+import { ProfileModule } from './views/profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { GraderModule } from './views/grader/grader.module';
     DashboardModule,
     WizardModule,
     GraderModule,
+    ProfileModule,
   ],
   bootstrap: [AppComponent],
 })

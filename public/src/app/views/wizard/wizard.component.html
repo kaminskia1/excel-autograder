@@ -68,6 +68,11 @@
               <span class="question-list-item-number">{{ i + 1 }}</span>
               <span class="question-list-item-title">{{ getQuestionDisplayName(question, i) }}</span>
             </div>
+            <mat-icon 
+              *ngIf="hasInvalidFacets(question)" 
+              class="question-warning-icon" 
+              matTooltip="This problem has misconfigured grading rules" 
+              matTooltipPosition="above">warning</mat-icon>
             <mat-icon class="question-list-item-chevron">chevron_right</mat-icon>
           </div>
         </div>

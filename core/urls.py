@@ -9,7 +9,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from users.views import UserViewSet, UserLogin, UserLogout, UserCreate, UserMe
+from users.views import UserViewSet, UserLogin, UserLogout, UserCreate, UserMe, ChangePassword
 from assignments.views import AssignmentViewSet
 from assignments.models import Assignment
 
@@ -61,6 +61,7 @@ urlpatterns = [
     path('api/v1/auth/register/', UserCreate.as_view()),
     path('api/v1/auth/logout/', UserLogout.as_view()),
     path('api/v1/auth/me/', UserMe.as_view()),
+    path('api/v1/auth/change-password/', ChangePassword.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
     re_path(r'^api/v1/files/(?P<path>.*)$' % static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),

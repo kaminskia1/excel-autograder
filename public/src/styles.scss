@@ -683,6 +683,13 @@ body.dark-theme {
 // User Menu Panel
 // =============================================================================
 
-.user-menu-panel {
-  min-width: 320px !important;
+.user-menu-panel.mat-mdc-menu-panel {
+  min-width: 270px !important;
+  max-width: 350px !important;
+  width: 270px !important;
+}
+
+.user-menu-panel .mat-mdc-menu-content {
+  min-width: 270px !important;
+  width: 100%;
 }

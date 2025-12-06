@@ -269,6 +269,10 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
     return question.name || `Problem ${index + 1}`;
   }
 
+  hasInvalidFacets(question: Question): boolean {
+    return question.getFacets().some(facet => !facet.isValid());
+  }
+
   startEditingQuestionName() {
     if (!this.activeQuestion) return;
     this.editingQuestionName = true;

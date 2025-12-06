@@ -10,6 +10,7 @@ import { WizardComponent } from './views/wizard/wizard.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { GraderComponent } from './views/grader/grader.component';
+import { ProfileComponent } from './views/profile/profile.component';
 import { UserService } from './models/user/user.service';
 
 // Wait for session restoration before checking auth state
@@ -58,6 +59,11 @@ const routes: Routes = [
   {
     path: 'grader/:id',
     component: GraderComponent,
+    canActivate: [userLoggedIn],
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [userLoggedIn],
   },
   {

@@ -20,6 +20,10 @@
       <mat-icon>dashboard</mat-icon>
       <span>Dashboard</span>
     </a>
+    <a mat-menu-item routerLink="/profile">
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </a>
     <button mat-menu-item [matMenuTriggerFor]="themeMenu">
       <mat-icon>{{ themeService.isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
       <span>Theme</span>

@@ -115,6 +115,13 @@ export class UserService {
     });
   }
 
+  public changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.api.post<{ message: string }>('auth/change-password/', {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+  }
+
   public isLoggedIn(): boolean {
     return this.currentUser.getValue() !== null;
   }
