@@ -16,4 +16,8 @@ export class SubmissionService {
   save(assignment: Assignment, submissions: Submission[]): void {
     this.cache[assignment.getUuid()] = submissions;
   }
+
+  clear(assignment: Assignment): void {
+    delete this.cache[assignment.getUuid()];
+  }
 }

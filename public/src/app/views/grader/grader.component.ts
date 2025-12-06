@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,7 +38,7 @@ interface ParsedFacetInfo {
   styleUrls: ['./grader.component.scss'],
   providers: [DestroyService],
 })
-export class GraderComponent implements OnInit {
+export class GraderComponent implements OnInit, OnDestroy {
   masterAssignment: Assignment | null = null;
 
   masterWorkbook: FancyWorkbook | null = null;
@@ -51,6 +51,14 @@ export class GraderComponent implements OnInit {
   submissionTable = new MatTableDataSource<Submission>(this.submissions);
 
   displayedColumns: string[] = ['name', 'size', 'score', 'action'];
+
+  // Track if the page is being refreshed/closed (vs in-app navigation)
+  private isPageUnloading = false;
+
+  @HostListener('window:beforeunload')
+  onBeforeUnload(): void {
+    this.isPageUnloading = true;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +83,13 @@ export class GraderComponent implements OnInit {
           this.registerAssignment(id);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    // Only clear submissions when navigating away within the app, not on page refresh
+    if (!this.isPageUnloading && this.masterAssignment) {
+      this.submissionService.clear(this.masterAssignment);
+    }
   }
 
   registerAssignment(id: string) {
