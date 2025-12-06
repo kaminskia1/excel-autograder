@@ -93,4 +93,3 @@ export class VerifyEmailComponent implements OnInit {
     this.router.navigate(['/']);
   }
 }
-

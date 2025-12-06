@@ -15,4 +15,3 @@ import { VerifyEmailComponent } from './verify-email.component';
   ],
 })
 export class VerifyEmailModule { }
-

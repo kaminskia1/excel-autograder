@@ -23,4 +23,3 @@ import { ImportAssignmentDialogComponent } from './import-assignment-dialog/impo
   ],
 })
 export class DashboardModule { }
-

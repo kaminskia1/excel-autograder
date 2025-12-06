@@ -34,4 +34,3 @@ export class DestroyService extends Subject<void> implements OnDestroy {
     this.complete();
   }
 }
-

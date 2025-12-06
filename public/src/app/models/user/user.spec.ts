@@ -24,34 +24,6 @@ describe('User', () => {
       expect(user.metadata.theme).toBe('dark');
     });
 
-    it('should handle snake_case email_verified field from backend', () => {
-      const userData: IUserPartial = {
-        uuid: '123',
-        username: 'testuser',
-        email: 'test@example.com',
-        email_verified: true,
-        token: 'test-token',
-      };
-
-      const user = new User(userData);
-
-      expect(user.emailVerified).toBeTrue();
-    });
-
-    it('should handle snake_case pending_email field from backend', () => {
-      const userData: IUserPartial = {
-        uuid: '123',
-        username: 'testuser',
-        email: 'test@example.com',
-        pending_email: 'new@example.com',
-        token: 'test-token',
-      };
-
-      const user = new User(userData);
-
-      expect(user.pendingEmail).toBe('new@example.com');
-    });
-
     it('should default emailVerified to false when not provided', () => {
       const userData: IUserPartial = {
         uuid: '123',
@@ -89,24 +61,6 @@ describe('User', () => {
       const user = new User(userData);
 
       expect(user.metadata).toEqual({});
-    });
-
-    it('should prefer camelCase over snake_case when both provided', () => {
-      const userData: IUserPartial = {
-        uuid: '123',
-        username: 'testuser',
-        email: 'test@example.com',
-        emailVerified: true,
-        email_verified: false,
-        pendingEmail: 'camel@example.com',
-        pending_email: 'snake@example.com',
-        token: 'test-token',
-      };
-
-      const user = new User(userData);
-
-      expect(user.emailVerified).toBeTrue();
-      expect(user.pendingEmail).toBe('camel@example.com');
     });
   });
 
@@ -178,4 +132,3 @@ describe('User', () => {
     });
   });
 });
-

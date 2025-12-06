@@ -15,4 +15,3 @@ import { ProfileComponent } from './profile.component';
   ],
 })
 export class ProfileModule { }
-

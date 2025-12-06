@@ -28,9 +28,7 @@ export interface IUserPartial {
   username: string
   email: string
   emailVerified?: boolean
-  email_verified?: boolean
   pendingEmail?: string | null
-  pending_email?: string | null
   token: string;
   metadata?: UserMetadata;
 }
@@ -58,9 +56,8 @@ export class User implements IUser {
     this.uuid = user.uuid;
     this.username = user.username;
     this.email = user.email;
-    // Handle both camelCase (frontend) and snake_case (backend API)
-    this.emailVerified = user.emailVerified ?? user.email_verified ?? false;
-    this.pendingEmail = user.pendingEmail ?? user.pending_email ?? null;
+    this.emailVerified = user.emailVerified ?? false;
+    this.pendingEmail = user.pendingEmail ?? null;
     this.token = user.token;
     this.metadata = user.metadata ?? {};
   }

@@ -19,4 +19,3 @@ import { ResetComponent } from './reset/reset.component';
   ],
 })
 export class AuthModule { }
-
