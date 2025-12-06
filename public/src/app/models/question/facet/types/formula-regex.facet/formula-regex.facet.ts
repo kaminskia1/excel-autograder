@@ -33,8 +33,8 @@ export class FormulaRegexFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
-      `Expression:${this.expression ? ' ' + this.expression : '&nbsp;<span class="red">Not set</span>'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ` ${this.targetCell.address.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Expression:${this.expression ? ` ${this.expression}` : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 
@@ -87,7 +87,7 @@ export class FormulaRegexFacet extends Facet implements
    * Check if the regex pattern is safe from ReDoS attacks.
    */
   isSafePattern(): boolean {
-    if (!this.expression) return true;  // No pattern = safe
+    if (!this.expression) return true; // No pattern = safe
     return safeRegex(this.expression);
   }
 }

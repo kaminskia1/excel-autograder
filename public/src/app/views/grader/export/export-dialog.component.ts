@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Facet } from '../../../models/question/facet/facet';
-import {CellErrorValue, CellHyperlinkValue} from "exceljs";
-import {ExportValue} from "../../../models/submission/submission";
+import { ExportValue } from '../../../models/submission/submission';
 
 interface ExportDialogData {
   cols: Array<{ [key: string]: { val: string, fac?: Facet}}>;

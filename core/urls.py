@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import path, re_path, include, reverse_lazy
 from django.contrib import admin
-from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseForbidden
 from django.views.generic.base import RedirectView
 from django.views.static import serve
 from rest_framework.routers import DefaultRouter

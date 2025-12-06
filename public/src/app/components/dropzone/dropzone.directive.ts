@@ -10,6 +10,7 @@ export class DropzoneDirective {
   @Output() private filesChange : EventEmitter<FileList> = new EventEmitter();
 
   @HostBinding('class.dropzone-idle') idleState = true;
+
   @HostBinding('class.dropzone-active') activeState = false;
 
   @HostListener('dragover', ['$event'])

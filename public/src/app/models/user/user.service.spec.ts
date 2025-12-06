@@ -6,7 +6,6 @@ import { UserService } from './user.service';
 import { ApiService } from '../../services/api/api.service';
 import { UserFactory } from './user.factory';
 import { CookieService } from '../../core/services';
-import { User } from './user';
 import { API_URL } from '../../config/api.config';
 
 describe('UserService', () => {
@@ -48,7 +47,7 @@ describe('UserService', () => {
     describe('verifyEmail', () => {
       it('should call the verify-email endpoint with token', () => {
         const testToken = 'test-verification-token-123';
-        
+
         service.verifyEmail(testToken).subscribe((response) => {
           expect(response.message).toBe('Email verified successfully');
         });
@@ -60,11 +59,11 @@ describe('UserService', () => {
 
       it('should handle verification error', () => {
         const testToken = 'expired-token';
-        
+
         service.verifyEmail(testToken).subscribe({
           error: (err) => {
             expect(err.error.error).toBe('Verification link has expired');
-          }
+          },
         });
 
         const req = httpMock.expectOne(`${baseUrl}auth/verify-email/${testToken}/`);
@@ -88,13 +87,13 @@ describe('UserService', () => {
         service.resendVerification().subscribe({
           error: (err) => {
             expect(err.status).toBe(429);
-          }
+          },
         });
 
         const req = httpMock.expectOne(`${baseUrl}auth/resend-verification/`);
         req.flush(
           { error: 'Please wait 10m 0s before requesting another email' },
-          { status: 429, statusText: 'Too Many Requests' }
+          { status: 429, statusText: 'Too Many Requests' },
         );
       });
     });
@@ -102,7 +101,7 @@ describe('UserService', () => {
     describe('changeEmail', () => {
       it('should call the change-email endpoint with new email', () => {
         const newEmail = 'newemail@example.com';
-        
+
         service.changeEmail(newEmail).subscribe((response) => {
           expect(response.message).toBe('Verification email sent to your new email address');
           expect(response.pending_email).toBe(newEmail);
@@ -111,9 +110,9 @@ describe('UserService', () => {
         const req = httpMock.expectOne(`${baseUrl}auth/change-email/`);
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual({ new_email: newEmail });
-        req.flush({ 
+        req.flush({
           message: 'Verification email sent to your new email address',
-          pending_email: newEmail 
+          pending_email: newEmail,
         });
       });
 
@@ -121,7 +120,7 @@ describe('UserService', () => {
         service.changeEmail('taken@example.com').subscribe({
           error: (err) => {
             expect(err.error.error).toBe('This email is already in use');
-          }
+          },
         });
 
         const req = httpMock.expectOne(`${baseUrl}auth/change-email/`);
@@ -145,7 +144,7 @@ describe('UserService', () => {
         service.cancelEmailChange().subscribe({
           error: (err) => {
             expect(err.error.error).toBe('No pending email change to cancel');
-          }
+          },
         });
 
         const req = httpMock.expectOne(`${baseUrl}auth/cancel-email-change/`);

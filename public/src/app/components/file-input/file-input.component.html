@@ -1,8 +1,11 @@
-<div 
-  class="file-input-container" 
+<div
+  class="file-input-container"
   [class.drag-over]="isDragOver"
   [class.has-file]="value"
-  (click)="openFilePicker()">
+  (click)="openFilePicker()"
+  (keydown.enter)="openFilePicker()"
+  tabindex="0"
+  role="button">
   
   <input
     #fileInput

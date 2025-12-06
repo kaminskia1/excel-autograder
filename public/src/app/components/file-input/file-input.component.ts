@@ -33,24 +33,33 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
   @Input() accept = '';
 
   stateChanges = new Subject<void>();
+
   focused = false;
+
   touched = false;
+
   controlType = 'app-file-input';
+
   isDragOver = false;
 
   private _placeholder = '';
+
   private _required = false;
+
   private _disabled = false;
+
   private _value: File | null = null;
 
   // ControlValueAccessor callbacks
   private onChange: (value: File | null) => void = () => {};
+
   private onTouched: () => void = () => {};
 
   @Input()
   get placeholder(): string {
     return this._placeholder;
   }
+
   set placeholder(value: string) {
     this._placeholder = value;
     this.stateChanges.next();
@@ -60,6 +69,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
   get required(): boolean {
     return this._required;
   }
+
   set required(value: boolean) {
     this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
@@ -69,6 +79,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
   get disabled(): boolean {
     return this._disabled;
   }
+
   set disabled(value: boolean) {
     this._disabled = coerceBooleanProperty(value);
     this.stateChanges.next();
@@ -78,6 +89,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
   get value(): File | null {
     return this._value;
   }
+
   set value(file: File | null) {
     this._value = file;
     this.onChange(file);
@@ -106,6 +118,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
 
   // Required by MatFormFieldControl but not used
   @HostBinding('attr.aria-describedby') describedBy = '';
+
   setDescribedByIds(ids: string[]): void {
     this.describedBy = ids.join(' ');
   }
@@ -130,7 +143,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
     this.focusMonitor.stopMonitoring(this.elementRef);
   }
 
-  onContainerClick(event: MouseEvent): void {
+  onContainerClick(_event: MouseEvent): void {
     if (!this.disabled) {
       this.fileInput.nativeElement.click();
     }
@@ -178,7 +191,7 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver = false;
-    
+
     if (this.disabled) return;
 
     const files = event.dataTransfer?.files;
@@ -196,19 +209,18 @@ export class FileInputComponent implements MatFormFieldControl<File | null>, Con
 
   private isFileAccepted(file: File): boolean {
     if (!this.accept) return true;
-    
-    const acceptedTypes = this.accept.split(',').map(t => t.trim().toLowerCase());
+
+    const acceptedTypes = this.accept.split(',').map((t) => t.trim().toLowerCase());
     const fileName = file.name.toLowerCase();
     const fileType = file.type.toLowerCase();
-    
-    return acceptedTypes.some(type => {
+
+    return acceptedTypes.some((type) => {
       if (type.startsWith('.')) {
         // Extension match
         return fileName.endsWith(type);
-      } else {
-        // MIME type match
-        return fileType === type || (type.endsWith('/*') && fileType.startsWith(type.slice(0, -1)));
       }
+      // MIME type match
+      return fileType === type || (type.endsWith('/*') && fileType.startsWith(type.slice(0, -1)));
     });
   }
 

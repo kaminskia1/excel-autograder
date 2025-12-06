@@ -10,7 +10,7 @@ describe('ValueFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ValueLengthCreateComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ValueLengthCreateComponent);
     component = fixture.componentInstance;

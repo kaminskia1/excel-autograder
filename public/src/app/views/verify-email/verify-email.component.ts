@@ -12,7 +12,9 @@ type VerificationState = 'loading' | 'success' | 'expired' | 'invalid';
 })
 export class VerifyEmailComponent implements OnInit {
   state: VerificationState = 'loading';
+
   message = '';
+
   isResending = false;
 
   constructor(
@@ -24,7 +26,7 @@ export class VerifyEmailComponent implements OnInit {
 
   ngOnInit(): void {
     const token = this.route.snapshot.paramMap.get('token');
-    
+
     if (!token) {
       this.state = 'invalid';
       this.message = 'Invalid verification link.';
@@ -39,7 +41,7 @@ export class VerifyEmailComponent implements OnInit {
       next: (response) => {
         this.state = 'success';
         this.message = response.message || 'Email verified successfully!';
-        
+
         // Refresh user data to update email_verified status
         this.userService.refreshUser().subscribe();
 
@@ -50,7 +52,7 @@ export class VerifyEmailComponent implements OnInit {
       },
       error: (err) => {
         const errorMessage = err.error?.error || 'Verification failed.';
-        
+
         if (errorMessage.toLowerCase().includes('expired')) {
           this.state = 'expired';
           this.message = 'This verification link has expired.';

@@ -34,9 +34,9 @@ export class ValueLengthFacet extends Facet implements IValueLengthFacet,
 
   getInfo(): Array<string> {
     return [
-      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
-      `Minimum Length:${this.minLength != null ? ' ' + this.minLength : '&nbsp;<span class="red">Not set</span>'}`,
-      `Maximum Length:${this.maxLength != null ? ' ' + this.maxLength : '&nbsp;<span class="red">Not set</span>'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ` ${this.targetCell.address.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Minimum Length:${this.minLength != null ? ` ${this.minLength}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Maximum Length:${this.maxLength != null ? ` ${this.maxLength}` : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 

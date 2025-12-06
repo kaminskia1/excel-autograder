@@ -18,7 +18,7 @@ describe('ResetComponent', () => {
       imports: [RouterTestingModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule],
       declarations: [ResetComponent],
       providers: [ApiService, UserFactory, UserService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ResetComponent);
     component = fixture.componentInstance;

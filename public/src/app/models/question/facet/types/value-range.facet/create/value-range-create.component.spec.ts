@@ -10,7 +10,7 @@ describe('ValueRangeFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ValueRangeCreateComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ValueRangeCreateComponent);
     component = fixture.componentInstance;

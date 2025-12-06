@@ -10,10 +10,13 @@ const THEME_STORAGE_KEY = 'app_theme';
 })
 export class ThemeService {
   private currentTheme = new BehaviorSubject<ThemeMode>('light');
+
   private themePreference = new BehaviorSubject<ThemePreference>('system');
+
   private systemDarkMode = false;
-  
+
   theme$ = this.currentTheme.asObservable();
+
   preference$ = this.themePreference.asObservable();
 
   constructor(private api: ApiService) {
@@ -21,7 +24,7 @@ export class ThemeService {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       this.systemDarkMode = mediaQuery.matches;
-      
+
       // Listen for system changes
       mediaQuery.addEventListener('change', (e) => {
         this.systemDarkMode = e.matches;
@@ -30,7 +33,7 @@ export class ThemeService {
         }
       });
     }
-    
+
     // Initialize from localStorage
     this.initializeTheme();
   }
@@ -72,18 +75,17 @@ export class ThemeService {
    */
   setPreference(pref: ThemePreference, persistToBackend: boolean = true): void {
     this.themePreference.next(pref);
-    
+
     // Resolve effective theme
-    const effectiveTheme: ThemeMode = 
-      pref === 'system' 
-        ? (this.systemDarkMode ? 'dark' : 'light')
-        : pref;
-    
+    const effectiveTheme: ThemeMode = pref === 'system'
+      ? (this.systemDarkMode ? 'dark' : 'light')
+      : pref;
+
     this.applyTheme(effectiveTheme);
-    
+
     // Store in localStorage
     localStorage.setItem(THEME_STORAGE_KEY, pref);
-    
+
     // Persist to backend if requested
     if (persistToBackend) {
       this.persistThemeToBackend(pref);
@@ -104,14 +106,14 @@ export class ThemeService {
    */
   private applyTheme(theme: ThemeMode): void {
     this.currentTheme.next(theme);
-    
+
     // Remove FOUC prevention class from html element (added by index.html script)
     document.documentElement.classList.remove('dark-theme-pending');
-    
+
     // Apply to document body
     document.body.classList.remove('light-theme', 'dark-theme');
     document.body.classList.add(`${theme}-theme`);
-    
+
     // Update color-scheme for native elements
     document.documentElement.style.colorScheme = theme;
   }
@@ -122,9 +124,7 @@ export class ThemeService {
   private persistThemeToBackend(pref: ThemePreference): void {
     this.api.post<{ metadata: UserMetadata }>('auth/me/', {
       metadata: { theme: pref },
-    }).subscribe({
-      error: (err) => console.error('Failed to save theme preference:', err),
-    });
+    }).subscribe();
   }
 
   /**

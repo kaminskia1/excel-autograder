@@ -18,7 +18,7 @@ describe('AuthComponent', () => {
       imports: [RouterTestingModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule],
       declarations: [AuthComponent],
       providers: [ApiService, UserFactory, UserService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(AuthComponent);
     component = fixture.componentInstance;

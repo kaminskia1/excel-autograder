@@ -23,7 +23,9 @@ function match(str: string) {
   // - Singular (A4)
   // - Set Range (A2:B3)
   // - Vertical or Horizontal Range (A:B, 2:3)
-  return str.match(/((('.*')|([_A-Za-z-0-9]+))!)?((([A-Z]+([0-9]+))(:[A-Z]+([0-9]+))?)|([A-Z]+:[A-Z]+)|([0-9]+:[0-9]+))/g);
+  // eslint-disable-next-line max-len
+  const pattern = /((('.*')|([_A-Za-z-0-9]+))!)?((([A-Z]+([0-9]+))(:[A-Z]+([0-9]+))?)|([A-Z]+:[A-Z]+)|([0-9]+:[0-9]+))/g;
+  return str.match(pattern);
 }
 
 export class FormulaListFacet extends Facet implements
@@ -45,8 +47,8 @@ export class FormulaListFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
-      `Formulas:${this.formulas?.length ? ' ' + this.formulas.toString() : '&nbsp;<span class="red">Not set</span>'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ` ${this.targetCell.address.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Formulas:${this.formulas?.length ? ` ${this.formulas.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 

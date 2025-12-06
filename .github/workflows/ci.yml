@@ -90,7 +90,6 @@ jobs:
 
       - name: Run Ruff linter
         run: ruff check .
-        continue-on-error: true
 
   lint-frontend:
     name: Lint Frontend
@@ -114,5 +113,4 @@ jobs:
       - name: Run ESLint
         working-directory: ./public
         run: npm run lint
-        continue-on-error: true
 

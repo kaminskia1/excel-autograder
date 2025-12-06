@@ -27,7 +27,7 @@
          <mat-icon>list</mat-icon>
        </button>
       <h2 class="ms-2 problems-title" *ngIf="questionListShown">Problems</h2>
-      <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()">
+      <h2 class="ms-2 question-name" *ngIf="!questionListShown && !editingQuestionName" (click)="startEditingQuestionName()" (keydown.enter)="startEditingQuestionName()" tabindex="0" role="button">
         {{ getQuestionDisplayName(activeQuestion, activeAssignment.getQuestions().indexOf(activeQuestion)) }}
         <mat-icon class="edit-icon">edit</mat-icon>
       </h2>
@@ -55,12 +55,15 @@
           cdkDropList
           (cdkDropListDropped)="onQuestionDrop($event)"
           *ngIf="questionListShown">
-          <div 
+          <div
             class="question-list-item"
             *ngFor="let question of activeAssignment.getQuestions(); let i = index"
             cdkDrag
             [ngClass]="{'question-list-item-active': activeQuestion === question}"
-            (click)="setActiveQuestion(question)">
+            (click)="setActiveQuestion(question)"
+            (keydown.enter)="setActiveQuestion(question)"
+            tabindex="0"
+            role="button">
             <div class="question-drag-handle" cdkDragHandle>
               <mat-icon>drag_indicator</mat-icon>
             </div>

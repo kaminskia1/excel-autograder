@@ -2,10 +2,9 @@
 Unit tests for the users app.
 """
 from datetime import timedelta
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
-from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -147,7 +146,7 @@ class TestUserLogin:
     
     def test_login_success(self, api_client, user_factory):
         """Test successful login returns token."""
-        user = user_factory(username='loginuser', password='testpass123')
+        _user = user_factory(username='loginuser', password='testpass123')
         
         url = '/api/v1/auth/login/'
         data = {
@@ -301,7 +300,7 @@ class TestEmailVerificationTokenModel:
         user = user_factory()
         
         # Create an expired token
-        expired_token = EmailVerificationToken.objects.create(
+        _expired_token = EmailVerificationToken.objects.create(
             user=user,
             token='expired_token_123',
             token_type=EmailVerificationToken.TOKEN_TYPE_VERIFY,
@@ -627,7 +626,7 @@ class TestChangeEmailEndpoint:
     
     def test_change_email_already_in_use(self, authenticated_client, user_factory, user):
         """Test change email fails when email in use by another user."""
-        other_user = user_factory(email='taken@example.com')
+        _other_user = user_factory(email='taken@example.com')
         
         url = '/api/v1/auth/change-email/'
         data = {'new_email': 'taken@example.com'}
@@ -670,8 +669,8 @@ class TestCancelEmailChangeEndpoint:
         user.save()
         
         # Create a change token
-        token = EmailVerificationToken.create_token(
-            user, 
+        _token = EmailVerificationToken.create_token(
+            user,
             EmailVerificationToken.TOKEN_TYPE_CHANGE
         )
         

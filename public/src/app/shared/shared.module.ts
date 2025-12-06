@@ -96,4 +96,3 @@ const SHARED_COMPONENTS = [
   ],
 })
 export class SharedModule { }
-

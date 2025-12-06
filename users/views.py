@@ -12,7 +12,6 @@ from .serializers import UserSerializer
 from .email_service import (
     send_verification_email,
     can_send_verification_email,
-    constant_time_compare,
 )
 
 

@@ -10,7 +10,7 @@ describe('FormulaContainsFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [FormulaContainsCreateComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(FormulaContainsCreateComponent);
     component = fixture.componentInstance;

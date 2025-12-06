@@ -15,9 +15,9 @@ describe('ExportAssignmentDialogComponent', () => {
       declarations: [ExportAssignmentDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { data: '' } },
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ExportAssignmentDialogComponent);
     component = fixture.componentInstance;

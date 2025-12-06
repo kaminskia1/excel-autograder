@@ -13,10 +13,10 @@ export class CookieService {
       const trimmed = cookie.trim();
       const separatorIndex = trimmed.indexOf('=');
       if (separatorIndex === -1) continue;
-      
+
       const cookieName = trimmed.substring(0, separatorIndex);
       const cookieValue = trimmed.substring(separatorIndex + 1);
-      
+
       if (cookieName === name) {
         return decodeURIComponent(cookieValue);
       }
@@ -55,4 +55,3 @@ export class CookieService {
     return this.get(name) !== null;
   }
 }
-

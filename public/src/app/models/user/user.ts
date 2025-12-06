@@ -31,8 +31,8 @@ export interface IUserPartial {
   email_verified?: boolean
   pendingEmail?: string | null
   pending_email?: string | null
-  token: string
-  metadata?: UserMetadata
+  token: string;
+  metadata?: UserMetadata;
 }
 
 export interface IUser extends IUserPartial, IApiModel<IUserPartial> {

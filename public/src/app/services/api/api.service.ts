@@ -8,6 +8,7 @@ import { API_URL } from '../../config/api.config';
 })
 export class ApiService {
   private static headers: Headers = new Headers();
+
   private static apiUrl = '';
 
   constructor(private http: HttpClient) {
@@ -17,8 +18,8 @@ export class ApiService {
   private static buildHttpOptions(options: NonNullable<unknown>): NonNullable<unknown> {
     return {
       ...options,
-      headers: ('headers' in options && options.headers instanceof Object) 
-        ? { ...ApiService.headers, ...(options.headers) } 
+      headers: ('headers' in options && options.headers instanceof Object)
+        ? { ...ApiService.headers, ...(options.headers) }
         : ApiService.headers,
     };
   }

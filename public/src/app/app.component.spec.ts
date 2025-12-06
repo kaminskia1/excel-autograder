@@ -18,11 +18,11 @@ describe('AppComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        MatMenuModule
+        MatMenuModule,
       ],
       declarations: [AppComponent],
       providers: [ApiService, UserFactory, UserService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);

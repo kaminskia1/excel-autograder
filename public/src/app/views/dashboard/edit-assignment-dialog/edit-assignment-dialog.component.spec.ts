@@ -17,7 +17,7 @@ describe('RenameAssignmentDialogComponent', () => {
     getFile: () => of(new Blob()),
     setFile: () => {},
     setKey: () => {},
-    save: () => of({})
+    save: () => of({}),
   };
 
   beforeEach(() => {
@@ -26,9 +26,9 @@ describe('RenameAssignmentDialogComponent', () => {
       declarations: [EditAssignmentDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockAssignment },
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(EditAssignmentDialogComponent);
     component = fixture.componentInstance;

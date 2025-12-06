@@ -90,8 +90,8 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
         this.activateWorkbook(assignment);
       },
       error: (err) => {
-        const message = err.status === 404 
-          ? 'Assignment not found' 
+        const message = err.status === 404
+          ? 'Assignment not found'
           : 'This assignment does not exist or you do not have permission to access it.';
         this.snackBar.open(message, 'Close', { duration: 5000 });
         this.router.navigate(['/']);
@@ -185,8 +185,9 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
 
   // Timeout IDs for animation - stored to allow cancellation on rapid clicks
   private fadeOutTimeout: ReturnType<typeof setTimeout> | null = null;
+
   private fadeInTimeout: ReturnType<typeof setTimeout> | null = null;
-  
+
   facetAreaFading = false;
 
   setActiveQuestion(question: Question | null) {
@@ -199,16 +200,16 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
       clearTimeout(this.fadeInTimeout);
       this.fadeInTimeout = null;
     }
-    
+
     if (!question) {
       this.activeQuestion = null;
       this.facetAreaFading = false;
       return;
     }
-    
+
     // Capture initial state to avoid race condition with user toggling the list
     const wasShowingList = this.questionListShown;
-    
+
     // If facet area is visible, fade out first then change question
     // If facet area is hidden (list is shown), skip fade-out and just switch
     if (!wasShowingList) {
@@ -238,7 +239,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  addFacetComponent(facet: Facet) {
+  addFacetComponent(_facet: Facet) {
     // Facet is added to question, Angular will render it via *ngFor
     this.saveQuestions();
   }
@@ -270,7 +271,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
   }
 
   hasInvalidFacets(question: Question): boolean {
-    return question.getFacets().some(facet => !facet.isValid());
+    return question.getFacets().some((facet) => !facet.isValid());
   }
 
   startEditingQuestionName() {

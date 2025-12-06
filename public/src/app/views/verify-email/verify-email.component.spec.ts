@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, discardPeriodicTasks, flush } from '@angular/core/testing';
+import {
+  ComponentFixture, TestBed, fakeAsync, tick, flush,
+} from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -98,7 +100,7 @@ describe('VerifyEmailComponent', () => {
 
     it('should set expired state on expired token error', fakeAsync(() => {
       userServiceSpy.verifyEmail.and.returnValue(
-        throwError(() => ({ error: { error: 'Verification link has expired' } }))
+        throwError(() => ({ error: { error: 'Verification link has expired' } })),
       );
       fixture.detectChanges();
       tick();
@@ -110,7 +112,7 @@ describe('VerifyEmailComponent', () => {
 
     it('should set invalid state on other verification errors', fakeAsync(() => {
       userServiceSpy.verifyEmail.and.returnValue(
-        throwError(() => ({ error: { error: 'Invalid token' } }))
+        throwError(() => ({ error: { error: 'Invalid token' } })),
       );
       fixture.detectChanges();
       tick();
@@ -149,7 +151,7 @@ describe('VerifyEmailComponent', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'Please log in to resend verification email.',
         'Close',
-        { duration: 5000 }
+        { duration: 5000 },
       );
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
     });
@@ -169,7 +171,7 @@ describe('VerifyEmailComponent', () => {
     it('should handle resend error', fakeAsync(() => {
       userServiceSpy.isLoggedIn.and.returnValue(true);
       userServiceSpy.resendVerification.and.returnValue(
-        throwError(() => ({ error: { error: 'Rate limited' } }))
+        throwError(() => ({ error: { error: 'Rate limited' } })),
       );
 
       component.resendVerification();
@@ -198,4 +200,3 @@ describe('VerifyEmailComponent', () => {
     });
   });
 });
-

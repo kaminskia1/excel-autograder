@@ -10,4 +10,3 @@ export enum FacetType {
   ValueRangeFacet = 'ValueRangeFacet',
   ValueLengthFacet = 'ValueLengthFacet',
 }
-

@@ -96,4 +96,3 @@ export class FacetItemComponent implements AfterViewInit {
     this.editingNameValue = '';
   }
 }
-

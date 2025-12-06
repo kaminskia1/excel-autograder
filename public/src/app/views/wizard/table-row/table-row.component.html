@@ -23,7 +23,7 @@
       <div class="cell action" [ngClass]="{'cell-active-hover': workbookService.isRenderedCellEmitterSubscribed(), 'cell-active': rCell.isHighlighted}" [ngStyle]="{
         'height': rCell.height + 'px',
         'width': rCell.actionWidth + 'px',
-      }" [matTooltip]="getTooltip(rCell)" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(rCell)"
+      }" [matTooltip]="getTooltip(rCell)" matTooltipPosition="above" (click)="workbookService.emitRenderedCell(rCell)" (keydown.enter)="workbookService.emitRenderedCell(rCell)" tabindex="0" role="button"
            [matMenuTriggerFor]="activeQuestion && !workbookService.isRenderedCellEmitterSubscribed() ? menu : null"></div>
       <mat-menu #menu="matMenu">
         <button *ngIf="activeQuestion" mat-menu-item class="d-block w-100" (click)="addFacetEmitter.emit(activeQuestion.createFacet({type: FacetType.ValueFacet, points: 1, review: QuestionFlag.None, targetCell: rCell.parent.fullAddress}))">

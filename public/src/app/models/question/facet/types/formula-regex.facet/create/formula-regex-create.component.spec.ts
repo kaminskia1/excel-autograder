@@ -10,7 +10,7 @@ describe('FormulaRegexFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [FormulaRegexCreateComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(FormulaRegexCreateComponent);
     component = fixture.componentInstance;

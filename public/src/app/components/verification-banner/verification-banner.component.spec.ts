@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture, TestBed, fakeAsync, tick,
+} from '@angular/core/testing';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BehaviorSubject, of, throwError } from 'rxjs';
@@ -14,18 +16,16 @@ describe('VerificationBannerComponent', () => {
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
   let userSubject: BehaviorSubject<User | null>;
 
-  const createMockUser = (overrides: Partial<User> = {}): User => {
-    return new User({
-      uuid: '123',
-      username: 'testuser',
-      email: 'test@example.com',
-      emailVerified: false,
-      pendingEmail: null,
-      token: 'test-token',
-      metadata: {},
-      ...overrides,
-    });
-  };
+  const createMockUser = (overrides: Partial<User> = {}): User => new User({
+    uuid: '123',
+    username: 'testuser',
+    email: 'test@example.com',
+    emailVerified: false,
+    pendingEmail: null,
+    token: 'test-token',
+    metadata: {},
+    ...overrides,
+  });
 
   beforeEach(async () => {
     userSubject = new BehaviorSubject<User | null>(null);
@@ -75,37 +75,37 @@ describe('VerificationBannerComponent', () => {
 
     it('should reset isDismissed when a different user logs in', () => {
       fixture.detectChanges();
-      
+
       // First user logs in
       const userA = createMockUser({ uuid: 'user-a', emailVerified: false });
       userSubject.next(userA);
-      
+
       // User A dismisses the banner
       component.isDismissed = true;
       expect(component.isDismissed).toBeTrue();
-      
+
       // Different user logs in
       const userB = createMockUser({ uuid: 'user-b', emailVerified: false });
       userSubject.next(userB);
-      
+
       // Banner should be reset for User B
       expect(component.isDismissed).toBeFalse();
     });
 
     it('should reset isDismissed when user logs out and same user logs back in', () => {
       fixture.detectChanges();
-      
+
       // User logs in
       const userA = createMockUser({ uuid: 'user-a', emailVerified: false });
       userSubject.next(userA);
-      
+
       // User dismisses the banner
       component.isDismissed = true;
-      
+
       // User logs out
       userSubject.next(null);
       expect(component.isDismissed).toBeFalse(); // Reset on logout
-      
+
       // Same user logs back in - should still show banner
       userSubject.next(userA);
       expect(component.isDismissed).toBeFalse();
@@ -113,18 +113,18 @@ describe('VerificationBannerComponent', () => {
 
     it('should not reset isDismissed when same user data is re-emitted', () => {
       fixture.detectChanges();
-      
+
       // User logs in
       const userA = createMockUser({ uuid: 'user-a', emailVerified: false });
       userSubject.next(userA);
-      
+
       // User dismisses the banner
       component.isDismissed = true;
-      
+
       // Same user data re-emitted (e.g., from refreshUser)
       const userARefreshed = createMockUser({ uuid: 'user-a', emailVerified: false });
       userSubject.next(userARefreshed);
-      
+
       // Banner should stay dismissed for same user
       expect(component.isDismissed).toBeTrue();
     });
@@ -185,7 +185,7 @@ describe('VerificationBannerComponent', () => {
 
     it('should handle resend error', fakeAsync(() => {
       userServiceSpy.resendVerification.and.returnValue(
-        throwError(() => ({ error: { error: 'Rate limited' } }))
+        throwError(() => ({ error: { error: 'Rate limited' } })),
       );
 
       component.resendVerification();
@@ -197,7 +197,7 @@ describe('VerificationBannerComponent', () => {
 
     it('should handle error without specific message', fakeAsync(() => {
       userServiceSpy.resendVerification.and.returnValue(
-        throwError(() => ({}))
+        throwError(() => ({})),
       );
 
       component.resendVerification();
@@ -206,7 +206,7 @@ describe('VerificationBannerComponent', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'Failed to send email. Please try again later.',
         'Close',
-        { duration: 5000 }
+        { duration: 5000 },
       );
     }));
   });
@@ -214,10 +214,9 @@ describe('VerificationBannerComponent', () => {
   describe('ngOnDestroy', () => {
     it('should unsubscribe from user changes', () => {
       fixture.detectChanges();
-      const unsubscribeSpy = spyOn(component['userSubscription']!, 'unsubscribe');
+      const unsubscribeSpy = spyOn(component.userSubscription!, 'unsubscribe');
       component.ngOnDestroy();
       expect(unsubscribeSpy).toHaveBeenCalled();
     });
   });
 });
-

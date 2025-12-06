@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture, TestBed, fakeAsync, tick,
+} from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -126,7 +128,7 @@ describe('ProfileComponent', () => {
 
     it('should handle changeEmail error', fakeAsync(() => {
       userServiceSpy.changeEmail.and.returnValue(
-        throwError(() => ({ error: { error: 'Email already in use' } }))
+        throwError(() => ({ error: { error: 'Email already in use' } })),
       );
 
       component.emailForm.setValue({ newEmail: 'taken@example.com' });
@@ -152,7 +154,7 @@ describe('ProfileComponent', () => {
 
     it('should handle resendVerification error', fakeAsync(() => {
       userServiceSpy.resendVerification.and.returnValue(
-        throwError(() => ({ error: { error: 'Rate limited' } }))
+        throwError(() => ({ error: { error: 'Rate limited' } })),
       );
 
       component.onResendVerification();
@@ -178,7 +180,7 @@ describe('ProfileComponent', () => {
 
     it('should handle cancelEmailChange error', fakeAsync(() => {
       userServiceSpy.cancelEmailChange.and.returnValue(
-        throwError(() => ({ error: { error: 'No pending change' } }))
+        throwError(() => ({ error: { error: 'No pending change' } })),
       );
 
       component.onCancelEmailChange();
@@ -218,12 +220,12 @@ describe('ProfileComponent', () => {
         newPassword: 'newpass123',
         confirmPassword: 'different',
       });
-      
+
       expect(component.passwordForm.get('confirmPassword')?.hasError('passwordMismatch')).toBeTrue();
-      
+
       // Now fix the password to match
       component.passwordForm.patchValue({ confirmPassword: 'newpass123' });
-      
+
       // Error should be cleared
       expect(component.passwordForm.get('confirmPassword')?.hasError('passwordMismatch')).toBeFalse();
       expect(component.passwordForm.get('confirmPassword')?.errors).toBeNull();
@@ -235,4 +237,3 @@ describe('ProfileComponent', () => {
     });
   });
 });
-

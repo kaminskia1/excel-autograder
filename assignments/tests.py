@@ -127,9 +127,9 @@ class TestAssignmentListAPI:
     def test_list_assignments_only_own(self, authenticated_client, assignment_factory, user):
         """Test that users only see their own assignments."""
         # Create assignment for another user
-        other_assignment = assignment_factory(name='Other Assignment')
+        _other_assignment = assignment_factory(name='Other Assignment')
         # Create assignment for authenticated user
-        own_assignment = assignment_factory(name='Own Assignment', owner=user)
+        _own_assignment = assignment_factory(name='Own Assignment', owner=user)
         
         url = '/api/v1/assignments/'
         response = authenticated_client.get(url)

@@ -29,8 +29,8 @@ export class ValueFacet extends Facet implements IValueFacet, IModel<IValueFacet
 
   getInfo(): Array<string> {
     return [
-      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
-      `Value:${this.value != null ? ' ' + this.value : '&nbsp;<span class="red">Not set</span>'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ` ${this.targetCell.address.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Value:${this.value != null ? ` ${this.value}` : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 

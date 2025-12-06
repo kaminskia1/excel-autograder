@@ -1,4 +1,6 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component, HostListener, OnDestroy, OnInit,
+} from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -119,8 +121,8 @@ export class GraderComponent implements OnInit, OnDestroy {
     });
   }
 
-  addSubmission(fileList: FileList | EventTarget | null) {
-    fileList = fileList instanceof FileList ? fileList : (fileList as HTMLInputElement).files;
+  addSubmission(input: FileList | EventTarget | null) {
+    const fileList = input instanceof FileList ? input : (input as HTMLInputElement).files;
     if (!fileList) return;
     const files = Array.from(fileList);
 
@@ -267,7 +269,7 @@ export class GraderComponent implements OnInit, OnDestroy {
 
   openReview() {
     if (!this.masterAssignment || !this.submissions.length) return;
-    const dialogRef = this.dialog.open(InfoDialogComponent, {
+    this.dialog.open(InfoDialogComponent, {
       width: '350px',
       data: {
         title: 'Work in Progress',
@@ -310,14 +312,14 @@ export class GraderComponent implements OnInit, OnDestroy {
             category: sub.workbook.category,
 
             ...Array.from(sub.responses.entries()).map(([key, val]) => ({
-              ["expected-" + key.uuid]: val.expectedValue,
+              [`expected-${key.uuid}`]: val.expectedValue,
             })).reduce((acc, cur) => {
               Object.assign(acc, cur);
               return acc;
             }, {}),
 
             ...Array.from(sub.responses.entries()).map(([key, val]) => ({
-              ["provided-" + key.uuid]: val.providedValue,
+              [`provided-${key.uuid}`]: val.providedValue,
             })).reduce((acc, cur) => {
               Object.assign(acc, cur);
               return acc;
@@ -351,8 +353,8 @@ export class GraderComponent implements OnInit, OnDestroy {
       const questionName = que.name || `Problem ${i + 1}`;
       for (let j = 0; j < que.getFacets().length; j += 1) {
         const fac = que.getFacets()[j];
-        copy.set("expected-"+ fac.uuid, { val: `${questionName} Expected - ${fac.getName()} (#${j + 1})`, fac });
-        copy.set("provided-"+ fac.uuid, { val: `${questionName} Provided - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set(`expected-${fac.uuid}`, { val: `${questionName} Expected - ${fac.getName()} (#${j + 1})`, fac });
+        copy.set(`provided-${fac.uuid}`, { val: `${questionName} Provided - ${fac.getName()} (#${j + 1})`, fac });
       }
     }
     return copy;

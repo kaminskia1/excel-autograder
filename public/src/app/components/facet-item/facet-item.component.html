@@ -2,7 +2,7 @@
   <div class="drag-handle" cdkDragHandle>
     <mat-icon>drag_indicator</mat-icon>
   </div>
-  <h2 class="facet-title facet-name-editable" *ngIf="!editingName" (click)="startEditingName()">
+  <h2 class="facet-title facet-name-editable" *ngIf="!editingName" (click)="startEditingName()" (keydown.enter)="startEditingName()" tabindex="0" role="button">
     {{facet.getName()}}
     <mat-icon class="edit-icon">edit</mat-icon>
   </h2>

@@ -13,9 +13,9 @@ describe('ConfirmationDialogComponent', () => {
       declarations: [ConfirmationDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { title: 'Test', message: 'Test message' } },
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ConfirmationDialogComponent);
     component = fixture.componentInstance;

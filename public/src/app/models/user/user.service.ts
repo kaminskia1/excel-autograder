@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, shareReplay, of, first, map } from 'rxjs';
+import {
+  BehaviorSubject, Observable, shareReplay, of, first, map,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api/api.service';
 import {
@@ -41,7 +43,7 @@ export class UserService {
   private restoreSession(token: string): void {
     // Set the token immediately so API calls work
     ApiService.registerHeader('Authorization', `Token ${token}`);
-    
+
     // Fetch user info from API
     this.api.get<IUser>('auth/me/').subscribe({
       next: (userData) => {

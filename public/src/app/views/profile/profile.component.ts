@@ -10,13 +10,21 @@ import { UserService } from '../../models/user/user.service';
 })
 export class ProfileComponent {
   passwordForm: FormGroup;
+
   emailForm: FormGroup;
+
   isChangingPassword = false;
+
   isChangingEmail = false;
+
   isResendingVerification = false;
+
   isCancellingEmailChange = false;
+
   hideCurrentPassword = true;
+
   hideNewPassword = true;
+
   hideConfirmPassword = true;
 
   constructor(
@@ -39,16 +47,17 @@ export class ProfileComponent {
     const newPassword = form.get('newPassword')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
     const confirmPasswordControl = form.get('confirmPassword');
-    
+
     if (newPassword !== confirmPassword) {
       confirmPasswordControl?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     }
-    
+
     // Clear the passwordMismatch error when passwords match
     // But preserve other errors like 'required'
     if (confirmPasswordControl?.hasError('passwordMismatch')) {
       const errors = { ...confirmPasswordControl.errors };
+      // eslint-disable-next-line dot-notation
       delete errors['passwordMismatch'];
       confirmPasswordControl.setErrors(Object.keys(errors).length ? errors : null);
     }
@@ -139,4 +148,3 @@ export class ProfileComponent {
     });
   }
 }
-

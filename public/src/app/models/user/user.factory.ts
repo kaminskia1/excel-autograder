@@ -19,7 +19,7 @@ interface IUserResponse {
 export class UserFactory {
   createUser(user: IUserPartial | IUserResponse): User {
     if (user instanceof User) return user;
-    
+
     // Transform snake_case backend response to camelCase frontend model
     const transformed: IUserPartial = {
       uuid: (user as IUserResponse).uuid ?? String((user as IUserResponse).id ?? ''),
@@ -30,7 +30,7 @@ export class UserFactory {
       token: user.token,
       metadata: user.metadata,
     };
-    
+
     return new User(transformed);
   }
 }

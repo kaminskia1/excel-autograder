@@ -23,6 +23,7 @@ interface NewAssignmentForm {
 })
 export class NewAssignmentDialogComponent {
   newAssignmentForm: FormGroup<NewAssignmentForm>;
+
   newAssignment: Assignment;
 
   constructor(
@@ -63,10 +64,10 @@ export class NewAssignmentDialogComponent {
 
     const key = this.newAssignmentForm.controls.key.value;
     if (key) this.newAssignment.setKey(key);
-    
+
     // Create a default problem
     this.newAssignment.addQuestion();
-    
+
     this.data.emit(this.newAssignment);
     this.dialogRef.close();
   }

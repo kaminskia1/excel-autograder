@@ -13,9 +13,9 @@ describe('WorkInProgressDialogComponent', () => {
       declarations: [InfoDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { title: 'Test', message: 'Test' } },
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(InfoDialogComponent);
     component = fixture.componentInstance;

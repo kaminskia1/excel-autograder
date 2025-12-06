@@ -1,7 +1,7 @@
 /**
  * These tests verify that formulas with Excel's internal function prefixes
  * (_xlfn., _xlws.) are correctly stripped before matching.
- * 
+ *
  * When Excel saves newer functions like STDEV.S, STDEV.P, CONCAT, IFS, etc.,
  * they are stored with the _xlfn. or _xlws. prefix in the formula string.
  * Our formula matching logic needs to strip these prefixes to correctly
@@ -256,7 +256,7 @@ describe('Formula Prefix Stripping', () => {
     function extractFunctions(formula: string): string[] {
       const stripped = stripPrefixes(formula);
       const matches = stripped.match(/[A-Z.]+\(/g);
-      return matches ? matches.map(fn => fn.slice(0, -1)) : [];
+      return matches ? matches.map((fn) => fn.slice(0, -1)) : [];
     }
 
     it('should extract STDEV.S from _xlfn prefixed formula', () => {
@@ -360,4 +360,3 @@ describe('Formula Prefix Stripping', () => {
     });
   });
 });
-

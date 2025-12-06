@@ -1,21 +1,20 @@
 /**
  * Unit tests for Question score aggregation methods.
- * 
+ *
  * Tests cover:
  * - getMaxScore(): Aggregates max points from all facets
  * - evaluateScore(): Sums actual scores from all facets
  * - evaluateResponses(): Returns Map with per-facet responses
  */
 
-import { Workbook, Worksheet } from 'exceljs';
+import { Workbook, Worksheet, CellFormulaValue } from 'exceljs';
 import { FancyWorkbook } from '../workbook/workbook';
-import { Question, IQuestionPartial } from './question';
+import { Question } from './question';
 import { FacetFactory } from './facet/facet.factory';
 import { WorkbookService } from '../workbook/workbook.service';
 import { QuestionFlag, ICellAddress } from './misc';
 import { FacetType } from './facet/types/facet-type.enum';
 import { IFacetPartial } from './facet/facet';
-import { CellFormulaValue } from 'exceljs';
 
 /**
  * Helper to create a formula cell value with proper typing
@@ -40,7 +39,12 @@ function valueFacet(value: string, points: number, targetCell: ICellAddress): IF
 /**
  * Helper to create a ValueRangeFacet partial config
  */
-function valueRangeFacet(lowerBounds: number, upperBounds: number, points: number, targetCell: ICellAddress): IFacetPartial {
+function valueRangeFacet(
+  lowerBounds: number,
+  upperBounds: number,
+  points: number,
+  targetCell: ICellAddress,
+): IFacetPartial {
   return {
     type: FacetType.ValueRangeFacet,
     lowerBounds,
@@ -85,7 +89,9 @@ function createMockFacetFactory(): FacetFactory {
  * Helper to create a test cell address
  */
 function createCellAddress(sheetName: string, address: string, row: number, col: number): ICellAddress {
-  return { sheetName, address, row, col };
+  return {
+    sheetName, address, row, col,
+  };
 }
 
 /**
@@ -95,7 +101,7 @@ async function createFancyWorkbook(setupFn: (wb: Workbook, ws: Worksheet) => voi
   const wb = new Workbook();
   const ws = wb.addWorksheet('Sheet1');
   setupFn(wb, ws);
-  
+
   const buffer = await wb.xlsx.writeBuffer();
   const fancy = new FancyWorkbook();
   await fancy.xlsx.load(buffer);
@@ -114,7 +120,7 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [],
       }, facetFactory);
-      
+
       expect(question.getMaxScore()).toBe(0);
     });
 
@@ -123,7 +129,7 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [valueFacet('test', 10, targetCellA1)],
       }, facetFactory);
-      
+
       expect(question.getMaxScore()).toBe(10);
     });
 
@@ -136,7 +142,7 @@ describe('Question', () => {
           valueFacet('test3', 5, targetCellA3),
         ],
       }, facetFactory);
-      
+
       expect(question.getMaxScore()).toBe(30);
     });
 
@@ -148,7 +154,7 @@ describe('Question', () => {
           valueFacet('test2', 0, targetCellA2),
         ],
       }, facetFactory);
-      
+
       expect(question.getMaxScore()).toBe(10);
     });
   });
@@ -158,12 +164,12 @@ describe('Question', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'test';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [],
       }, facetFactory);
-      
+
       expect(question.evaluateScore(workbook)).toBe(0);
     });
 
@@ -171,12 +177,12 @@ describe('Question', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'correct';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [valueFacet('correct', 10, targetCellA1)],
       }, facetFactory);
-      
+
       expect(question.evaluateScore(workbook)).toBe(10);
     });
 
@@ -184,12 +190,12 @@ describe('Question', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'wrong';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [valueFacet('correct', 10, targetCellA1)],
       }, facetFactory);
-      
+
       expect(question.evaluateScore(workbook)).toBe(0);
     });
 
@@ -199,7 +205,7 @@ describe('Question', () => {
         ws.getCell('A2').value = 'correct2';
         ws.getCell('A3').value = 'correct3';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [
@@ -208,7 +214,7 @@ describe('Question', () => {
           valueFacet('correct3', 5, targetCellA3),
         ],
       }, facetFactory);
-      
+
       expect(question.evaluateScore(workbook)).toBe(30);
     });
 
@@ -218,7 +224,7 @@ describe('Question', () => {
         ws.getCell('A2').value = 'wrong';
         ws.getCell('A3').value = 'correct3';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [
@@ -227,7 +233,7 @@ describe('Question', () => {
           valueFacet('correct3', 5, targetCellA3),
         ],
       }, facetFactory);
-      
+
       // Only facets 1 and 3 match (10 + 5 = 15)
       expect(question.evaluateScore(workbook)).toBe(15);
     });
@@ -238,7 +244,7 @@ describe('Question', () => {
         ws.getCell('A2').value = 50;
         ws.getCell('A3').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [
@@ -247,7 +253,7 @@ describe('Question', () => {
           formulaListFacet(['SUM'], 5, targetCellA3),
         ],
       }, facetFactory);
-      
+
       expect(question.evaluateScore(workbook)).toBe(30);
     });
   });
@@ -257,12 +263,12 @@ describe('Question', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'test';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [],
       }, facetFactory);
-      
+
       const responses = question.evaluateResponses(workbook);
       expect(responses.size).toBe(0);
     });
@@ -272,7 +278,7 @@ describe('Question', () => {
         ws.getCell('A1').value = 'correct';
         ws.getCell('A2').value = 'wrong';
       });
-      
+
       const question = new Question({
         name: 'Test Question',
         facets: [
@@ -280,21 +286,22 @@ describe('Question', () => {
           valueFacet('expected', 15, targetCellA2),
         ],
       }, facetFactory);
-      
+
       const responses = question.evaluateResponses(workbook);
       expect(responses.size).toBe(2);
-      
+
       // Get facets to check responses
       const facets = question.getFacets();
-      
+
       // The return type annotation in Question says Map<Facet, number> but it actually returns objects
-      const response1 = responses.get(facets[0]) as unknown as { score: number; maxScore: number; providedValue: string };
+      type FacetResponse = { score: number; maxScore: number; providedValue: string };
+      const response1 = responses.get(facets[0]) as unknown as FacetResponse;
       expect(response1).toBeDefined();
       expect(response1.score).toBe(10);
       expect(response1.maxScore).toBe(10);
       expect(response1.providedValue).toBe('correct');
-      
-      const response2 = responses.get(facets[1]) as unknown as { score: number; maxScore: number; providedValue: string };
+
+      const response2 = responses.get(facets[1]) as unknown as FacetResponse;
       expect(response2).toBeDefined();
       expect(response2.score).toBe(0);
       expect(response2.maxScore).toBe(15);
@@ -308,7 +315,7 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [],
       }, facetFactory);
-      
+
       expect(question.getFacets()).toEqual([]);
     });
 
@@ -320,7 +327,7 @@ describe('Question', () => {
           valueFacet('test2', 15, targetCellA2),
         ],
       }, facetFactory);
-      
+
       expect(question.getFacets().length).toBe(2);
     });
   });
@@ -331,11 +338,11 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [],
       }, facetFactory);
-      
+
       expect(question.getFacets().length).toBe(0);
-      
+
       question.createFacet(valueFacet('test', 10, targetCellA1));
-      
+
       expect(question.getFacets().length).toBe(1);
     });
   });
@@ -346,12 +353,12 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [valueFacet('test', 10, targetCellA1)],
       }, facetFactory);
-      
+
       expect(question.getFacets().length).toBe(1);
-      
+
       const facet = question.getFacets()[0];
       question.removeFacet(facet);
-      
+
       expect(question.getFacets().length).toBe(0);
     });
 
@@ -360,14 +367,14 @@ describe('Question', () => {
         name: 'Test Question 1',
         facets: [],
       }, facetFactory);
-      
+
       const question2 = new Question({
         name: 'Test Question 2',
         facets: [valueFacet('test', 10, targetCellA1)],
       }, facetFactory);
-      
+
       const facetFromQuestion2 = question2.getFacets()[0];
-      
+
       expect(() => question1.removeFacet(facetFromQuestion2)).toThrowError(Error, 'Facet not found in question');
     });
   });
@@ -378,13 +385,12 @@ describe('Question', () => {
         name: 'Test Question',
         facets: [valueFacet('test', 10, targetCellA1)],
       }, facetFactory);
-      
+
       const serialized = question.getSerializable();
-      
+
       expect(serialized.name).toBe('Test Question');
       expect(serialized.facets.length).toBe(1);
       expect(serialized.facets[0].type).toBe(FacetType.ValueFacet);
     });
   });
 });
-

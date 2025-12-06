@@ -18,10 +18,10 @@ describe('GraderComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { params: of({ id: 'test-id' }) }
-        }
+          useValue: { params: of({ id: 'test-id' }) },
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(GraderComponent);
     component = fixture.componentInstance;

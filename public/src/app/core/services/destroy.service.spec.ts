@@ -83,16 +83,14 @@ describe('DestroyService', () => {
 
   it('should work with multiple subscriptions', () => {
     const service = new DestroyService();
-    let sub1Count = 0;
-    let sub2Count = 0;
 
     const sub1 = interval(10)
       .pipe(takeUntil(service))
-      .subscribe(() => { sub1Count++; });
+      .subscribe();
 
     const sub2 = interval(10)
       .pipe(takeUntil(service))
-      .subscribe(() => { sub2Count++; });
+      .subscribe();
 
     // Destroy service
     service.ngOnDestroy();
@@ -102,4 +100,3 @@ describe('DestroyService', () => {
     expect(sub2.closed).toBeTrue();
   });
 });
-

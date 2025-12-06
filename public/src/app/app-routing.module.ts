@@ -18,7 +18,7 @@ import { UserService } from './models/user/user.service';
 const userLoggedIn: CanActivateFn = () => {
   const router = inject(Router);
   const userService = inject(UserService);
-  
+
   return userService.waitForSessionRestore().pipe(
     map((isLoggedIn) => {
       if (isLoggedIn) return true;
@@ -31,7 +31,7 @@ const userLoggedIn: CanActivateFn = () => {
 const userNotPresent: CanActivateFn = () => {
   const router = inject(Router);
   const userService = inject(UserService);
-  
+
   return userService.waitForSessionRestore().pipe(
     map((isLoggedIn) => {
       if (!isLoggedIn) return true;

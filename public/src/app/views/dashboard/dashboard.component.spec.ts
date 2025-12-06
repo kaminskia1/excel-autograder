@@ -15,7 +15,7 @@ describe('AssignmentsComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, MatDialogModule, MatSnackBarModule],
       declarations: [DashboardComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;

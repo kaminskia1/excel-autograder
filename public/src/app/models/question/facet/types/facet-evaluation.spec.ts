@@ -1,6 +1,6 @@
 /**
  * Unit tests for facet evaluateScore() and isValid() methods.
- * 
+ *
  * These tests cover the core grading logic for all facet types:
  * - ValueFacet: Exact value matching
  * - FormulaListFacet: Formula function matching with prefix stripping
@@ -16,12 +16,12 @@ import { WorkbookService } from '../../../workbook/workbook.service';
 import { QuestionFlag, ICellAddress } from '../../misc';
 import { FacetType } from './facet-type.enum';
 
-import { ValueFacet, IValueFacetPartial } from './value.facet/value.facet';
-import { FormulaListFacet, IFormulaListFacetPartial } from './formula-list.facet/formula-list.facet';
-import { FormulaContainsFacet, IFormulaContainsFacetPartial } from './formula-contains.facet/formula-contain.facet';
-import { FormulaRegexFacet, IFormulaRegexFacetPartial } from './formula-regex.facet/formula-regex.facet';
-import { ValueRangeFacet, IValueRangeFacetPartial } from './value-range.facet/value-range.facet';
-import { ValueLengthFacet, IValueLengthFacetPartial } from './value-length.facet/value-length.facet';
+import { ValueFacet } from './value.facet/value.facet';
+import { FormulaListFacet } from './formula-list.facet/formula-list.facet';
+import { FormulaContainsFacet } from './formula-contains.facet/formula-contain.facet';
+import { FormulaRegexFacet } from './formula-regex.facet/formula-regex.facet';
+import { ValueRangeFacet } from './value-range.facet/value-range.facet';
+import { ValueLengthFacet } from './value-length.facet/value-length.facet';
 
 /**
  * Helper to create a formula cell value with proper typing
@@ -43,7 +43,9 @@ function createMockWorkbookService(): WorkbookService {
  * Helper to create a test cell address
  */
 function createCellAddress(sheetName: string, address: string, row: number, col: number): ICellAddress {
-  return { sheetName, address, row, col };
+  return {
+    sheetName, address, row, col,
+  };
 }
 
 /**
@@ -53,7 +55,7 @@ async function createFancyWorkbook(setupFn: (wb: Workbook, ws: Worksheet) => voi
   const wb = new Workbook();
   const ws = wb.addWorksheet('Sheet1');
   setupFn(wb, ws);
-  
+
   // Convert to FancyWorkbook by writing to buffer and reading back
   const buffer = await wb.xlsx.writeBuffer();
   const fancy = new FancyWorkbook();
@@ -64,7 +66,7 @@ async function createFancyWorkbook(setupFn: (wb: Workbook, ws: Worksheet) => voi
 describe('ValueFacet', () => {
   const mockService = createMockWorkbookService();
   const targetCell = createCellAddress('Sheet1', 'A1', 1, 1);
-  
+
   describe('isValid()', () => {
     it('should return true when all required fields are set', () => {
       const facet = new ValueFacet({
@@ -145,7 +147,7 @@ describe('ValueFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueFacet({
         type: FacetType.ValueFacet,
         value: 'Hello',
@@ -153,7 +155,7 @@ describe('ValueFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -161,7 +163,7 @@ describe('ValueFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueFacet({
         type: FacetType.ValueFacet,
         value: 'World',
@@ -169,15 +171,15 @@ describe('ValueFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
     it('should return 0 when cell is empty', async () => {
-      const workbook = await createFancyWorkbook((wb, ws) => {
+      const workbook = await createFancyWorkbook(() => {
         // Cell A1 is not set
       });
-      
+
       const facet = new ValueFacet({
         type: FacetType.ValueFacet,
         value: 'test',
@@ -185,7 +187,7 @@ describe('ValueFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -193,7 +195,7 @@ describe('ValueFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 42;
       });
-      
+
       const facet = new ValueFacet({
         type: FacetType.ValueFacet,
         value: '42',
@@ -201,7 +203,7 @@ describe('ValueFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -209,7 +211,7 @@ describe('ValueFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'test';
       });
-      
+
       const facet = new ValueFacet({
         type: FacetType.ValueFacet,
         value: 'test',
@@ -217,7 +219,7 @@ describe('ValueFacet', () => {
         targetCell: undefined as any,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(() => facet.evaluateScore(workbook)).toThrowError(Error, 'Target cell not set');
     });
   });
@@ -267,7 +269,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['SUM'],
@@ -275,7 +277,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -283,7 +285,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('AVERAGE(B1:B10)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['SUM'],
@@ -291,7 +293,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -299,7 +301,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)+AVERAGE(C1:C10)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['SUM', 'AVERAGE'],
@@ -307,7 +309,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -315,7 +317,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Just text';
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['SUM'],
@@ -323,7 +325,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -331,7 +333,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('_xlfn.STDEV.S(B1:B10)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['STDEV.S'],
@@ -339,7 +341,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -347,7 +349,7 @@ describe('FormulaListFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('_xlfn.STDEV.P(B1:B10)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['STDEV.P'],
@@ -355,7 +357,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -367,7 +369,7 @@ describe('FormulaListFacet', () => {
         ws.getCell('Z1').value = 1;
         ws.getCell('A1').value = createFormulaValue('_xlws.FILTER(Z1,Z1>0)');
       });
-      
+
       const facet = new FormulaListFacet({
         type: FacetType.FormulaListFacet,
         formulas: ['FILTER'],
@@ -375,7 +377,7 @@ describe('FormulaListFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
   });
@@ -414,7 +416,7 @@ describe('FormulaContainsFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const facet = new FormulaContainsFacet({
         type: FacetType.FormulaContainsFacet,
         formula: 'SUM',
@@ -422,7 +424,7 @@ describe('FormulaContainsFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -430,7 +432,7 @@ describe('FormulaContainsFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('AVERAGE(B1:B10)');
       });
-      
+
       const facet = new FormulaContainsFacet({
         type: FacetType.FormulaContainsFacet,
         formula: 'SUM',
@@ -438,7 +440,7 @@ describe('FormulaContainsFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -446,7 +448,7 @@ describe('FormulaContainsFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('_xlfn.STDEV.S(B1:B10)');
       });
-      
+
       const facet = new FormulaContainsFacet({
         type: FacetType.FormulaContainsFacet,
         formula: 'STDEV.S',
@@ -454,7 +456,7 @@ describe('FormulaContainsFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -462,7 +464,7 @@ describe('FormulaContainsFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const facet = new FormulaContainsFacet({
         type: FacetType.FormulaContainsFacet,
         formula: 'B1:B10',
@@ -470,7 +472,7 @@ describe('FormulaContainsFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
   });
@@ -520,7 +522,7 @@ describe('FormulaRegexFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const facet = new FormulaRegexFacet({
         type: FacetType.FormulaRegexFacet,
         expression: 'SUM\\(.*\\)',
@@ -528,7 +530,7 @@ describe('FormulaRegexFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -536,7 +538,7 @@ describe('FormulaRegexFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('AVERAGE(B1:B10)');
       });
-      
+
       const facet = new FormulaRegexFacet({
         type: FacetType.FormulaRegexFacet,
         expression: '^SUM\\(',
@@ -544,7 +546,7 @@ describe('FormulaRegexFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -552,7 +554,7 @@ describe('FormulaRegexFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('_xlfn.STDEV.S(B1:B10)');
       });
-      
+
       const facet = new FormulaRegexFacet({
         type: FacetType.FormulaRegexFacet,
         expression: '^STDEV\\.S\\(',
@@ -560,7 +562,7 @@ describe('FormulaRegexFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -571,7 +573,7 @@ describe('FormulaRegexFacet', () => {
       const workbook2 = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('_xlfn.STDEV.P(B1:B10)');
       });
-      
+
       const facet = new FormulaRegexFacet({
         type: FacetType.FormulaRegexFacet,
         expression: 'STDEV\\.(S|P)\\(',
@@ -579,7 +581,7 @@ describe('FormulaRegexFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook1)).toBe(10);
       expect(facet.evaluateScore(workbook2)).toBe(10);
     });
@@ -588,7 +590,7 @@ describe('FormulaRegexFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = createFormulaValue('SUM(B1:B10)');
       });
-      
+
       const facet = new FormulaRegexFacet({
         type: FacetType.FormulaRegexFacet,
         expression: '[invalid',
@@ -596,7 +598,7 @@ describe('FormulaRegexFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(() => facet.evaluateScore(workbook)).toThrowError(Error, 'Error parsing regex');
     });
   });
@@ -661,7 +663,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 50;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -670,7 +672,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -678,7 +680,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 0;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -687,7 +689,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -695,7 +697,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 100;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -704,7 +706,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -712,7 +714,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = -1;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -721,7 +723,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -729,7 +731,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 101;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -738,7 +740,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -746,7 +748,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'not a number';
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: 0,
@@ -755,7 +757,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -763,7 +765,7 @@ describe('ValueRangeFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = -50;
       });
-      
+
       const facet = new ValueRangeFacet({
         type: FacetType.ValueRangeFacet,
         lowerBounds: -100,
@@ -772,7 +774,7 @@ describe('ValueRangeFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
   });
@@ -849,7 +851,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: 3,
@@ -858,7 +860,7 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -866,7 +868,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hi';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: 5,
@@ -875,7 +877,7 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -883,7 +885,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: undefined,
@@ -892,7 +894,7 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -900,7 +902,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello World';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: undefined,
@@ -909,7 +911,7 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(0);
     });
 
@@ -917,7 +919,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: 3,
@@ -926,7 +928,7 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(facet.evaluateScore(workbook)).toBe(10);
     });
 
@@ -934,7 +936,7 @@ describe('ValueLengthFacet', () => {
       const workbook = await createFancyWorkbook((wb, ws) => {
         ws.getCell('A1').value = 'Hello';
       });
-      
+
       const facet = new ValueLengthFacet({
         type: FacetType.ValueLengthFacet,
         minLength: 10,
@@ -943,9 +945,8 @@ describe('ValueLengthFacet', () => {
         targetCell,
         review: QuestionFlag.None,
       }, mockService);
-      
+
       expect(() => facet.evaluateScore(workbook)).toThrowError(Error, 'Max length less than min');
     });
   });
 });
-

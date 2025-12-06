@@ -10,7 +10,7 @@ describe('FunctionListFacetComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [FormulaListCreateComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(FormulaListCreateComponent);
     component = fixture.componentInstance;

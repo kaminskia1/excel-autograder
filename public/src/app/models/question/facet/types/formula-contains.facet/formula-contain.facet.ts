@@ -31,8 +31,8 @@ export class FormulaContainsFacet extends Facet implements
 
   getInfo(): Array<string> {
     return [
-      `Target Cell:${this.targetCell?.address?.toString() ? ' ' + this.targetCell.address.toString() : '&nbsp;<span class="red">Not set</span>'}`,
-      `Formula:${this.formula ? ' ' + this.formula : '&nbsp;<span class="red">Not set</span>'}`,
+      `Target Cell:${this.targetCell?.address?.toString() ? ` ${this.targetCell.address.toString()}` : '&nbsp;<span class="red">Not set</span>'}`,
+      `Formula:${this.formula ? ` ${this.formula}` : '&nbsp;<span class="red">Not set</span>'}`,
     ];
   }
 

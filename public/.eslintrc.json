@@ -36,7 +36,62 @@
         "import/extensions": "off",
         "no-useless-constructor": "off",
         "import/no-unresolved": "off",
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+
+        // Angular DI pattern - constructors with injected services appear empty
+        // Also allow empty arrow functions (callbacks) and methods (stubs)
+        "no-empty-function": ["error", { "allow": ["constructors", "arrowFunctions", "methods"] }],
+        "@typescript-eslint/no-empty-function": ["error", { "allow": ["constructors", "arrowFunctions", "methods"] }],
+
+        // Private property convention with getters/setters
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+
+        // TypeScript handles variable shadowing; enums trigger false positives
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
+
+        // TypeScript handles use-before-define
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+
+        // Allow ++ operator (common in loops)
+        "no-plusplus": "off",
+
+        // Allow for-of loops (modern JS)
+        "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+
+        // Allow continue statement
+        "no-continue": "off",
+
+        // Allow multiple related classes per file
+        "max-classes-per-file": "off",
+
+        // Allow nested ternary (sometimes cleaner than if-else chains)
+        "no-nested-ternary": "off",
+
+        // Allow new for side effects (e.g., regex validation)
+        "no-new": "off",
+
+        // Console statements as warnings (useful for debugging)
+        "no-console": "warn",
+
+        // Increase max line length to 120 (more practical)
+        "max-len": ["error", { "code": 120, "ignoreUrls": true, "ignoreStrings": true, "ignoreTemplateLiterals": true }],
+
+        // Allow param reassign for properties (common in test setup)
+        "no-param-reassign": ["error", { "props": false }],
+
+        // Allow underscore-prefixed unused vars (convention for intentionally unused)
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }]
+      }
+    },
+    {
+      "files": [
+        "*.spec.ts"
+      ],
+      "rules": {
+        // Allow `any` in test files for mocking flexibility
+        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {

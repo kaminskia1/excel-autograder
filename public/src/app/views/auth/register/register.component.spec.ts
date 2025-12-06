@@ -18,7 +18,7 @@ describe('RegisterComponent', () => {
       imports: [RouterTestingModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule],
       declarations: [RegisterComponent],
       providers: [ApiService, UserFactory, UserService],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;

@@ -11,9 +11,13 @@ import { User } from '../../models/user/user';
 })
 export class VerificationBannerComponent implements OnInit, OnDestroy {
   user: User | null = null;
+
   isDismissed = false;
+
   isResending = false;
+
   private userSubscription?: Subscription;
+
   private previousUserId: string | null = null;
 
   constructor(
@@ -29,7 +33,7 @@ export class VerificationBannerComponent implements OnInit, OnDestroy {
         this.isDismissed = false;
         this.previousUserId = currentUserId;
       }
-      
+
       this.user = user;
     });
   }
@@ -61,4 +65,3 @@ export class VerificationBannerComponent implements OnInit, OnDestroy {
     });
   }
 }
-

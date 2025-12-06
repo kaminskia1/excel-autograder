@@ -10,7 +10,7 @@ describe('TableCellComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TableRowComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(TableRowComponent);
     component = fixture.componentInstance;

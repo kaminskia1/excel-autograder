@@ -29,14 +29,14 @@ import { VerifyEmailModule } from './views/verify-email/verify-email.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    
+
     // App core & routing
     CoreModule,
     AppRoutingModule,
-    
+
     // Shared module
     SharedModule,
-    
+
     // Feature modules
     AuthModule,
     DashboardModule,
