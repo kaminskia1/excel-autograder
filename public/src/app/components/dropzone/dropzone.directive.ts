@@ -7,7 +7,7 @@ import {
 })
 
 export class DropzoneDirective {
-  @Output() private filesChange : EventEmitter<FileList> = new EventEmitter();
+  @Output() filesChange: EventEmitter<FileList> = new EventEmitter();
 
   @HostBinding('class.dropzone-idle') idleState = true;
 

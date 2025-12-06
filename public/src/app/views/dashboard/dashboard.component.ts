@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,6 +19,7 @@ import {
 import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { encodeBlobToBase64, encodeString } from '../../utils/encoding.utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,7 +29,7 @@ import {
 export class DashboardComponent implements OnInit {
   assignments: Array<Assignment> = [];
 
-  displayedColumns = ['name', 'status', 'updated_at', 'action'];
+  displayedColumns = ['name', 'status', 'updatedAt', 'action'];
 
   dataSource = new MatTableDataSource<Assignment>(this.assignments);
 
@@ -118,24 +118,16 @@ export class DashboardComponent implements OnInit {
   }
 
   openExportDialog(assignment: Assignment) {
-    // @TODO: Clean this up (move to assignment or modular encoding class?)
     assignment.getFile().subscribe((file) => {
-      const encodeBlobToBase64 = (blob: Blob): Promise<string> => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
       encodeBlobToBase64(file).then((base64) => {
-        const xp = {
+        const exportData = {
           name: assignment.name,
           file: base64,
           questions: assignment.questions.map((q: Question) => q.getSerializable()),
         };
-        const encode = (str: string):string => Buffer.from(str, 'binary').toString('base64');
         this.dialog.open(ExportAssignmentDialogComponent, {
           width: '350px',
-          data: encode(JSON.stringify(xp)),
+          data: encodeString(JSON.stringify(exportData)),
         });
       });
     });

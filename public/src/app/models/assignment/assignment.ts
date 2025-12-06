@@ -1,4 +1,6 @@
-import { Observable, of, shareReplay } from 'rxjs';
+import {
+  Observable, of, shareReplay, tap,
+} from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { IQuestion, Question } from '../question/question';
 import { QuestionFactory } from '../question/question.factory';
@@ -13,8 +15,8 @@ export interface EncodedAssignment {
 }
 export interface IAssignmentPartial {
   readonly uuid: string;
-  readonly created_at: string;
-  readonly updated_at: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
   readonly owner: IUser;
   name: string;
   file: string;
@@ -37,9 +39,9 @@ export class Assignment implements IAssignment {
 
   readonly uuid: string;
 
-  readonly created_at: string;
+  readonly createdAt: string;
 
-  readonly updated_at: string;
+  readonly updatedAt: string;
 
   readonly owner: IUser;
 
@@ -62,8 +64,8 @@ export class Assignment implements IAssignment {
     private assignmentService: AssignmentService,
   ) {
     this.uuid = assignment.uuid;
-    this.created_at = assignment.created_at;
-    this.updated_at = assignment.updated_at;
+    this.createdAt = assignment.createdAt;
+    this.updatedAt = assignment.updatedAt;
     this.owner = assignment.owner;
     this.name = assignment.name;
     this.file = assignment.file;
@@ -76,8 +78,8 @@ export class Assignment implements IAssignment {
   public getSerializable(): IAssignmentPartial {
     return {
       uuid: this.uuid,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       owner: this.owner,
       name: this.name,
       file: this.file,
@@ -102,27 +104,27 @@ export class Assignment implements IAssignment {
     if (this.uuid) {
       // existing
       if (this.cache.file) form.append('file', this.cache.file, this.file.split('/').pop());
-      const obs = (this.assignmentService.put(`assignments/${this.uuid}/`, form) as Observable<Assignment>).pipe(shareReplay(1));
-      obs.subscribe(() => { });
-      return obs;
+      return (this.assignmentService.put(`assignments/${this.uuid}/`, form) as Observable<Assignment>).pipe(
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
     }
-    // new, @TODO: change file: Blob to file: File
+    // new
     if (this.cache.file) {
       const fileName = this.cache.file instanceof File ? this.cache.file.name : 'file.xlsx';
       form.append('file', this.cache.file, fileName);
     }
-    const obs: Observable<IAssignment> = (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(shareReplay(1));
-    obs.subscribe(() => { });
-    return obs;
+    return (this.assignmentService.post('assignments/', form) as Observable<Assignment>).pipe(
+      shareReplay({ bufferSize: 1, refCount: false }),
+    );
   }
 
   /**
-   * Delete an assignment. Auto-resolves
+   * Delete an assignment.
    */
   public destroy(): Observable<boolean> {
-    const obs = (this.assignmentService.delete(`assignments/${this.uuid}/`, this) as Observable<boolean>).pipe(shareReplay(1));
-    obs.subscribe(() => { });
-    return obs;
+    return (this.assignmentService.delete(`assignments/${this.uuid}/`, this) as Observable<boolean>).pipe(
+      shareReplay({ bufferSize: 1, refCount: false }),
+    );
   }
 
   getQuestions(): Array<Question> {
@@ -144,9 +146,10 @@ export class Assignment implements IAssignment {
 
   getFile(): Observable<Blob> {
     if (this.cache.file) return of(this.cache.file);
-    const obs = (this.assignmentService.get(`files/${this.file.split('/').pop()}`, { responseType: 'blob' } as Partial<HttpHeaders>) as Observable<Blob>).pipe(shareReplay(1));
-    obs.subscribe((file) => { this.cache.file = file; });
-    return obs;
+    return (this.assignmentService.get(`files/${this.file.split('/').pop()}`, { responseType: 'blob' } as Partial<HttpHeaders>) as Observable<Blob>).pipe(
+      tap((file) => { this.cache.file = file; }),
+      shareReplay({ bufferSize: 1, refCount: false }),
+    );
   }
 
   getCachedFile(): Blob|undefined {

@@ -69,7 +69,7 @@ export class Submission implements ISubmission {
   }
 
   getUnreviewed(): Array<Facet> {
-    return [];
+    return Array.from(this.unreviewed.keys());
   }
 
   isReviewed(): boolean {

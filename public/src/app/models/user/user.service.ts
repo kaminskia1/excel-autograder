@@ -100,15 +100,11 @@ export class UserService {
   }
 
   public register(creds: UserCredentialsNew): Observable<IUser> {
-    const req = this.api.post<IUser>('auth/register/', creds).pipe(shareReplay(1));
-    req.subscribe((user: IUser) => user);
-    return req;
+    return this.api.post<IUser>('auth/register/', creds);
   }
 
   public reset(creds: UserCredentialsReset): Observable<boolean> {
-    const req = this.api.post<boolean>('auth/reset/', creds).pipe(shareReplay(1));
-    req.subscribe((success: boolean) => success);
-    return req;
+    return this.api.post<boolean>('auth/reset/', creds);
   }
 
   public logout(): void {
@@ -119,8 +115,8 @@ export class UserService {
 
   public changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
     return this.api.post<{ message: string }>('auth/change-password/', {
-      current_password: currentPassword,
-      new_password: newPassword,
+      currentPassword,
+      newPassword,
     });
   }
 
@@ -132,9 +128,9 @@ export class UserService {
     return this.api.post<{ message: string }>('auth/resend-verification/', {});
   }
 
-  public changeEmail(newEmail: string): Observable<{ message: string; pending_email?: string }> {
-    return this.api.post<{ message: string; pending_email?: string }>('auth/change-email/', {
-      new_email: newEmail,
+  public changeEmail(newEmail: string): Observable<{ message: string; pendingEmail?: string }> {
+    return this.api.post<{ message: string; pendingEmail?: string }>('auth/change-email/', {
+      newEmail,
     });
   }
 

@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { UserService } from './user.service';
 import { ApiService } from '../../services/api/api.service';
 import { UserFactory } from './user.factory';
 import { CookieService } from '../../core/services';
+import { CaseInterceptor } from '../../core/interceptors';
 import { API_URL } from '../../config/api.config';
 
 describe('UserService', () => {
@@ -20,7 +22,13 @@ describe('UserService', () => {
         HttpClientTestingModule,
         RouterTestingModule,
       ],
-      providers: [ApiService, UserFactory, UserService, CookieService],
+      providers: [
+        ApiService,
+        UserFactory,
+        UserService,
+        CookieService,
+        { provide: HTTP_INTERCEPTORS, useClass: CaseInterceptor, multi: true },
+      ],
     });
     httpMock = TestBed.inject(HttpTestingController);
     cookieService = TestBed.inject(CookieService);
@@ -104,12 +112,14 @@ describe('UserService', () => {
 
         service.changeEmail(newEmail).subscribe((response) => {
           expect(response.message).toBe('Verification email sent to your new email address');
-          expect(response.pending_email).toBe(newEmail);
+          expect(response.pendingEmail).toBe(newEmail);
         });
 
         const req = httpMock.expectOne(`${baseUrl}auth/change-email/`);
         expect(req.request.method).toBe('POST');
+        // Request body is transformed to snake_case by interceptor
         expect(req.request.body).toEqual({ new_email: newEmail });
+        // Mock backend response in snake_case (interceptor converts to camelCase)
         req.flush({
           message: 'Verification email sent to your new email address',
           pending_email: newEmail,

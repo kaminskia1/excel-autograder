@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
-import * as _ from 'underscore';
 import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
 import { AssignmentService } from '../../models/assignment/assignment.service';
@@ -292,8 +291,8 @@ export class GraderComponent implements OnInit, OnDestroy {
         workbook.title = `Submissions - ${this.masterAssignment.name}`;
         const worksheet = workbook.addWorksheet('Submissions');
         worksheet.addRow(cols.map((r) => this.getExportSubmissionColumns().get(r)?.val));
-        const rows = this.submissions.map((sub: Submission) => (
-          Object.values(_.pick({
+        const rows = this.submissions.map((sub: Submission) => {
+          const allData: Record<string, unknown> = {
             fileName: sub.file.name,
             points: sub.score,
             maxPoints: sub.maxScore,
@@ -310,22 +309,15 @@ export class GraderComponent implements OnInit, OnDestroy {
             description: sub.workbook.description,
             keywords: sub.workbook.keywords,
             category: sub.workbook.category,
+          };
 
-            ...Array.from(sub.responses.entries()).map(([key, val]) => ({
-              [`expected-${key.uuid}`]: val.expectedValue,
-            })).reduce((acc, cur) => {
-              Object.assign(acc, cur);
-              return acc;
-            }, {}),
+          sub.responses.forEach((val, key) => {
+            allData[`expected-${key.uuid}`] = val.expectedValue;
+            allData[`provided-${key.uuid}`] = val.providedValue;
+          });
 
-            ...Array.from(sub.responses.entries()).map(([key, val]) => ({
-              [`provided-${key.uuid}`]: val.providedValue,
-            })).reduce((acc, cur) => {
-              Object.assign(acc, cur);
-              return acc;
-            }, {}),
-
-          }, ...cols))));
+          return cols.map((col) => allData[col]);
+        });
         worksheet.addRows(rows);
         worksheet.columns.forEach((column) => {
           if (!column.values) return;

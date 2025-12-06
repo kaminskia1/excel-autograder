@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import { Component, EventEmitter, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -11,6 +10,7 @@ import {
   IAssignmentPartial,
 } from '../../../models/assignment/assignment';
 import { QuestionFactory } from '../../../models/question/question.factory';
+import { decodeBase64ToFile, decodeString } from '../../../utils/encoding.utils';
 
 interface ImportAssignmentForm {
   data: FormControl<string>;
@@ -40,26 +40,14 @@ export class ImportAssignmentDialogComponent {
   }
 
   create() {
-    // @TODO: Clean this up (move to assignment or encode util?)
-    const decodeBase64ToBlob = (base64String: string) => {
-      const byteCharacters = atob(base64String.split(',')[1]);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i += 1) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      return new File([byteArray], 'imported_assignment.xlsx', { type: 'application/xlsx' });
-    };
-
     if (this.importAssignmentForm.invalid) return;
     const data = this.importAssignmentForm.controls.data.value;
     if (!data) return;
-    let ea: EncodedAssignment | null = null;
+
     try {
-      const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
-      ea = JSON.parse(decode(data));
+      const ea: EncodedAssignment = JSON.parse(decodeString(data));
       if (!ea) throw new Error('Invalid data!');
-      this.newAssignment.setFile(decodeBase64ToBlob(ea.file));
+      this.newAssignment.setFile(decodeBase64ToFile(ea.file, 'imported_assignment.xlsx'));
       this.newAssignment.name = ea.name;
       this.newAssignment.encrypted = false;
       this.newAssignment.questions = ea.questions.map(
