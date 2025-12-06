@@ -135,7 +135,11 @@ describe('ProfileComponent', () => {
       component.onChangeEmail();
       tick();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Email already in use', 'Close', { duration: 5000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Email already in use',
+        'Close',
+        jasmine.objectContaining({ duration: 5000 }),
+      );
       expect(component.isChangingEmail).toBeFalse();
     }));
   });
@@ -148,7 +152,11 @@ describe('ProfileComponent', () => {
       tick();
 
       expect(userServiceSpy.resendVerification).toHaveBeenCalled();
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Verification email sent', 'Close', { duration: 3000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Verification email sent',
+        'Close',
+        jasmine.objectContaining({ duration: 3000 }),
+      );
       expect(component.isResendingVerification).toBeFalse();
     }));
 
@@ -160,7 +168,11 @@ describe('ProfileComponent', () => {
       component.onResendVerification();
       tick();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Rate limited', 'Close', { duration: 5000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Rate limited',
+        'Close',
+        jasmine.objectContaining({ duration: 5000 }),
+      );
       expect(component.isResendingVerification).toBeFalse();
     }));
   });
@@ -173,7 +185,11 @@ describe('ProfileComponent', () => {
       tick();
 
       expect(userServiceSpy.cancelEmailChange).toHaveBeenCalled();
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Email change cancelled', 'Close', { duration: 3000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Email change cancelled',
+        'Close',
+        jasmine.objectContaining({ duration: 3000 }),
+      );
       expect(component.isCancellingEmailChange).toBeFalse();
       expect(userServiceSpy.refreshUser).toHaveBeenCalled();
     }));
@@ -186,7 +202,11 @@ describe('ProfileComponent', () => {
       component.onCancelEmailChange();
       tick();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('No pending change', 'Close', { duration: 5000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'No pending change',
+        'Close',
+        jasmine.objectContaining({ duration: 5000 }),
+      );
       expect(component.isCancellingEmailChange).toBeFalse();
     }));
   });

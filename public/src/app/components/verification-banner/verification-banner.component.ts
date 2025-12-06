@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { NotificationService } from '../../core/services';
 import { UserService } from '../../models/user/user.service';
 import { User } from '../../models/user/user';
 
@@ -22,7 +22,7 @@ export class VerificationBannerComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -54,12 +54,12 @@ export class VerificationBannerComponent implements OnInit, OnDestroy {
     this.isResending = true;
     this.userService.resendVerification().subscribe({
       next: () => {
-        this.snackBar.open('Verification email sent!', 'Close', { duration: 3000 });
+        this.notification.success('Verification email sent!');
         this.isResending = false;
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to send email. Please try again later.';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isResending = false;
       },
     });

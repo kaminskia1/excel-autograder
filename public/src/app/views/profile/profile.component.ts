@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../core/services';
 import { UserService } from '../../models/user/user.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class ProfileComponent {
   constructor(
     public userService: UserService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {
     this.passwordForm = this.fb.group({
       currentPassword: ['', [Validators.required]],
@@ -79,13 +79,13 @@ export class ProfileComponent {
 
     this.userService.changePassword(currentPassword, newPassword).subscribe({
       next: () => {
-        this.snackBar.open('Password changed successfully', 'Close', { duration: 3000 });
+        this.notification.success('Password changed successfully');
         this.passwordForm.reset();
         this.isChangingPassword = false;
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to change password';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isChangingPassword = false;
       },
     });
@@ -101,7 +101,7 @@ export class ProfileComponent {
 
     this.userService.changeEmail(newEmail).subscribe({
       next: () => {
-        this.snackBar.open('Verification email sent to your new address', 'Close', { duration: 5000 });
+        this.notification.success('Verification email sent to your new address');
         this.emailForm.reset();
         this.isChangingEmail = false;
         // Refresh user data to get pending_email
@@ -109,7 +109,7 @@ export class ProfileComponent {
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to change email';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isChangingEmail = false;
       },
     });
@@ -120,12 +120,12 @@ export class ProfileComponent {
 
     this.userService.resendVerification().subscribe({
       next: () => {
-        this.snackBar.open('Verification email sent', 'Close', { duration: 3000 });
+        this.notification.success('Verification email sent');
         this.isResendingVerification = false;
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to send verification email';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isResendingVerification = false;
       },
     });
@@ -136,13 +136,13 @@ export class ProfileComponent {
 
     this.userService.cancelEmailChange().subscribe({
       next: () => {
-        this.snackBar.open('Email change cancelled', 'Close', { duration: 3000 });
+        this.notification.success('Email change cancelled');
         this.isCancellingEmailChange = false;
         this.userService.refreshUser().subscribe();
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to cancel email change';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isCancellingEmailChange = false;
       },
     });

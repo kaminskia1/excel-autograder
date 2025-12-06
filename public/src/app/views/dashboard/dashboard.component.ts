@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment, IAssignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
@@ -20,6 +19,7 @@ import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
 import { encodeBlobToBase64, encodeString } from '../../utils/encoding.utils';
+import { NotificationService } from '../../core/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog,
     public assignmentService: AssignmentService,
     public assignmentFactory: AssignmentFactory,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {
   }
 
@@ -60,12 +60,12 @@ export class DashboardComponent implements OnInit {
         assignment.save().subscribe({
           next: (iLiveAssignment: IAssignment) => {
             const liveAssignment = this.assignmentFactory.create(iLiveAssignment);
-            this.snackBar.open('Assignment created!', 'Close', { duration: 1500 });
+            this.notification.success('Assignment created!');
             this.assignments.push(liveAssignment);
             this.dataSource.data = this.assignments;
           },
           error: () => {
-            this.snackBar.open('Failed to create assignment!', 'Close', { duration: 1500 });
+            this.notification.error('Failed to create assignment!');
           },
         });
       }
@@ -88,14 +88,14 @@ export class DashboardComponent implements OnInit {
       if (result) {
         assignment.destroy().subscribe({
           next: () => {
-            this.snackBar.open('Assignment deleted!', 'Close', { duration: 1500 });
+            this.notification.success('Assignment deleted!');
             this.assignments = this.assignments.filter(
               (removed) => removed.uuid !== assignment.uuid,
             );
             this.dataSource.data = this.assignments;
           },
           error: () => {
-            this.snackBar.open('Failed to delete assignment!', 'Close', { duration: 1500 });
+            this.notification.error('Failed to delete assignment!');
           },
         });
       }
@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
       aElement.click();
       URL.revokeObjectURL(blobUrl);
       aElement.remove();
-      this.snackBar.open('Assignment file downloaded!', 'Close', { duration: 1500 });
+      this.notification.success('Assignment file downloaded!');
     });
   }
 
@@ -140,12 +140,12 @@ export class DashboardComponent implements OnInit {
         assignment.save().subscribe({
           next: (iLiveAssignment: IAssignment) => {
             const liveAssignment = this.assignmentFactory.create(iLiveAssignment);
-            this.snackBar.open('Assignment imported!', 'Close', { duration: 1500 });
+            this.notification.success('Assignment imported!');
             this.assignments.push(liveAssignment);
             this.dataSource.data = this.assignments;
           },
           error: () => {
-            this.snackBar.open('Failed to import assignment!', 'Close', { duration: 1500 });
+            this.notification.error('Failed to import assignment!');
           },
         });
       }
@@ -162,11 +162,11 @@ export class DashboardComponent implements OnInit {
       if (as) {
         as.save().subscribe({
           next: () => {
-            this.snackBar.open('Assignment updated!', 'Close', { duration: 1500 });
+            this.notification.success('Assignment updated!');
             this.dataSource.data = this.assignments;
           },
           error: () => {
-            this.snackBar.open('Failed to update assignment!', 'Close', { duration: 1500 });
+            this.notification.error('Failed to update assignment!');
           },
         });
       }

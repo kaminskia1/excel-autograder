@@ -83,7 +83,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'Session expired. Please log in again.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
   });
@@ -101,7 +101,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'You do not have permission to access this resource.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
 
@@ -131,7 +131,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'The requested resource was not found.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
   });
@@ -149,7 +149,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'A server error occurred. Please try again later.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
 
@@ -165,7 +165,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'A server error occurred. Please try again later.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
 
@@ -181,7 +181,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'A server error occurred. Please try again later.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
 
@@ -197,7 +197,7 @@ describe('ErrorInterceptor', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'A server error occurred. Please try again later.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
   });

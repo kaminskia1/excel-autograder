@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services';
 import { AssignmentFactory } from '../../../models/assignment/assignment.factory';
 import {
   Assignment,
@@ -29,7 +29,7 @@ export class ImportAssignmentDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ImportAssignmentDialogComponent>,
     public assignmentFactory: AssignmentFactory,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
     private questionFactory: QuestionFactory,
     @Inject(MAT_DIALOG_DATA) public data: EventEmitter<IAssignment|null>,
   ) {
@@ -54,7 +54,7 @@ export class ImportAssignmentDialogComponent {
         (q) => this.questionFactory.create(q),
       );
     } catch (e) {
-      this.snackBar.open('Error parsing assignment data!', 'Close', { duration: 1500 });
+      this.notification.error('Error parsing assignment data!');
       return;
     }
     this.data.emit(this.newAssignment);

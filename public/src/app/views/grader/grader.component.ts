@@ -4,7 +4,6 @@ import {
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
 import { CellValue } from 'exceljs';
 import { WorkbookService } from '../../models/workbook/workbook.service';
@@ -25,7 +24,7 @@ import {
   Submission,
 } from '../../models/submission/submission';
 import { SubmissionService } from '../../models/submission/submission.service';
-import { DestroyService } from '../../core/services';
+import { DestroyService, NotificationService } from '../../core/services';
 
 interface ParsedFacetInfo {
   label: string;
@@ -70,7 +69,7 @@ export class GraderComponent implements OnInit, OnDestroy {
     public assignmentFactory: AssignmentFactory,
     public submissionService: SubmissionService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
     private destroy$: DestroyService,
   ) { }
 
@@ -105,7 +104,7 @@ export class GraderComponent implements OnInit, OnDestroy {
         const message = err.status === 404
           ? 'Assignment not found'
           : 'This assignment does not exist or you do not have permission to access it.';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.router.navigate(['/']);
       },
     });

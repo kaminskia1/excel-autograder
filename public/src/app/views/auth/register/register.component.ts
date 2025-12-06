@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services';
 import { UserService } from '../../../models/user/user.service';
 import { IUser, UserCredentials, UserCredentialsNew } from '../../../models/user/user';
 
@@ -21,7 +21,7 @@ export class RegisterComponent {
 
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {
     this.registerForm = new FormGroup<RegisterForm>({
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -33,7 +33,7 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
-      this.snackBar.open('Error creating account!', 'Close', { duration: 1500 });
+      this.notification.error('Error creating account!');
     } else {
       const formData: UserCredentialsNew = {
         username: this.registerForm.controls.username.value,

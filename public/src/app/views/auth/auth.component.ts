@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../core/services';
 import { UserService } from '../../models/user/user.service';
 import { UserCredentials } from '../../models/user/user';
 
@@ -31,7 +31,7 @@ export class AuthComponent {
 
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
     private router: Router,
   ) {
     this.logInForm = new FormGroup<LoginForm>({
@@ -44,7 +44,7 @@ export class AuthComponent {
   onSubmit(): void {
     if (this.logInForm.invalid) {
       this.failedLogin = true;
-      this.snackBar.open('Error signing in!', 'Close', { duration: 1500 });
+      this.notification.error('Error signing in!');
     } else {
       const credentials: UserCredentials = {
         username: this.logInForm.controls.username.value,
@@ -54,7 +54,7 @@ export class AuthComponent {
         error: () => {
           this.failedLogin = true;
           this.logInForm.controls.password.setValue('');
-          this.snackBar.open('Error signing in!', 'Close', { duration: 1500 });
+          this.notification.error('Error signing in!');
         },
       });
     }

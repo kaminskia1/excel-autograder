@@ -151,7 +151,7 @@ describe('VerifyEmailComponent', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'Please log in to resend verification email.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
     });
@@ -164,7 +164,11 @@ describe('VerifyEmailComponent', () => {
       tick();
 
       expect(userServiceSpy.resendVerification).toHaveBeenCalled();
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Verification email sent!', 'Close', { duration: 3000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Verification email sent!',
+        'Close',
+        jasmine.objectContaining({ duration: 3000 }),
+      );
       expect(component.isResending).toBeFalse();
     }));
 
@@ -177,7 +181,11 @@ describe('VerifyEmailComponent', () => {
       component.resendVerification();
       tick();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Rate limited', 'Close', { duration: 5000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Rate limited',
+        'Close',
+        jasmine.objectContaining({ duration: 5000 }),
+      );
       expect(component.isResending).toBeFalse();
     }));
   });

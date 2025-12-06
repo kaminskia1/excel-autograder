@@ -179,7 +179,11 @@ describe('VerificationBannerComponent', () => {
       tick();
 
       expect(userServiceSpy.resendVerification).toHaveBeenCalled();
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Verification email sent!', 'Close', { duration: 3000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Verification email sent!',
+        'Close',
+        jasmine.objectContaining({ duration: 3000 }),
+      );
       expect(component.isResending).toBeFalse();
     }));
 
@@ -191,7 +195,11 @@ describe('VerificationBannerComponent', () => {
       component.resendVerification();
       tick();
 
-      expect(snackBarSpy.open).toHaveBeenCalledWith('Rate limited', 'Close', { duration: 5000 });
+      expect(snackBarSpy.open).toHaveBeenCalledWith(
+        'Rate limited',
+        'Close',
+        jasmine.objectContaining({ duration: 5000 }),
+      );
       expect(component.isResending).toBeFalse();
     }));
 
@@ -206,7 +214,7 @@ describe('VerificationBannerComponent', () => {
       expect(snackBarSpy.open).toHaveBeenCalledWith(
         'Failed to send email. Please try again later.',
         'Close',
-        { duration: 5000 },
+        jasmine.objectContaining({ duration: 5000 }),
       );
     }));
   });

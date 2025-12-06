@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services';
 
 @Component({
   selector: 'app-export-assignment-dialog',
@@ -9,12 +9,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ExportAssignmentDialogComponent {
   constructor(
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
     public dialogRef: MatDialogRef<ExportAssignmentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
   ) { }
 
   copied() {
-    this.snackBar.open('Copied to clipboard!', 'Close', { duration: 1500 });
+    this.notification.success('Copied to clipboard!');
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../core/services';
 import { UserCredentialsReset } from '../../../models/user/user';
 import { UserService } from '../../../models/user/user.service';
 
@@ -20,7 +20,7 @@ export class ResetComponent {
 
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {
     this.resetForm = new FormGroup<ResetForm>({
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -29,7 +29,7 @@ export class ResetComponent {
 
   onSubmit(): void {
     if (this.resetForm.invalid) {
-      this.snackBar.open('Error resetting password!', 'Close', { duration: 1500 });
+      this.notification.error('Error resetting password!');
     } else {
       const formData: UserCredentialsReset = {
         username: this.resetForm.controls.username.value,

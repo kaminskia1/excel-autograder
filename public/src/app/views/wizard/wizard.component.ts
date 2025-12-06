@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntil } from 'rxjs/operators';
+import { NotificationService, DestroyService } from '../../core/services';
 import { AssignmentService } from '../../models/assignment/assignment.service';
 import { Assignment } from '../../models/assignment/assignment';
 import { AssignmentFactory } from '../../models/assignment/assignment.factory';
@@ -21,7 +21,6 @@ import { FacetType } from '../../models/question/facet/types/lib';
 import {
   ConfirmationDialogComponent,
 } from '../../components/confirmation-dialog/confirmation-dialog.component';
-import { DestroyService } from '../../core/services';
 
 @Component({
   selector: 'app-wizard',
@@ -52,7 +51,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
     public workbookService: WorkbookService,
     public assignmentService: AssignmentService,
     public assignmentFactory: AssignmentFactory,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private destroy$: DestroyService,
@@ -93,7 +92,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
         const message = err.status === 404
           ? 'Assignment not found'
           : 'This assignment does not exist or you do not have permission to access it.';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.router.navigate(['/']);
       },
     });
@@ -111,7 +110,7 @@ export class WizardComponent implements AfterViewInit, OnDestroy {
     if (!this.activeAssignment) return;
     this.activeAssignment.save().subscribe({
       error: () => {
-        this.snackBar.open('Failed to save!', 'Close', { duration: 1500 });
+        this.notification.error('Failed to save!');
       },
     });
   }

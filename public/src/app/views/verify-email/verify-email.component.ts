@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../core/services';
 import { UserService } from '../../models/user/user.service';
 
 type VerificationState = 'loading' | 'success' | 'expired' | 'invalid';
@@ -21,7 +21,7 @@ export class VerifyEmailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
-    private snackBar: MatSnackBar,
+    private notification: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +66,7 @@ export class VerifyEmailComponent implements OnInit {
 
   resendVerification(): void {
     if (!this.userService.isLoggedIn()) {
-      this.snackBar.open('Please log in to resend verification email.', 'Close', { duration: 5000 });
+      this.notification.error('Please log in to resend verification email.');
       this.router.navigate(['/login']);
       return;
     }
@@ -74,12 +74,12 @@ export class VerifyEmailComponent implements OnInit {
     this.isResending = true;
     this.userService.resendVerification().subscribe({
       next: () => {
-        this.snackBar.open('Verification email sent!', 'Close', { duration: 3000 });
+        this.notification.success('Verification email sent!');
         this.isResending = false;
       },
       error: (err) => {
         const message = err.error?.error || 'Failed to send email.';
-        this.snackBar.open(message, 'Close', { duration: 5000 });
+        this.notification.error(message);
         this.isResending = false;
       },
     });
