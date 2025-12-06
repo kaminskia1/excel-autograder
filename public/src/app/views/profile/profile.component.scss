@@ -104,6 +104,109 @@
   font-weight: 500;
 }
 
+// Email section styles
+.email-status-section {
+  padding: 8px 0;
+}
+
+.email-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  &.pending {
+    background-color: var(--color-warning-light);
+    margin: 8px -16px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border-bottom: none;
+  }
+}
+
+.email-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.email-value {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+
+  &.pending-value {
+    color: var(--color-warning-dark);
+  }
+}
+
+.email-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &.verified {
+    color: var(--color-success);
+  }
+
+  &.unverified {
+    color: var(--color-warning);
+  }
+}
+
+.resend-section {
+  padding-top: 16px;
+}
+
+.pending-email-section {
+  margin-top: 8px;
+}
+
+.pending-hint {
+  margin: 8px 0 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.pending-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.section-divider {
+  margin: 24px 0;
+}
+
+.section-subtitle {
+  margin: 0 0 16px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.change-email-section {
+  padding-top: 8px;
+}
+
+.email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .password-form {
   display: flex;
   flex-direction: column;

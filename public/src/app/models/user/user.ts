@@ -26,6 +26,11 @@ export interface UserCredentialsReset {
 export interface IUserPartial {
   uuid: string
   username: string
+  email: string
+  emailVerified?: boolean
+  email_verified?: boolean
+  pendingEmail?: string | null
+  pending_email?: string | null
   token: string
   metadata?: UserMetadata
 }
@@ -39,6 +44,12 @@ export class User implements IUser {
 
   username: string;
 
+  email: string;
+
+  emailVerified: boolean;
+
+  pendingEmail: string | null;
+
   token: string;
 
   metadata: UserMetadata;
@@ -46,6 +57,10 @@ export class User implements IUser {
   constructor(user: IUserPartial) {
     this.uuid = user.uuid;
     this.username = user.username;
+    this.email = user.email;
+    // Handle both camelCase (frontend) and snake_case (backend API)
+    this.emailVerified = user.emailVerified ?? user.email_verified ?? false;
+    this.pendingEmail = user.pendingEmail ?? user.pending_email ?? null;
     this.token = user.token;
     this.metadata = user.metadata ?? {};
   }
@@ -62,6 +77,9 @@ export class User implements IUser {
     return {
       uuid: this.uuid,
       username: this.username,
+      email: this.email,
+      emailVerified: this.emailVerified,
+      pendingEmail: this.pendingEmail,
       token: this.token,
       metadata: this.metadata,
     };

@@ -1,0 +1,62 @@
+<div class="verify-email-container">
+  <mat-card class="verify-email-card">
+    <!-- Loading State -->
+    <div class="state-content" *ngIf="state === 'loading'">
+      <div class="state-icon loading">
+        <mat-icon>hourglass_empty</mat-icon>
+      </div>
+      <h2>Verifying your email...</h2>
+      <p>Please wait while we verify your email address.</p>
+    </div>
+
+    <!-- Success State -->
+    <div class="state-content" *ngIf="state === 'success'">
+      <div class="state-icon success">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <h2>Email Verified!</h2>
+      <p>{{ message }}</p>
+      <p class="redirect-message">Redirecting to dashboard...</p>
+      <button mat-flat-button color="primary" (click)="goToDashboard()">
+        Go to Dashboard
+      </button>
+    </div>
+
+    <!-- Expired State -->
+    <div class="state-content" *ngIf="state === 'expired'">
+      <div class="state-icon expired">
+        <mat-icon>timer_off</mat-icon>
+      </div>
+      <h2>Link Expired</h2>
+      <p>{{ message }}</p>
+      <p class="help-text">Request a new verification email below.</p>
+      <div class="action-buttons">
+        <button mat-flat-button color="primary" (click)="resendVerification()" [disabled]="isResending">
+          {{ isResending ? 'Sending...' : 'Resend Verification Email' }}
+        </button>
+        <button mat-stroked-button (click)="goToLogin()">
+          Go to Login
+        </button>
+      </div>
+    </div>
+
+    <!-- Invalid State -->
+    <div class="state-content" *ngIf="state === 'invalid'">
+      <div class="state-icon invalid">
+        <mat-icon>error</mat-icon>
+      </div>
+      <h2>Invalid Link</h2>
+      <p>{{ message }}</p>
+      <p class="help-text">The verification link may have been used already or is malformed.</p>
+      <div class="action-buttons">
+        <button mat-flat-button color="primary" (click)="goToDashboard()">
+          Go to Dashboard
+        </button>
+        <button mat-stroked-button (click)="goToLogin()">
+          Go to Login
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+

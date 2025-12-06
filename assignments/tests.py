@@ -337,3 +337,38 @@ class TestFileAccessSecurity:
         
         # Should be forbidden (no matching assignment for this path)
         assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_suffix_collision_blocked(self, authenticated_client, user, user_factory, db):
+        """Test that users cannot access other users' files with similar filenames.
+        
+        This tests the fix for a vulnerability where file__endswith was used,
+        allowing a user with 'mydata.xlsx' to access another user's 'data.xlsx'
+        because 'mydata.xlsx' ends with 'data.xlsx'.
+        """
+        from django.core.files.base import ContentFile
+        
+        # Create another user with a file that has a suffix matching our target
+        other_user = user_factory(username='other_user')
+        
+        # Other user has 'data.xlsx'
+        other_assignment = Assignment.objects.create(
+            name='Other Assignment',
+            owner=other_user,
+        )
+        other_assignment.file.save('data.xlsx', ContentFile(b'other user data'))
+        
+        # Our authenticated user has 'mydata.xlsx' (ends with 'data.xlsx')
+        my_assignment = Assignment.objects.create(
+            name='My Assignment',
+            owner=user,
+        )
+        my_assignment.file.save('mydata.xlsx', ContentFile(b'my data'))
+        
+        # Try to access other user's 'data.xlsx'
+        # With the old endswith check, this would succeed because our 'mydata.xlsx'
+        # ends with 'data.xlsx'. With the fix, it should fail.
+        url = '/api/v1/files/data.xlsx'
+        response = authenticated_client.get(url)
+        
+        # Should be forbidden - exact path match required
+        assert response.status_code == status.HTTP_403_FORBIDDEN

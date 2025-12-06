@@ -17,6 +17,7 @@ import { DashboardModule } from './views/dashboard/dashboard.module';
 import { WizardModule } from './views/wizard/wizard.module';
 import { GraderModule } from './views/grader/grader.module';
 import { ProfileModule } from './views/profile/profile.module';
+import { VerifyEmailModule } from './views/verify-email/verify-email.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ProfileModule } from './views/profile/profile.module';
     WizardModule,
     GraderModule,
     ProfileModule,
+    VerifyEmailModule,
   ],
   bootstrap: [AppComponent],
 })

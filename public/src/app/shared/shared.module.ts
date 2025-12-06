@@ -36,6 +36,7 @@ import { ConfirmationDialogComponent } from '../components/confirmation-dialog/c
 import { InfoDialogComponent } from '../components/info-dialog/info-dialog.component';
 import { FileInputComponent } from '../components/file-input/file-input.component';
 import { DropzoneDirective } from '../components/dropzone/dropzone.directive';
+import { VerificationBannerComponent } from '../components/verification-banner/verification-banner.component';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -67,6 +68,7 @@ const SHARED_COMPONENTS = [
   InfoDialogComponent,
   FileInputComponent,
   DropzoneDirective,
+  VerificationBannerComponent,
 ];
 
 @NgModule({

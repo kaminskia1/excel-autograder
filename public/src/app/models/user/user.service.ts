@@ -122,11 +122,61 @@ export class UserService {
     });
   }
 
+  public verifyEmail(token: string): Observable<{ message: string }> {
+    return this.api.get<{ message: string }>(`auth/verify-email/${token}/`);
+  }
+
+  public resendVerification(): Observable<{ message: string }> {
+    return this.api.post<{ message: string }>('auth/resend-verification/', {});
+  }
+
+  public changeEmail(newEmail: string): Observable<{ message: string; pending_email?: string }> {
+    return this.api.post<{ message: string; pending_email?: string }>('auth/change-email/', {
+      new_email: newEmail,
+    });
+  }
+
+  public cancelEmailChange(): Observable<{ message: string }> {
+    return this.api.post<{ message: string }>('auth/cancel-email-change/', {});
+  }
+
+  /**
+   * Refresh current user data from the server.
+   * Updates the local user state with fresh data.
+   */
+  public refreshUser(): Observable<User | null> {
+    const currentUser = this.currentUser.getValue();
+    if (!currentUser) {
+      return of(null);
+    }
+
+    return new Observable((observer) => {
+      this.api.get<IUser>('auth/me/').subscribe({
+        next: (userData) => {
+          const user = this.userFactory.createUser({ ...userData, token: currentUser.token });
+          this.currentUser.next(user);
+          observer.next(user);
+          observer.complete();
+        },
+        error: (err) => {
+          observer.error(err);
+        },
+      });
+    });
+  }
+
   public isLoggedIn(): boolean {
     return this.currentUser.getValue() !== null;
   }
 
   getUser() {
     return this.currentUser.getValue();
+  }
+
+  /**
+   * Observable for subscribing to user changes
+   */
+  getUser$(): Observable<User | null> {
+    return this.currentUser.asObservable();
   }
 }

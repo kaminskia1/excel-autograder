@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.conf.urls.static import static
 from django.urls import path, re_path, include, reverse_lazy
 from django.contrib import admin
 from django.http import HttpResponseForbidden, HttpResponseNotFound
@@ -9,7 +8,10 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from users.views import UserViewSet, UserLogin, UserLogout, UserCreate, UserMe, ChangePassword
+from users.views import (
+    UserViewSet, UserLogin, UserLogout, UserCreate, UserMe, ChangePassword,
+    VerifyEmail, ResendVerification, ChangeEmail, CancelEmailChange
+)
 from assignments.views import AssignmentViewSet
 from assignments.models import Assignment
 
@@ -39,12 +41,9 @@ def protected_serve(request, path, document_root=None, show_indexes=False):
     if not user:
         return HttpResponseForbidden("Authentication required")
     
-    # Extract filename from path and verify ownership
-    filename = path.split('/')[-1]
-    
-    # Check if user owns an assignment with this file
-    # The file field stores the filename, so we match against it
-    if not Assignment.objects.filter(owner=user, file=filename).exists():
+    # Verify ownership by checking if user owns an assignment with this exact file path
+    # The file field stores the path relative to MEDIA_ROOT, which should match the requested path
+    if not Assignment.objects.filter(owner=user, file=path).exists():
         return HttpResponseForbidden("Access denied")
     
     return serve(request, path, document_root, show_indexes)
@@ -62,8 +61,11 @@ urlpatterns = [
     path('api/v1/auth/logout/', UserLogout.as_view()),
     path('api/v1/auth/me/', UserMe.as_view()),
     path('api/v1/auth/change-password/', ChangePassword.as_view()),
+    path('api/v1/auth/verify-email/<str:token>/', VerifyEmail.as_view()),
+    path('api/v1/auth/resend-verification/', ResendVerification.as_view()),
+    path('api/v1/auth/change-email/', ChangeEmail.as_view()),
+    path('api/v1/auth/cancel-email-change/', CancelEmailChange.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-    re_path(r'^api/v1/files/(?P<path>.*)$' % static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-            protected_serve, {'document_root': settings.MEDIA_ROOT})
+    re_path(r'^api/v1/files/(?P<path>.*)$', protected_serve, {'document_root': settings.MEDIA_ROOT}),
 ]

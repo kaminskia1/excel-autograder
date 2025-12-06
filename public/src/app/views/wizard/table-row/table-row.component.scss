@@ -33,5 +33,6 @@
   position: relative;
   border-radius: 2px;
   background: var(--cell-highlight-bg) !important;
-  border-color: var(--cell-highlight-border) !important;
+  border: 1px solid var(--cell-highlight-border) !important;
+  box-sizing: border-box;
 }

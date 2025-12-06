@@ -27,6 +27,79 @@
       </mat-card-content>
     </mat-card>
 
+    <!-- Email Settings Card -->
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>Email Settings</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Current Email Status -->
+        <div class="email-status-section">
+          <div class="email-row">
+            <span class="email-label">Current Email</span>
+            <span class="email-value">{{ userService.getUser()?.email }}</span>
+          </div>
+          <div class="email-row">
+            <span class="email-label">Status</span>
+            <span class="email-status" [class.verified]="userService.getUser()?.emailVerified" [class.unverified]="!userService.getUser()?.emailVerified">
+              <mat-icon>{{ userService.getUser()?.emailVerified ? 'check_circle' : 'error' }}</mat-icon>
+              {{ userService.getUser()?.emailVerified ? 'Verified' : 'Unverified' }}
+            </span>
+          </div>
+          
+          <!-- Resend verification if not verified -->
+          <div class="resend-section" *ngIf="!userService.getUser()?.emailVerified">
+            <button mat-stroked-button color="primary" (click)="onResendVerification()" [disabled]="isResendingVerification">
+              <mat-icon *ngIf="!isResendingVerification">email</mat-icon>
+              {{ isResendingVerification ? 'Sending...' : 'Resend Verification Email' }}
+            </button>
+          </div>
+
+          <!-- Pending email change -->
+          <div class="pending-email-section" *ngIf="userService.getUser()?.pendingEmail">
+            <div class="email-row pending">
+              <span class="email-label">Pending Change</span>
+              <span class="email-value pending-value">{{ userService.getUser()?.pendingEmail }}</span>
+            </div>
+            <p class="pending-hint">Check your inbox at the new address to complete the change.</p>
+            <div class="pending-actions">
+              <button mat-stroked-button color="warn" (click)="onCancelEmailChange()" [disabled]="isCancellingEmailChange">
+                <mat-icon *ngIf="!isCancellingEmailChange">cancel</mat-icon>
+                {{ isCancellingEmailChange ? 'Cancelling...' : 'Cancel Change' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Change Email Form -->
+        <div class="change-email-section">
+          <h3 class="section-subtitle">Change Email Address</h3>
+          <form [formGroup]="emailForm" (ngSubmit)="onChangeEmail()" class="email-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>New Email Address</mat-label>
+              <input matInput type="email" formControlName="newEmail" placeholder="Enter new email">
+              <mat-error *ngIf="emailForm.get('newEmail')?.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="emailForm.get('newEmail')?.hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button mat-flat-button color="primary" type="submit" [disabled]="emailForm.invalid || isChangingEmail">
+                <mat-icon *ngIf="!isChangingEmail">send</mat-icon>
+                <span *ngIf="!isChangingEmail">Update Email</span>
+                <span *ngIf="isChangingEmail">Sending...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
     <!-- Change Password Card -->
     <mat-card class="profile-card">
       <mat-card-header>

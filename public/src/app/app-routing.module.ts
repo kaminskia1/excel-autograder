@@ -11,6 +11,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { GraderComponent } from './views/grader/grader.component';
 import { ProfileComponent } from './views/profile/profile.component';
+import { VerifyEmailComponent } from './views/verify-email/verify-email.component';
 import { UserService } from './models/user/user.service';
 
 // Wait for session restoration before checking auth state
@@ -65,6 +66,10 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [userLoggedIn],
+  },
+  {
+    path: 'verify-email/:token',
+    component: VerifyEmailComponent,
   },
   {
     path: '**',

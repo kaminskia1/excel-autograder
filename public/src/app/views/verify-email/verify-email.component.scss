@@ -1,0 +1,139 @@
+.verify-email-container {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  padding: 24px;
+}
+
+.verify-email-card {
+  max-width: 450px;
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  background-color: var(--surface-card);
+}
+
+.state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  &.loading {
+    background-color: var(--color-info-light);
+    
+    mat-icon {
+      color: var(--color-info);
+      animation: spin 1.5s linear infinite;
+    }
+  }
+
+  &.success {
+    background-color: var(--color-success-light);
+    
+    mat-icon {
+      color: var(--color-success);
+    }
+  }
+
+  &.expired {
+    background-color: var(--color-warning-light);
+    
+    mat-icon {
+      color: var(--color-warning);
+    }
+  }
+
+  &.invalid {
+    background-color: var(--color-error-light);
+    
+    mat-icon {
+      color: var(--color-error);
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.redirect-message {
+  font-size: 0.875rem;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.help-text {
+  font-size: 0.875rem;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+  max-width: 280px;
+
+  button {
+    width: 100%;
+  }
+}
+
+// Dark theme adjustments
+:host-context(body.dark-theme) {
+  .state-icon {
+    &.loading {
+      background-color: rgba(66, 165, 245, 0.15);
+    }
+
+    &.success {
+      background-color: rgba(76, 175, 80, 0.15);
+    }
+
+    &.expired {
+      background-color: rgba(255, 152, 0, 0.15);
+    }
+
+    &.invalid {
+      background-color: rgba(244, 67, 54, 0.15);
+    }
+  }
+}
+

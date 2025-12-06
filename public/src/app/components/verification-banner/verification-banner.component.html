@@ -1,0 +1,19 @@
+<div class="verification-banner" *ngIf="shouldShow">
+  <div class="banner-content">
+    <mat-icon class="banner-icon">warning</mat-icon>
+    <span class="banner-message">
+      Please verify your email address
+      <span class="banner-email" *ngIf="user?.pendingEmail"> ({{ user?.pendingEmail }})</span>
+      <span class="banner-email" *ngIf="!user?.pendingEmail"> ({{ user?.email }})</span>
+    </span>
+  </div>
+  <div class="banner-actions">
+    <button mat-button class="resend-button" (click)="resendVerification()" [disabled]="isResending">
+      {{ isResending ? 'Sending...' : 'Resend Email' }}
+    </button>
+    <button mat-icon-button class="dismiss-button" (click)="dismiss()" matTooltip="Dismiss">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
